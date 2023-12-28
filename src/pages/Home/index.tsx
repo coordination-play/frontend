@@ -59,9 +59,9 @@ export const HomePage = () => {
                   <p className="text-background/60 text-xs">1m ago</p>
                 </div>
 
-                <p className="font-semibold text-cyan-400 text-xs mt-auto mb-2 cursor-pointer">
+                <Button variant="link" className="mt-auto mb-2">
                   See More
-                </p>
+                </Button>
               </div>
             </Box>
           </div>
@@ -204,13 +204,13 @@ export const HomePage = () => {
                 </div>
 
                 <div className="flex items-center justify-center gap-6 py-4">
-                  <button className="font-semibold text-cyan-400 text-xs mt-auto mb-2 cursor-pointer">
+                  <Button variant="link" className="mt-auto mb-2">
                     Prev
-                  </button>
+                  </Button>
 
-                  <button className="font-semibold text-cyan-400 text-xs mt-auto mb-2 cursor-pointer">
+                  <Button variant="link" className="mt-auto mb-2">
                     Next
-                  </button>
+                  </Button>
                 </div>
               </div>
 
