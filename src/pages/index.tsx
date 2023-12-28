@@ -5,6 +5,7 @@ import { Layout } from "./layout";
 
 import { HomePage } from "./Home";
 import { NotFoundPage } from "./NotFound";
+import { ContributorProfilePage } from "./ContributorProfile";
 
 export const Routing = memo(() => {
   return (
@@ -12,6 +13,8 @@ export const Routing = memo(() => {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/contributor" element={<ContributorProfilePage />} />
+
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

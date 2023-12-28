@@ -6,10 +6,10 @@ import { Link } from "react-router-dom";
 
 export const NotFoundPage = memo(() => (
   <>
-    <Box className="flex flex-col items-center h-full">
-      <h1 className="font-bold text-2xl text-foreground">404</h1>
+    <Box className="flex flex-col items-center mt-44 h-full justify-center gap-4">
+      <h1 className="font-bold text-4xl text-background">404</h1>
 
-      <p className="text-foreground/50">
+      <p className="text-background/50">
         Page not found. The URL may be misspelled or the page may have moved.
       </p>
 
