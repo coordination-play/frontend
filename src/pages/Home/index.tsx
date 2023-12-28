@@ -1,4 +1,4 @@
-import { GetStarted } from "@/components/GetStarted";
+// import { GetStarted } from "@/components/GetStarted";
 import { Box } from "@/components/ui/box";
 import { Button } from "@/components/ui/button";
 
