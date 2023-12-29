@@ -13,7 +13,7 @@ export const GetStarted = () => {
         className="h-24 object-contain"
       />
 
-      <p className="text-background/90 text-lg font-medium">
+      <p className="text-text/90 text-lg font-medium">
         Get started by connecting your wallet to see your organisation profile
       </p>
 

@@ -8,11 +8,11 @@ const boxVariants = cva("", {
   variants: {
     variant: {
       default: "",
-      navy: "bg-[#141451]",
-      pinkPurple: "bg-gradient-to-b from-[#F76CE0] to-[#736CF7]",
-      orange: "bg-gradient-to-b from-[#FC8E51] to-[#F05C58]",
-      green: "bg-gradient-to-b from-[#35AC65] to-[#41898E]",
-      red: "bg-gradient-to-b from-[#DD2476] to-[#FF512F]",
+      navy: "bg-navy",
+      pinkPurple: "bg-gradient-to-b from-lightPink to-violet",
+      orange: "bg-gradient-to-b from-orange to-lightRed",
+      green: "bg-gradient-to-b from-lightGreen to-darkGreen",
+      red: "bg-gradient-to-b from-magenta to-red",
       grey: "bg-[#FFFFFF33]",
       shadow:
         "backdrop-blur-[76.98px] shadow-[inset_0px_0px_22px_0px_rgba(255,255,255,0.6)]",

@@ -4,7 +4,7 @@ export const MeshNFTs = () => {
   return (
     <Box variant="shadow" className="rounded-lg">
       <div className="p-4 border-b border-b-border/20">
-        <p className="text-lg font-semibold text-background">Mesh NFTs</p>
+        <p className="text-lg font-semibold text-text">Mesh NFTs</p>
       </div>
 
       <div className="p-4 flex gap-4">

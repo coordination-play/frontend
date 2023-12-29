@@ -33,7 +33,7 @@ export const ContributorProfilePage = () => {
                   />
                 </div>
 
-                <p className="text-xl text-background font-bold text-center">
+                <p className="text-xl text-text font-bold text-center">
                   0x013d...d114
                 </p>
 
@@ -62,7 +62,7 @@ export const ContributorProfilePage = () => {
             className="h-full flex-1 flex border border-border flex-col rounded-lg p-8 gap-6"
           >
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-background">
+              <h2 className="text-2xl font-bold text-text">
                 JediSwap Contributor Profile
               </h2>
 
@@ -78,7 +78,7 @@ export const ContributorProfilePage = () => {
                 <div className="flex gap-6 w-full">
                   <Box
                     variant="pinkPurple"
-                    className="p-6 relative overflow-hidden rounded-lg w-full flex flex-col gap-1 text-background font-bold"
+                    className="p-6 relative overflow-hidden rounded-lg w-full flex flex-col gap-1 text-text font-bold"
                   >
                     <p className="font-semibold">Design</p>
 
@@ -98,7 +98,7 @@ export const ContributorProfilePage = () => {
 
                   {/* <Box
                     variant="pinkPurple"
-                    className="py-4 rounded-lg px-4 w-full flex flex-col gap-1 text-background font-bold"
+                    className="py-4 rounded-lg px-4 w-full flex flex-col gap-1 text-text font-bold"
                   >
                     <p className="font-semibold">Design</p>
                     <p className="font-medium text-xs">8 contributers</p>
@@ -106,12 +106,12 @@ export const ContributorProfilePage = () => {
 
                   <Box
                     variant="shadow"
-                    className="p-6 relative overflow-hidden rounded-lg w-full flex flex-col gap-1 text-background font-bold"
+                    className="p-6 relative overflow-hidden rounded-lg w-full flex flex-col gap-1 text-text font-bold"
                   >
                     <p className="font-semibold">Development</p>
 
                     <div className="mt-auto">
-                      <p className="text-sm font-medium text-background/90">
+                      <p className="text-sm font-medium text-text/90">
                         Kick Start your journey
                       </p>
 
@@ -123,7 +123,7 @@ export const ContributorProfilePage = () => {
 
                   <Box
                     variant="orange"
-                    className="p-6 relative overflow-hidden rounded-lg w-full flex flex-col gap-1 text-background font-bold"
+                    className="p-6 relative overflow-hidden rounded-lg w-full flex flex-col gap-1 text-text font-bold"
                   >
                     <p className="font-semibold">Growth</p>
 
@@ -143,12 +143,12 @@ export const ContributorProfilePage = () => {
 
                   <Box
                     variant="shadow"
-                    className="p-6 relative overflow-hidden rounded-lg w-full flex flex-col gap-1 text-background font-bold"
+                    className="p-6 relative overflow-hidden rounded-lg w-full flex flex-col gap-1 text-text font-bold"
                   >
-                    <p className="font-semibold">Development</p>
+                    <p className="font-semibold">Problem S</p>
 
                     <div className="mt-auto">
-                      <p className="text-sm font-medium text-background/90">
+                      <p className="text-sm font-medium text-text/90">
                         Kick Start your journey
                       </p>
 
