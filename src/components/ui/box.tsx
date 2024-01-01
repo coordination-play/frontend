@@ -13,11 +13,8 @@ const boxVariants = cva("", {
       orange: "bg-gradient-to-b from-orange to-lightRed",
       green: "bg-gradient-to-b from-lightGreen to-darkGreen",
       red: "bg-gradient-to-b from-magenta to-red",
-      grey: "bg-[#FFFFFF33]",
-      shadow:
-        "backdrop-blur-[76.98px] shadow-[inset_0px_0px_22px_0px_rgba(255,255,255,0.6)]",
-
-      //   outline: `border-2 border-white bg-[rgba(196,196,196,0.01)] `,
+      grey: "bg-grey",
+      shadow: "backdrop-blur shadow",
     },
   },
   defaultVariants: {

@@ -162,7 +162,7 @@ export const ContributorProfilePage = () => {
             </div>
 
             <Leaderboard />
-            <MeshNFTs />
+            {/* <MeshNFTs /> */}
           </Box>
         </Box>
       </div>

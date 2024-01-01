@@ -1,9 +1,12 @@
 import { Routing } from "./pages";
+import { StarknetProvider } from "./provider";
 
 function App() {
   return (
     <>
-      <Routing />
+      <StarknetProvider>
+        <Routing />
+      </StarknetProvider>
     </>
   );
 }

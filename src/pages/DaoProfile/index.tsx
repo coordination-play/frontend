@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -19,7 +18,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -27,7 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export const HomePage = () => {
+export const DAOProfile = () => {
   return (
     <>
       {/* <div className="w-full h-full flex flex-1">
@@ -53,7 +51,7 @@ export const HomePage = () => {
             className="h-full flex-1 flex flex-col rounded-lg p-8 gap-6"
           >
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-text">Hello Admin!</h2>
+              <h2 className="text-2xl font-bold">Hello Admin!</h2>
 
               <div className="flex items-center gap-2">
                 <Button size="md" variant="outline">
@@ -65,18 +63,14 @@ export const HomePage = () => {
                       Pay Salary
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="bg-[#141451] sm:max-w-[425px] backdrop-blur-[76.98px] shadow-[inset_0px_0px_22px_0px_rgba(255,255,255,0.6)]">
+                  <DialogContent>
                     <DialogHeader>
-                      <DialogTitle className="text-white">
-                        Pay Salary
-                      </DialogTitle>
+                      <DialogTitle>Pay Salary</DialogTitle>
                     </DialogHeader>
-                    <Label htmlFor="guild" className="text-white">
-                      Select Guild
-                    </Label>
+                    <Label htmlFor="guild">Select Guild</Label>
 
                     <Select>
-                      <SelectTrigger className="w-[180px]" id="guild">
+                      <SelectTrigger className="w-full" id="guild">
                         <SelectValue placeholder="Design" />
                       </SelectTrigger>
                       <SelectContent>
@@ -95,12 +89,12 @@ export const HomePage = () => {
 
                     <Input placeholder="Enter salary amount" />
 
-                    <Label className="text-white" htmlFor="method">
+                    <Label className="mt-2 font-normal" htmlFor="method">
                       Select distribution method
                     </Label>
 
                     <Select>
-                      <SelectTrigger className="w-[180px]" id="method">
+                      <SelectTrigger className="w-full" id="method">
                         <SelectValue placeholder="Method 1" />
                       </SelectTrigger>
                       <SelectContent>
@@ -114,7 +108,7 @@ export const HomePage = () => {
                     </Select>
 
                     <DialogFooter>
-                      <Button type="submit" className="w-full">
+                      <Button type="submit" className="w-full" size="xl">
                         Send Payment
                       </Button>
                     </DialogFooter>
@@ -127,15 +121,13 @@ export const HomePage = () => {
                       Upload Points
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="bg-[#141451] sm:max-w-[425px] backdrop-blur-[76.98px] shadow-[inset_0px_0px_22px_0px_rgba(255,255,255,0.6)]">
+                  <DialogContent>
                     <DialogHeader>
-                      <DialogTitle className="text-white">
-                        Upload Points
-                      </DialogTitle>
+                      <DialogTitle>Upload Points</DialogTitle>
                     </DialogHeader>
-                    <Input className="text-white" id="picture" type="file" />
+                    <Input id="picture" type="file" className="text-text" />
                     <DialogFooter>
-                      <Button type="submit" className="w-full">
+                      <Button type="submit" className="w-full" size="xl">
                         Upload Points
                       </Button>
                     </DialogFooter>
@@ -145,13 +137,13 @@ export const HomePage = () => {
             </div>
 
             <div className="flex flex-col gap-3">
-              <h2 className="text-xl font-semibold text-text">All Guilds</h2>
+              <h2 className="text-xl font-semibold">All Guilds</h2>
 
               <div className="flex items-center flex-wrap gap-2">
                 <div className="flex gap-2 w-full">
                   <Box
                     variant="pinkPurple"
-                    className="py-4 rounded-lg px-4 w-full flex flex-col gap-1 text-text font-bold"
+                    className="py-4 rounded-lg px-4 w-full flex flex-col gap-1 font-bold"
                   >
                     <p className="font-semibold">Design</p>
                     <p className="font-medium text-xs">8 contributers</p>
@@ -159,7 +151,7 @@ export const HomePage = () => {
 
                   <Box
                     variant="orange"
-                    className="py-4 rounded-lg px-4 w-full flex flex-col gap-1 text-text font-bold"
+                    className="py-4 rounded-lg px-4 w-full flex flex-col gap-1 font-bold"
                   >
                     <p className="font-semibold">Development</p>
                     <p className="font-medium text-xs">12 contributers</p>
@@ -167,7 +159,7 @@ export const HomePage = () => {
 
                   <Box
                     variant="green"
-                    className="py-4 rounded-lg px-4 w-full flex flex-col gap-1 text-text font-bold"
+                    className="py-4 rounded-lg px-4 w-full flex flex-col gap-1 font-bold"
                   >
                     <p className="font-semibold">Community</p>
                     <p className="font-medium text-xs">2 contributers</p>
@@ -175,7 +167,7 @@ export const HomePage = () => {
 
                   <Box
                     variant="red"
-                    className="py-4 rounded-lg px-4 w-full flex flex-col gap-1 text-text font-bold"
+                    className="py-4 rounded-lg px-4 w-full flex flex-col gap-1 font-bold"
                   >
                     <p className="font-semibold">Growth</p>
                     <p className="font-medium text-xs">4 contributers</p>
@@ -187,40 +179,22 @@ export const HomePage = () => {
                     <Box
                       asChild
                       variant="navy"
-                      className="h-20 rounded-lg px-6 flex items-center text-text font-bold"
+                      className="h-20 rounded-lg px-6 flex items-center font-bold"
                     >
                       <button>Create Guild</button>
                     </Box>
                   </DialogTrigger>
-                  <DialogContent className="bg-[#141451] sm:max-w-[425px] backdrop-blur-[76.98px] shadow-[inset_0px_0px_22px_0px_rgba(255,255,255,0.6)]">
+                  <DialogContent className="">
                     <DialogHeader>
-                      <DialogTitle className="text-white">
-                        Create Guild
-                      </DialogTitle>
+                      <DialogTitle>Create Guild</DialogTitle>
                     </DialogHeader>
-                    <Label htmlFor="name" className="text-white">
+                    <Label htmlFor="name" className="mt-4">
                       Guild Name
                     </Label>
-                    <Input
-                      id="name"
-                      placeholder="Enter a name"
-                      className="bg-[#141451] backdrop-blur-[76.98px] shadow-[inset_0px_0px_22px_0px_rgba(255,255,255,0.6)]"
-                    />
+                    <Input id="name" placeholder="Enter a name" />
 
-                    <Label htmlFor="color" className="text-white">
-                      Select guild color
-                    </Label>
-                    <div className="flex flex-row gap-4">
-                      <div className="p-5 bg-purple-400" />
-                      <div className="p-5 bg-red-400" />
-                      <div className="p-5 bg-blue-400" />
-                      <div className="p-5 bg-yellow-400" />
-                      <div className="p-5 bg-blue-400" />
-                      <div className="p-5 bg-orange-400" />
-                      <div className="p-5 bg-red-400" />
-                    </div>
                     <DialogFooter>
-                      <Button type="submit" className="w-full">
+                      <Button type="submit" className="w-full" size="xl">
                         Create Guild
                       </Button>
                     </DialogFooter>
