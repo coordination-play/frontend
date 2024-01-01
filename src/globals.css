@@ -36,6 +36,10 @@
     --magenta: 333 73% 50%;
     --red: 10 100% 59%;
 
+    --ring: 0 0% 3.9%;
+
+    --radius: 0.5rem;
+
     /* --background: 0 0% 100%; */
     /* --foreground: 0 0% 3.9%; */
 
@@ -59,10 +63,6 @@
 
     /* --destructive: 0 84.2% 60.2%; */
     /* --destructive-foreground: 0 0% 98%; */
-
-    --ring: 0 0% 3.9%;
-
-    --radius: 0.5rem;
   }
 
   /* 

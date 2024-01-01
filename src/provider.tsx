@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-import { sepolia, mainnet } from "@starknet-react/chains";
+import { goerli } from "@starknet-react/chains";
 import {
   StarknetConfig,
   publicProvider,
@@ -27,7 +27,7 @@ export const StarknetProvider = ({
 
   return (
     <StarknetConfig
-      chains={[mainnet, sepolia]}
+      chains={[goerli]}
       provider={publicProvider()}
       connectors={connectors}
       explorer={voyager}

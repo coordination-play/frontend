@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { truncateAddress } from "@/lib/utils";
 
 export const Header = () => {
   const { address } = useAccount();
@@ -67,9 +68,7 @@ const WalletModal = () => {
     chain: { name },
   } = useNetwork();
 
-  const addressShort = address
-    ? `${address.slice(0, 6)}...${address.slice(-4)}`
-    : null;
+  const addressShort = address ? truncateAddress(address) : null;
 
   return (
     <>
