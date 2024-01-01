@@ -13,7 +13,10 @@ export const Routing = memo(() => {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<DAOProfile />} />
-          <Route path="/contributor" element={<ContributorProfilePage />} />
+          <Route
+            path="/contributor/:address"
+            element={<ContributorProfilePage />}
+          />
 
           <Route path="*" element={<NotFoundPage />} />
         </Route>

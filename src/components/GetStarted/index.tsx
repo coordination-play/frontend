@@ -1,11 +1,11 @@
+import { ConnectWalletModal } from "../Header";
 import { Box } from "../ui/box";
-import { Button } from "../ui/button";
 
 export const GetStarted = () => {
   return (
     <Box
       variant="navy"
-      className="flex justify-center items-center flex-col gap-6 max-w-4xl px-4 w-full rounded-lg py-16"
+      className="flex justify-center items-center flex-col gap-6 max-w-4xl px-4 w-full h-fit rounded-lg py-16"
     >
       <img
         alt="wallet"
@@ -17,9 +17,7 @@ export const GetStarted = () => {
         Get started by connecting your wallet to see your organisation profile
       </p>
 
-      <Button size="lg" className="w-fit">
-        Connect Wallet
-      </Button>
+      <ConnectWalletModal />
     </Box>
   );
 };

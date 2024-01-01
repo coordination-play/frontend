@@ -9,8 +9,8 @@ import {
 } from "@starknet-react/core";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
-  DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
@@ -25,13 +25,13 @@ export const Header = () => {
       </Link>
 
       <div className="flex gap-3 items-center justify-between">
-        {address ? <DisconnectModal /> : <ConnectModal />}
+        {address ? <WalletModal /> : <ConnectWalletModal />}
       </div>
     </div>
   );
 };
 
-const ConnectModal = () => {
+export const ConnectWalletModal = () => {
   const { connect, connectors } = useConnect();
 
   return (
@@ -41,7 +41,7 @@ const ConnectModal = () => {
       </DialogTrigger>
 
       <DialogContent>
-        <DialogTitle>Connect Wallet</DialogTitle>
+        <DialogTitle className="font-bold">Connect Wallet</DialogTitle>
 
         <div className="flex flex-col gap-4">
           {connectors.map((connector: Connector) => (
@@ -59,7 +59,7 @@ const ConnectModal = () => {
   );
 };
 
-const DisconnectModal = () => {
+const WalletModal = () => {
   const { address } = useAccount();
   const { disconnect } = useDisconnect();
 
@@ -85,9 +85,20 @@ const DisconnectModal = () => {
         </DialogTrigger>
 
         <DialogContent>
-          <DialogHeader>Disconnect Wallet</DialogHeader>
-          <div className="flex flex-col gap-4">
-            <Button onClick={() => disconnect()}>Disconnect</Button>
+          <DialogTitle className="font-bold">Wallet</DialogTitle>
+
+          <p className="text-xs font-medium">{address}</p>
+
+          <div className="flex flex-col gap-2">
+            <DialogClose asChild>
+              <Button asChild>
+                <Link to={`/contributor/${address}`}>Dashboard</Link>
+              </Button>
+            </DialogClose>
+
+            <Button variant="tertiary" onClick={() => disconnect()}>
+              Disconnect
+            </Button>
           </div>
         </DialogContent>
       </Dialog>

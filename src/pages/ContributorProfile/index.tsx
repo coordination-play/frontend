@@ -1,5 +1,4 @@
 import { Leaderboard } from "@/components/Leaderboard";
-import { MeshNFTs } from "@/components/MeshNFTs";
 import { RecentActivities } from "@/components/RecentActivities";
 import { WalletBalance } from "@/components/WalletBalance";
 import { Box } from "@/components/ui/box";
