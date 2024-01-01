@@ -10,6 +10,7 @@ import SalaryABI from "./abis/Salary.json";
 
 import { getEnv } from "@/lib/env";
 import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 // addresses
 export const CONTRACTS_ADDRESSES = {
@@ -33,28 +34,41 @@ export const useReadSalaryContract = (props: UseContractReadProps) =>
   });
 
 // write
-export const useWriteSalaryContract = (fnName: string) =>
+type WriteOptions = {
+  successMessage?: string;
+};
+
+export const useWriteSalaryContract = (fnName: string, options: WriteOptions) =>
   useWriteContract({
     abi: SalaryABI,
     address: CONTRACTS_ADDRESSES.SALARY,
     fnName,
+    ...options,
   });
 
-export const useWriteAttributionContract = (fnName: string) =>
+export const useWriteAttributionContract = (
+  fnName: string,
+  options: WriteOptions
+) =>
   useWriteContract({
     abi: AttributionABI,
     address: CONTRACTS_ADDRESSES.ATTRIBUTION,
     fnName,
+    ...options,
   });
 
 const useWriteContract = ({
   abi,
   address,
   fnName,
+
+  successMessage = "",
 }: {
   abi: Array<unknown>;
   address: string;
   fnName: string;
+
+  successMessage?: string;
 }) => {
   const { provider } = useProvider();
 
@@ -62,6 +76,8 @@ const useWriteContract = ({
     abi,
     address,
   });
+
+  const { toast } = useToast();
 
   const [state, setState] = useState<{
     isLoading: boolean;
@@ -96,12 +112,24 @@ const useWriteContract = ({
         isSuccess: true,
         error: null,
       });
+
+      toast({
+        title: "Transaction successful",
+        description: successMessage,
+      });
     } catch (err) {
       setState({
         isLoading: false,
         isError: true,
         isSuccess: false,
         error: err,
+      });
+
+      console.error(`failed to execute '${fnName}': `, { error: err });
+
+      toast({
+        title: "Transaction Failed",
+        description: `failed to execute '${fnName}'`,
       });
     }
   };

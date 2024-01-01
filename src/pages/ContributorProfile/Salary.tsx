@@ -1,3 +1,4 @@
+import { ContractWriteButton } from "@/components/ContractWriteButton";
 import { SpinnerSvg } from "@/components/icons";
 import { Box } from "@/components/ui/box";
 import { Button } from "@/components/ui/button";
@@ -11,12 +12,7 @@ export const Salary = ({ address }: { address: string }) => {
   //     args: [address, months_id],
   //   });
 
-  //   const { writeAsyncAndWait, isLoading } =
-  //     useWriteSalaryContract("claim_salary");
-
-  //   const onClaimSalary = async () => {
-  //     await writeAsyncAndWait([address, months_id]);
-  //   };
+  // const claimSalary = useWriteSalaryContract("claim_salary");
 
   return (
     <Box variant="shadow" className="rounded-lg">
@@ -28,14 +24,14 @@ export const Salary = ({ address }: { address: string }) => {
         <p className="text-3xl font-bold text-text">$18480.87</p>
       </div>
 
-      <Button
+      {/* <ContractWriteButton
         className="mb-5 ml-5"
-        // onClick={onClaimSalary}
-        // disabled={isLoading}
-      >
-        {/* <SpinnerSvg /> */}
-        Claim Salary
-      </Button>
+        label="Claim Salary"
+        args={[address]}
+        {...claimSalary}
+      /> */}
+
+      <Button className="mb-5 ml-5">Claim Salary</Button>
     </Box>
   );
 };
