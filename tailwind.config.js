@@ -1,12 +1,7 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   darkMode: ["class"],
-  content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
-  ],
+  content: ["./src/**/*.{ts,tsx}", "index.html"],
   prefix: "",
   theme: {
     container: {
@@ -18,45 +13,44 @@ module.exports = {
     },
     extend: {
       colors: {
-        text: {
-          DEFAULT: "hsl(var(--text))",
-          inverse: "hsl(var(--text-inverse))",
-        },
-
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
-
-        sky: "hsl(var(--sky))",
-        pink: "hsl(var(--pink))",
-
-        navy: "hsl(var(--navy))",
-        blueSky: "hsl(var(--blueSky))",
-
-        lightPink: "hsl(var(--lightPink))",
-        violet: "hsl(var(--violet))",
-
-        orange: "hsl(var(--orange))",
-        lightRed: "hsl(var(--lightRed))",
-
-        lightGreen: "hsl(var(--lightGreen))",
-        darkGreen: "hsl(var(--darkGreen))",
-
-        magenta: "hsl(var(--magenta))",
-        red: "hsl(var(--red))",
-
-        grey: "#FFFFFF33",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
-      },
-      backdropBlur: {
-        DEFAULT: "76.98px",
-      },
-      boxShadow: {
-        DEFAULT: "inset 0px 0px 22px 0px rgba(255, 255, 255, 0.6)",
-        inputInner: "inset 0px 0px 40px 0px rgba(255, 255, 255, 0.4)",
       },
       keyframes: {
         "accordion-down": {
@@ -74,5 +68,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [import("tailwindcss-animate")],
 };

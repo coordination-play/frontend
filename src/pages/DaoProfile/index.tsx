@@ -14,13 +14,6 @@ import { useAccount } from "@starknet-react/core";
 export const DAOProfile = () => {
   const { isConnected } = useAccount();
 
-  if (!isConnected)
-    return (
-      <div className="w-full h-fit flex flex-1 mt-16 justify-center">
-        <GetStarted />
-      </div>
-    );
-
   return (
     <>
       <div className="w-full h-full flex flex-1 mt-16 justify-center">

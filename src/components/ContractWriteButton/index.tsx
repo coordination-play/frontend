@@ -1,6 +1,6 @@
 import { ComponentProps } from "react";
 import { Button } from "../ui/button";
-import { SpinnerSvg } from "../icons";
+import { Spinner } from "../ui/spinner";
 
 type ContractWriteButtonProps = ComponentProps<typeof Button> & {
   label: React.ReactNode;
@@ -32,7 +32,7 @@ export const ContractWriteButton = ({
       onClick={onClick || (() => writeAsyncAndWait(args))}
       {...props}
     >
-      {isLoading ? <SpinnerSvg /> : label}
+      {isLoading ? <Spinner /> : label}
     </Button>
   );
 };

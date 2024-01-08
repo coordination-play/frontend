@@ -20,7 +20,7 @@ export const Header = () => {
   const { address } = useAccount();
 
   return (
-    <div className="flex items-center justify-between gap-2 px-12 py-5 border-b border-lightPink/30">
+    <div className="flex items-center justify-between gap-2 px-12 py-5 border-b border-border">
       <Link to="/">
         <img alt="logo" src="/assets/img/logo.png" />
       </Link>
@@ -38,7 +38,7 @@ export const ConnectWalletModal = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size="lg">Connect Wallet</Button>
+        <Button>Connect Wallet</Button>
       </DialogTrigger>
 
       <DialogContent>
@@ -72,15 +72,13 @@ const WalletModal = () => {
 
   return (
     <>
-      <Button variant="secondary" size="lg" className="w-fit px-2 font-medium">
+      <Button variant="outline" className="w-fit">
         {name}
       </Button>
 
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="tertiary" size="lg" className="px-2">
-            {addressShort}
-          </Button>
+          <Button variant="outline">{addressShort}</Button>
         </DialogTrigger>
 
         <DialogContent>
@@ -95,7 +93,7 @@ const WalletModal = () => {
               </Button>
             </DialogClose>
 
-            <Button variant="tertiary" onClick={() => disconnect()}>
+            <Button variant="secondary" onClick={() => disconnect()}>
               Disconnect
             </Button>
           </div>

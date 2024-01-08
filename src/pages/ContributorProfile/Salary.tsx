@@ -1,5 +1,4 @@
 import { ContractWriteButton } from "@/components/ContractWriteButton";
-import { SpinnerSvg } from "@/components/icons";
 import { Box } from "@/components/ui/box";
 import { Button } from "@/components/ui/button";
 import { useReadSalaryContract, useWriteSalaryContract } from "@/contracts";

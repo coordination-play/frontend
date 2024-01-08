@@ -6,13 +6,16 @@ import { Layout } from "./layout";
 import { DAOProfile } from "./DaoProfile";
 import { NotFoundPage } from "./NotFound";
 import { ContributorProfilePage } from "./ContributorProfile";
+import { HomePage } from "./Home";
 
 export const Routing = memo(() => {
   return (
     <Suspense fallback={<Box />}>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" element={<DAOProfile />} />
+          <Route path="/" element={<HomePage />} />
+
+          <Route path="/dao/:address" element={<DAOProfile />} />
           <Route
             path="/contributor/:address"
             element={<ContributorProfilePage />}

@@ -5,21 +5,8 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const boxVariants = cva("", {
-  variants: {
-    variant: {
-      default: "",
-      navy: "bg-navy",
-      pinkPurple: "bg-gradient-to-b from-lightPink to-violet",
-      orange: "bg-gradient-to-b from-orange to-lightRed",
-      green: "bg-gradient-to-b from-lightGreen to-darkGreen",
-      red: "bg-gradient-to-b from-magenta to-red",
-      grey: "bg-grey",
-      shadow: "backdrop-blur shadow",
-    },
-  },
-  defaultVariants: {
-    variant: "default",
-  },
+  variants: {},
+  defaultVariants: {},
 });
 
 export interface DivProps
@@ -29,14 +16,10 @@ export interface DivProps
 }
 
 const Box = React.forwardRef<HTMLDivElement, DivProps>(
-  ({ className, variant, asChild = false, ...props }, ref) => {
+  ({ className, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "div";
     return (
-      <Comp
-        className={cn(boxVariants({ variant, className }))}
-        ref={ref}
-        {...props}
-      />
+      <Comp className={cn(boxVariants({ className }))} ref={ref} {...props} />
     );
   }
 );
