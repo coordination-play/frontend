@@ -6,9 +6,11 @@ import {
   useProvider,
 } from "@starknet-react/core";
 
-import AttributionABI from "./abis/Attribution.json";
-import SalaryABI from "./abis/Salary.json";
 import FactoryABI from "./abis/Factory.json";
+import OrganisationABI from "./abis/Organisation.json";
+import GuildABI from "./abis/Guild.json";
+import SalaryABI from "./abis/Salary.json";
+import ETHTokenABI from "./abis/ETHToken.json";
 
 import { getEnv } from "@/lib/env";
 import { useState } from "react";
@@ -16,25 +18,32 @@ import { useToast } from "@/components/ui/use-toast";
 
 // addresses
 export const CONTRACTS_ADDRESSES = {
-  ATTRIBUTION: getEnv("VITE_ATTRIBUTION_CONTRACT_ADDRESS"),
-  SALARY: getEnv("VITE_SALARY_CONTRACT_ADDRESS"),
   FACTORY: getEnv("VITE_FACTORY_CONTRACT_ADDRESS"),
+  ORGANISATION: getEnv("VITE_ORGANISATION_CONTRACT_ADDRESS"),
+  GUILD: getEnv("VITE_GUILD_CONTRACT_ADDRESS"),
+  SALARY: getEnv("VITE_SALARY_CONTRACT_ADDRESS"),
+  ETH_TOKEN: getEnv("VITE_ETH_TOKEN_CONTRACT_ADDRESS"),
 };
 
 // read
 export const useReadFactoryContract = (props: UseContractReadProps) =>
   useContractRead({
     abi: FactoryABI,
-    address: CONTRACTS_ADDRESSES.SALARY,
+    address: CONTRACTS_ADDRESSES.FACTORY,
     ...props,
   });
 
-// export const useOrganizationContract;
-
-export const useReadAttributionContract = (props: UseContractReadProps) =>
+export const useReadOrgansationContract = (props: UseContractReadProps) =>
   useContractRead({
-    abi: AttributionABI,
-    address: CONTRACTS_ADDRESSES.ATTRIBUTION,
+    abi: OrganisationABI,
+    address: CONTRACTS_ADDRESSES.ORGANISATION,
+    ...props,
+  });
+
+export const useReadGuildContract = (props: UseContractReadProps) =>
+  useContractRead({
+    abi: GuildABI,
+    address: CONTRACTS_ADDRESSES.GUILD,
     ...props,
   });
 
@@ -42,6 +51,13 @@ export const useReadSalaryContract = (props: UseContractReadProps) =>
   useContractRead({
     abi: SalaryABI,
     address: CONTRACTS_ADDRESSES.SALARY,
+    ...props,
+  });
+
+export const useReadETHTokenContract = (props: UseContractReadProps) =>
+  useContractRead({
+    abi: ETHTokenABI,
+    address: CONTRACTS_ADDRESSES.ETH_TOKEN,
     ...props,
   });
 
@@ -61,6 +77,25 @@ export const useWriteFactoryContract = (
     ...options,
   });
 
+export const useWriteOrganisationContract = (
+  fnName: string,
+  options: WriteOptions
+) =>
+  useWriteContract({
+    abi: OrganisationABI,
+    address: CONTRACTS_ADDRESSES.ORGANISATION,
+    fnName,
+    ...options,
+  });
+
+export const useWriteGuildContract = (fnName: string, options: WriteOptions) =>
+  useWriteContract({
+    abi: GuildABI,
+    address: CONTRACTS_ADDRESSES.GUILD,
+    fnName,
+    ...options,
+  });
+
 export const useWriteSalaryContract = (fnName: string, options: WriteOptions) =>
   useWriteContract({
     abi: SalaryABI,
@@ -69,17 +104,7 @@ export const useWriteSalaryContract = (fnName: string, options: WriteOptions) =>
     ...options,
   });
 
-export const useWriteAttributionContract = (
-  fnName: string,
-  options: WriteOptions
-) =>
-  useWriteContract({
-    abi: AttributionABI,
-    address: CONTRACTS_ADDRESSES.ATTRIBUTION,
-    fnName,
-    ...options,
-  });
-
+// util
 const useWriteContract = ({
   abi,
   address,

@@ -1,51 +1,29 @@
 [
   {
-    "name": "SalaryDistributor",
+    "name": "Guild",
     "type": "impl",
-    "interface_name": "coordination_stack_core::salary::ISalaryDistributor"
+    "interface_name": "coordination_stack_core::guild::IGuild"
   },
   {
-    "name": "core::integer::u256",
+    "name": "coordination_stack_core::guild::MonthlyContribution",
     "type": "struct",
     "members": [
       {
-        "name": "low",
-        "type": "core::integer::u128"
+        "name": "contributor",
+        "type": "core::starknet::contract_address::ContractAddress"
       },
       {
-        "name": "high",
-        "type": "core::integer::u128"
+        "name": "point",
+        "type": "core::integer::u32"
       }
     ]
   },
   {
-    "name": "coordination_stack_core::salary::ISalaryDistributor",
+    "name": "coordination_stack_core::guild::IGuild",
     "type": "interface",
     "items": [
       {
-        "name": "token",
-        "type": "function",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
-        "name": "organisation",
-        "type": "function",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
-        "name": "get_cum_salary",
+        "name": "get_cum_contributions_points",
         "type": "function",
         "inputs": [
           {
@@ -55,13 +33,29 @@
         ],
         "outputs": [
           {
-            "type": "core::integer::u256"
+            "type": "core::integer::u32"
           }
         ],
         "state_mutability": "view"
       },
       {
-        "name": "get_claimed_salary",
+        "name": "get_monthly_total_contribution",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "month_id",
+            "type": "core::integer::u32"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::integer::u32"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "name": "get_contributions_data",
         "type": "function",
         "inputs": [
           {
@@ -71,13 +65,33 @@
         ],
         "outputs": [
           {
-            "type": "core::integer::u256"
+            "type": "core::array::Array::<core::integer::u32>"
           }
         ],
         "state_mutability": "view"
       },
       {
-        "name": "get_pool_amount",
+        "name": "get_monthly_contribution_points",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "contributor",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "month_id",
+            "type": "core::integer::u32"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::integer::u32"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "name": "update_contibutions",
         "type": "function",
         "inputs": [
           {
@@ -85,66 +99,23 @@
             "type": "core::integer::u32"
           },
           {
-            "name": "guild",
-            "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
-        "outputs": [
-          {
-            "type": "core::integer::u256"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
-        "name": "get_last_update_month_id",
-        "type": "function",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::integer::u32"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
-        "name": "add_fund_to_salary_pools",
-        "type": "function",
-        "inputs": [
-          {
-            "name": "month_id",
-            "type": "core::integer::u32"
-          },
-          {
-            "name": "amounts",
-            "type": "core::array::Array::<core::integer::u256>"
-          },
-          {
-            "name": "guilds",
-            "type": "core::array::Array::<core::starknet::contract_address::ContractAddress>"
+            "name": "contributions",
+            "type": "core::array::Array::<coordination_stack_core::guild::MonthlyContribution>"
           }
         ],
         "outputs": [],
         "state_mutability": "external"
       },
       {
-        "name": "update_cum_salary",
+        "name": "migrate_points",
         "type": "function",
         "inputs": [
           {
-            "name": "contributor",
+            "name": "old_address",
             "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
-        "outputs": [],
-        "state_mutability": "external"
-      },
-      {
-        "name": "claim_salary",
-        "type": "function",
-        "inputs": [
+          },
           {
-            "name": "recipient",
+            "name": "new_address",
             "type": "core::starknet::contract_address::ContractAddress"
           }
         ],
@@ -199,67 +170,54 @@
     "type": "constructor",
     "inputs": [
       {
-        "name": "owner",
-        "type": "core::starknet::contract_address::ContractAddress"
+        "name": "name",
+        "type": "core::felt252"
       },
       {
         "name": "organisation",
         "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "owner",
+        "type": "core::starknet::contract_address::ContractAddress"
       }
     ]
   },
   {
     "kind": "struct",
-    "name": "coordination_stack_core::salary::SalaryDistributor::CumulativeSalaryUpdated",
+    "name": "coordination_stack_core::guild::Guild::ContributionUpdated",
     "type": "event",
     "members": [
       {
         "kind": "data",
-        "name": "month_id",
-        "type": "core::integer::u32"
-      },
-      {
-        "kind": "data",
-        "name": "cum_salary",
-        "type": "core::integer::u256"
-      }
-    ]
-  },
-  {
-    "kind": "struct",
-    "name": "coordination_stack_core::salary::SalaryDistributor::SalaryPoolAdded",
-    "type": "event",
-    "members": [
-      {
-        "kind": "data",
-        "name": "month_id",
-        "type": "core::integer::u32"
-      },
-      {
-        "kind": "data",
-        "name": "guild",
+        "name": "contributor",
         "type": "core::starknet::contract_address::ContractAddress"
       },
       {
         "kind": "data",
-        "name": "pool_amount",
-        "type": "core::integer::u256"
+        "name": "month_id",
+        "type": "core::integer::u32"
+      },
+      {
+        "kind": "data",
+        "name": "points_earned",
+        "type": "core::integer::u32"
       }
     ]
   },
   {
     "kind": "struct",
-    "name": "coordination_stack_core::salary::SalaryDistributor::SalaryClaimed",
+    "name": "coordination_stack_core::guild::Guild::Migrated",
     "type": "event",
     "members": [
       {
         "kind": "data",
-        "name": "amount",
-        "type": "core::integer::u256"
+        "name": "old_address",
+        "type": "core::starknet::contract_address::ContractAddress"
       },
       {
         "kind": "data",
-        "name": "recipient",
+        "name": "new_address",
         "type": "core::starknet::contract_address::ContractAddress"
       }
     ]
@@ -295,23 +253,18 @@
   },
   {
     "kind": "enum",
-    "name": "coordination_stack_core::salary::SalaryDistributor::Event",
+    "name": "coordination_stack_core::guild::Guild::Event",
     "type": "event",
     "variants": [
       {
         "kind": "nested",
-        "name": "CumulativeSalaryUpdated",
-        "type": "coordination_stack_core::salary::SalaryDistributor::CumulativeSalaryUpdated"
+        "name": "ContributionUpdated",
+        "type": "coordination_stack_core::guild::Guild::ContributionUpdated"
       },
       {
         "kind": "nested",
-        "name": "SalaryPoolAdded",
-        "type": "coordination_stack_core::salary::SalaryDistributor::SalaryPoolAdded"
-      },
-      {
-        "kind": "nested",
-        "name": "SalaryClaimed",
-        "type": "coordination_stack_core::salary::SalaryDistributor::SalaryClaimed"
+        "name": "Migrated",
+        "type": "coordination_stack_core::guild::Guild::Migrated"
       },
       {
         "kind": "flat",
