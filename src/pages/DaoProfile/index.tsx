@@ -1,6 +1,5 @@
 import { LayoutGrid, Trophy } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 import { CreateGuildDialog } from "./CreateGuild";

@@ -5,7 +5,6 @@ import { Layout } from "./layout";
 
 import { DAOProfile } from "./DaoProfile";
 import { NotFoundPage } from "./NotFound";
-import { ContributorProfilePage } from "./ContributorProfile";
 import { HomePage } from "./Home";
 
 export const Routing = memo(() => {
@@ -16,10 +15,6 @@ export const Routing = memo(() => {
           <Route path="/" element={<HomePage />} />
 
           <Route path="/dao/:address" element={<DAOProfile />} />
-          <Route
-            path="/contributor/:address"
-            element={<ContributorProfilePage />}
-          />
 
           <Route path="*" element={<NotFoundPage />} />
         </Route>
