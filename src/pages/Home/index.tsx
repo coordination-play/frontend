@@ -5,13 +5,9 @@ import { useAccount } from "@starknet-react/core";
 import { Globe } from "lucide-react";
 import { CreateOrgDialog } from "./CreateOrgDialog";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 import { useState } from "react";
-import { truncateAddress } from "@/lib/utils";
-import {
-  useGetAllOrganisationDetails,
-  useGetAllOrganisations,
-} from "@/contracts/read/factory";
+import { useGetAllOrganisationDetails } from "@/contracts/read/factory";
+import { OrganisationBox } from "./OrganisationBox";
 
 export const HomePage = () => {
   const [activeTab, setActiveTab] = useState("allorgs");
@@ -61,27 +57,7 @@ export const HomePage = () => {
           ) : (
             <div className="flex flex-col gap-2">
               {data.orgs.map((org, i) => (
-                <Link
-                  key={i}
-                  to={`/org/${org.address}`}
-                  className="px-4 py-4 flex items-center gap-4 border-border rounded-lg bg-foreground/5"
-                >
-                  {/* <img className="aspect-square h-full" /> */}
-                  <div className="flex flex-col">
-                    <h6 className="text-lg text-foreground/90 font-medium">
-                      {org.name}
-                    </h6>
-                    <p className="text-sm text-foreground/40">
-                      {truncateAddress(org.address)}
-                    </p>
-                  </div>
-
-                  {/* <div className="p-1.5 rounded-md border-border border ml-auto">
-                  <p className="text-sm text-foreground/70">
-                    300 Contributors{" "}
-                  </p>
-                </div> */}
-                </Link>
+                <OrganisationBox key={i} {...org} />
               ))}
             </div>
           )}

@@ -26,28 +26,37 @@ export const useWriteFactoryContract = (
   });
 
 export const useWriteOrganisationContract = (
+  address: string,
   fnName: string,
   options: WriteOptions
 ) =>
   useWriteContract({
+    address,
     abi: OrganisationABI,
-    address: CONTRACTS_ADDRESSES.ORGANISATION,
     fnName,
     ...options,
   });
 
-export const useWriteGuildContract = (fnName: string, options: WriteOptions) =>
+export const useWriteGuildContract = (
+  address: string,
+  fnName: string,
+  options: WriteOptions
+) =>
   useWriteContract({
+    address,
     abi: GuildABI,
-    address: CONTRACTS_ADDRESSES.GUILD,
     fnName,
     ...options,
   });
 
-export const useWriteSalaryContract = (fnName: string, options: WriteOptions) =>
+export const useWriteSalaryContract = (
+  address: string,
+  fnName: string,
+  options: WriteOptions
+) =>
   useWriteContract({
+    address,
     abi: SalaryABI,
-    address: CONTRACTS_ADDRESSES.SALARY,
     fnName,
     ...options,
   });

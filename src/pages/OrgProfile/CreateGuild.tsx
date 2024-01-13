@@ -20,10 +20,15 @@ import {
 } from "@/components/ui/form";
 import { useWriteOrganisationContract } from "@/contracts/write";
 import { Spinner } from "@/components/ui/spinner";
+import { useOrganisation } from "@/hooks/organisation";
+import { useGetOrgAllGuilds } from "@/contracts/read/organisation";
+import { useState } from "react";
 
 export const CreateGuildDialog = () => {
+  const [open, setOpen] = useState(false);
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>Create Guild</Button>
       </DialogTrigger>
@@ -32,21 +37,20 @@ export const CreateGuildDialog = () => {
           <DialogTitle>Create Guild</DialogTitle>
         </DialogHeader>
 
-        <CreateGuildForm />
+        <CreateGuildForm onClose={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );
 };
 
 const formSchema = z.object({
-  //   logo: z.string().url(),
   name: z.string().min(2, {
-    message: "Organization name must be at least 2 characters.",
+    message: "Guild name must be at least 2 characters.",
   }),
-  owner: z.custom<string>(() => true, "Invalid Address"),
+  owner: z.string(),
 });
 
-const CreateGuildForm = () => {
+const CreateGuildForm = ({ onClose }: { onClose: () => void }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -55,13 +59,26 @@ const CreateGuildForm = () => {
     },
   });
 
-  const createOrgMutate = useWriteOrganisationContract("add_guild", {
+  const { address } = useOrganisation();
+  const { refetch: refetchAllGuilds } = useGetOrgAllGuilds({
+    address,
+  });
+
+  const createGuildMutate = useWriteOrganisationContract(address, "add_guild", {
     successMessage: "Guild created successfully",
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    await createOrgMutate.writeAsyncAndWait([values.name, values.owner]);
+    console.log("values", values);
+    await createGuildMutate.writeAsyncAndWait([values.name, values.owner]);
+
+    await refetchAllGuilds();
+
+    onClose();
   };
+
+  const disableField =
+    createGuildMutate.isLoading || createGuildMutate.isSuccess;
 
   return (
     <Form {...form}>
@@ -69,6 +86,7 @@ const CreateGuildForm = () => {
         <FormField
           control={form.control}
           name="name"
+          disabled={disableField}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Guild Name</FormLabel>
@@ -83,6 +101,7 @@ const CreateGuildForm = () => {
         <FormField
           control={form.control}
           name="owner"
+          disabled={disableField}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Guild Owner</FormLabel>
@@ -99,12 +118,12 @@ const CreateGuildForm = () => {
           className="w-full"
           size="lg"
           disabled={
-            createOrgMutate.isLoading ||
-            createOrgMutate.isError ||
-            createOrgMutate.isSuccess
+            createGuildMutate.isLoading ||
+            // createOrgMutate.isError ||
+            createGuildMutate.isSuccess
           }
         >
-          {createOrgMutate.isLoading ? <Spinner /> : "Create Guild"}
+          {createGuildMutate.isLoading ? <Spinner /> : "Create Guild"}
         </Button>
       </form>
     </Form>
