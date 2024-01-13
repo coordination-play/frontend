@@ -20,14 +20,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useWriteFactoryContract } from "@/contracts";
+import { useWriteFactoryContract } from "@/contracts/write";
 import { Spinner } from "@/components/ui/spinner";
+import { useCreateOrganisationContract } from "@/contracts/write/factory";
 
-export const CreateOrgDialog = () => {
+export const CreateOrgDialog = ({
+  triggerClassName,
+}: {
+  triggerClassName?: string;
+}) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="ml-auto">Create Organization</Button>
+        <Button className={triggerClassName}>Create Organization</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -45,9 +50,12 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: "Organization name must be at least 2 characters.",
   }),
-  description: z.string().min(10, {
-    message: "Organization description must be at least 10 characters.",
-  }),
+  description: z
+    .string()
+    // .min(10, {
+    //   message: "Organization description must be at least 10 characters.",
+    // })
+    .optional(),
 });
 
 const CreateDAOForm = () => {
@@ -60,13 +68,11 @@ const CreateDAOForm = () => {
     },
   });
 
-  const createOrgMutate = useWriteFactoryContract("create_organisation", {
-    successMessage: "Organization created successfully",
-  });
+  const createOrgMutate = useCreateOrganisationContract();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("values", values);
-    await createOrgMutate.writeAsyncAndWait([values.name]);
+    await createOrgMutate.createOrganisation({ name: values.name });
   };
 
   return (
@@ -106,7 +112,7 @@ const CreateDAOForm = () => {
           size="lg"
           disabled={
             createOrgMutate.isLoading ||
-            createOrgMutate.isError ||
+            // createOrgMutate.isError ||
             createOrgMutate.isSuccess
           }
         >

@@ -18,7 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useWriteOrganisationContract } from "@/contracts";
+import { useWriteOrganisationContract } from "@/contracts/write";
 import { Spinner } from "@/components/ui/spinner";
 
 export const CreateGuildDialog = () => {

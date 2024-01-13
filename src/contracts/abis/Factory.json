@@ -19,6 +19,34 @@
     ]
   },
   {
+    "name": "core::array::Span::<core::felt252>",
+    "type": "struct",
+    "members": [
+      {
+        "name": "snapshot",
+        "type": "@core::array::Array::<core::felt252>"
+      }
+    ]
+  },
+  {
+    "name": "coordination_stack_core::factory::Organisation",
+    "type": "struct",
+    "members": [
+      {
+        "name": "name",
+        "type": "core::felt252"
+      },
+      {
+        "name": "metadata",
+        "type": "core::array::Span::<core::felt252>"
+      },
+      {
+        "name": "organisation",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
+  },
+  {
     "name": "coordination_stack_core::factory::IFactory",
     "type": "interface",
     "items": [
@@ -51,6 +79,17 @@
         "outputs": [
           {
             "type": "(core::integer::u32, core::array::Array::<core::starknet::contract_address::ContractAddress>)"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "name": "get_all_organisations_details",
+        "type": "function",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "(core::integer::u32, core::array::Array::<coordination_stack_core::factory::Organisation>)"
           }
         ],
         "state_mutability": "view"
@@ -89,6 +128,28 @@
         "state_mutability": "view"
       },
       {
+        "name": "get_salary_contract_class_hash",
+        "type": "function",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::starknet::class_hash::ClassHash"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "name": "get_treasury_contract_class_hash",
+        "type": "function",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::starknet::class_hash::ClassHash"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
         "name": "update_creation_deposit",
         "type": "function",
         "inputs": [
@@ -107,6 +168,10 @@
           {
             "name": "name",
             "type": "core::felt252"
+          },
+          {
+            "name": "metadata",
+            "type": "core::array::Span::<core::felt252>"
           }
         ],
         "outputs": [
@@ -167,6 +232,30 @@
         ],
         "outputs": [],
         "state_mutability": "external"
+      },
+      {
+        "name": "replace_salary_contract_hash",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "new_salary_contract_class",
+            "type": "core::starknet::class_hash::ClassHash"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "name": "replace_treasury_contract_hash",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "new_treasury_contract_class",
+            "type": "core::starknet::class_hash::ClassHash"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
       }
     ]
   },
@@ -221,6 +310,14 @@
       },
       {
         "name": "guild_contract_class_hash",
+        "type": "core::starknet::class_hash::ClassHash"
+      },
+      {
+        "name": "treasury_contract_class_hash",
+        "type": "core::starknet::class_hash::ClassHash"
+      },
+      {
+        "name": "salary_contract_class_hash",
         "type": "core::starknet::class_hash::ClassHash"
       },
       {

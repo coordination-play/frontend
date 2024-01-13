@@ -1,9 +1,9 @@
 import { useAccount, useContract, useProvider } from "@starknet-react/core";
-import FactoryABI from "./abis/Factory.json";
-import { CONTRACTS_ADDRESSES } from ".";
+import { CONTRACTS_ADDRESSES, FactoryABI } from "../contracts";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { CallData, cairo } from "starknet";
+import { useOrgCreationDeposit } from "../read/factory";
 
 export const useCreateOrganisationContract = () => {
   const { provider } = useProvider();
@@ -14,6 +14,13 @@ export const useCreateOrganisationContract = () => {
     address: CONTRACTS_ADDRESSES.FACTORY,
     provider,
   });
+
+  const {
+    data: creationDeposit = 0,
+    // isLoading: isCreationDepositLoading,
+    isError: isCreationDepositError,
+    error: creationDepositError,
+  } = useOrgCreationDeposit();
 
   const { toast } = useToast();
 
@@ -32,7 +39,13 @@ export const useCreateOrganisationContract = () => {
   const createOrganisation = async ({ name }: { name: string }) => {
     if (!contract || !account) return;
 
+    console.log("creationDeposit", creationDeposit);
+
     try {
+      if (isCreationDepositError) {
+        throw creationDepositError;
+      }
+
       setState({
         isLoading: true,
         isError: false,
@@ -48,7 +61,7 @@ export const useCreateOrganisationContract = () => {
           entrypoint: "approve",
           calldata: CallData.compile({
             spender: CONTRACTS_ADDRESSES.FACTORY,
-            amount: cairo.uint256(1),
+            amount: cairo.uint256(BigInt(creationDeposit)),
           }),
         },
         // Calling Factory contract
@@ -57,6 +70,7 @@ export const useCreateOrganisationContract = () => {
           entrypoint: "create_organisation",
           calldata: CallData.compile({
             name: cairo.felt(name),
+            metadata: [cairo.felt(0)],
           }),
         },
       ]);

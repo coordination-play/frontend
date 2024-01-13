@@ -18,7 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useWriteOrganisationContract } from "@/contracts";
+import { useWriteOrganisationContract } from "@/contracts/write";
 import { Spinner } from "@/components/ui/spinner";
 import {
   Select,
@@ -28,18 +28,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export const PaySalaryDialog = () => {
+export const UploadPointsDialog = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-full">Pay Salary</Button>
+        <Button className="w-full">Upload Points</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Pay Salary</DialogTitle>
+          <DialogTitle>Upload Points</DialogTitle>
         </DialogHeader>
 
-        <PaySalaryForm />
+        <UploadPointsForm />
       </DialogContent>
     </Dialog>
   );
@@ -48,29 +48,29 @@ export const PaySalaryDialog = () => {
 const formSchema = z.object({
   //   logo: z.string().url(),
   guild: z.string(),
-  salaryAmount: z.string().min(0),
   monthId: z.string(),
+  points: z.string().min(0),
 });
 
-const PaySalaryForm = () => {
+const UploadPointsForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       guild: "",
-      salaryAmount: "",
       monthId: "",
+      points: "",
     },
   });
 
-  const paySalaryMutate = useWriteOrganisationContract("add_guild", {
+  const uploadPointsMutate = useWriteOrganisationContract("add_guild", {
     successMessage: "Guild created successfully",
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    await paySalaryMutate.writeAsyncAndWait([
+    await uploadPointsMutate.writeAsyncAndWait([
       values.guild,
-      values.salaryAmount,
       values.monthId,
+      values.points,
     ]);
   };
 
@@ -103,24 +103,6 @@ const PaySalaryForm = () => {
 
         <FormField
           control={form.control}
-          name="salaryAmount"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Salary Amount</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  placeholder="Enter Salary Amount"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
           name="monthId"
           render={({ field }) => (
             <FormItem>
@@ -133,17 +115,31 @@ const PaySalaryForm = () => {
           )}
         />
 
+        <FormField
+          control={form.control}
+          name="points"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Upload .CSV File</FormLabel>
+              <FormControl>
+                <Input type="file" placeholder="Click to Select" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <Button
           type="submit"
           className="w-full"
           size="lg"
           disabled={
-            paySalaryMutate.isLoading ||
-            paySalaryMutate.isError ||
-            paySalaryMutate.isSuccess
+            uploadPointsMutate.isLoading ||
+            uploadPointsMutate.isError ||
+            uploadPointsMutate.isSuccess
           }
         >
-          {paySalaryMutate.isLoading ? <Spinner /> : "Send Payment"}
+          {uploadPointsMutate.isLoading ? <Spinner /> : "Update Points"}
         </Button>
       </form>
     </Form>

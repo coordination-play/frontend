@@ -23,6 +23,17 @@
     "type": "interface",
     "items": [
       {
+        "name": "name",
+        "type": "function",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::felt252"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
         "name": "get_cum_contributions_points",
         "type": "function",
         "inputs": [

@@ -3,7 +3,7 @@ import { Suspense, memo } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Layout } from "./layout";
 
-import { DAOProfile } from "./DaoProfile";
+import { ORGProfile } from "./OrgProfile";
 import { NotFoundPage } from "./NotFound";
 import { HomePage } from "./Home";
 
@@ -14,7 +14,7 @@ export const Routing = memo(() => {
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
 
-          <Route path="/dao/:address" element={<DAOProfile />} />
+          <Route path="/org/:address" element={<ORGProfile />} />
 
           <Route path="*" element={<NotFoundPage />} />
         </Route>

@@ -1,67 +1,15 @@
 import {
-  UseContractReadProps,
-  useAccount,
-  useContract,
-  useContractRead,
-  useProvider,
-} from "@starknet-react/core";
+  CONTRACTS_ADDRESSES,
+  FactoryABI,
+  GuildABI,
+  OrganisationABI,
+  SalaryABI,
+} from "../contracts";
 
-import FactoryABI from "./abis/Factory.json";
-import OrganisationABI from "./abis/Organisation.json";
-import GuildABI from "./abis/Guild.json";
-import SalaryABI from "./abis/Salary.json";
-import ETHTokenABI from "./abis/ETHToken.json";
-
-import { getEnv } from "@/lib/env";
-import { useState } from "react";
+import { useAccount, useContract, useProvider } from "@starknet-react/core";
 import { useToast } from "@/components/ui/use-toast";
+import { useState } from "react";
 
-// addresses
-export const CONTRACTS_ADDRESSES = {
-  FACTORY: getEnv("VITE_FACTORY_CONTRACT_ADDRESS"),
-  ORGANISATION: getEnv("VITE_ORGANISATION_CONTRACT_ADDRESS"),
-  GUILD: getEnv("VITE_GUILD_CONTRACT_ADDRESS"),
-  SALARY: getEnv("VITE_SALARY_CONTRACT_ADDRESS"),
-  ETH_TOKEN: getEnv("VITE_ETH_TOKEN_CONTRACT_ADDRESS"),
-};
-
-// read
-export const useReadFactoryContract = (props: UseContractReadProps) =>
-  useContractRead({
-    abi: FactoryABI,
-    address: CONTRACTS_ADDRESSES.FACTORY,
-    ...props,
-  });
-
-export const useReadOrgansationContract = (props: UseContractReadProps) =>
-  useContractRead({
-    abi: OrganisationABI,
-    address: CONTRACTS_ADDRESSES.ORGANISATION,
-    ...props,
-  });
-
-export const useReadGuildContract = (props: UseContractReadProps) =>
-  useContractRead({
-    abi: GuildABI,
-    address: CONTRACTS_ADDRESSES.GUILD,
-    ...props,
-  });
-
-export const useReadSalaryContract = (props: UseContractReadProps) =>
-  useContractRead({
-    abi: SalaryABI,
-    address: CONTRACTS_ADDRESSES.SALARY,
-    ...props,
-  });
-
-export const useReadETHTokenContract = (props: UseContractReadProps) =>
-  useContractRead({
-    abi: ETHTokenABI,
-    address: CONTRACTS_ADDRESSES.ETH_TOKEN,
-    ...props,
-  });
-
-// write
 type WriteOptions = {
   successMessage?: string;
 };

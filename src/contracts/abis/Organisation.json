@@ -5,6 +5,30 @@
     "interface_name": "coordination_stack_core::organisation::IOrganisation"
   },
   {
+    "name": "core::array::Span::<core::felt252>",
+    "type": "struct",
+    "members": [
+      {
+        "name": "snapshot",
+        "type": "@core::array::Array::<core::felt252>"
+      }
+    ]
+  },
+  {
+    "name": "coordination_stack_core::organisation::Guild",
+    "type": "struct",
+    "members": [
+      {
+        "name": "name",
+        "type": "core::felt252"
+      },
+      {
+        "name": "guild",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
+  },
+  {
     "name": "core::bool",
     "type": "enum",
     "variants": [
@@ -22,6 +46,28 @@
     "name": "coordination_stack_core::organisation::IOrganisation",
     "type": "interface",
     "items": [
+      {
+        "name": "name",
+        "type": "function",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::felt252"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "name": "metadata",
+        "type": "function",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::array::Span::<core::felt252>"
+          }
+        ],
+        "state_mutability": "view"
+      },
       {
         "name": "get_cum_contributions_points",
         "type": "function",
@@ -45,6 +91,17 @@
         "outputs": [
           {
             "type": "(core::integer::u8, core::array::Array::<core::starknet::contract_address::ContractAddress>)"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "name": "get_all_guilds_details",
+        "type": "function",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "(core::integer::u8, core::array::Array::<coordination_stack_core::organisation::Guild>)"
           }
         ],
         "state_mutability": "view"
@@ -150,12 +207,23 @@
         "state_mutability": "view"
       },
       {
-        "name": "get_salary_contract_class_hash",
+        "name": "get_salary_contract",
         "type": "function",
         "inputs": [],
         "outputs": [
           {
-            "type": "core::starknet::class_hash::ClassHash"
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "name": "get_treasury",
+        "type": "function",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::starknet::contract_address::ContractAddress"
           }
         ],
         "state_mutability": "view"
@@ -193,7 +261,35 @@
         "state_mutability": "external"
       },
       {
+        "name": "update_organisation_metadata",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "new_metadata",
+            "type": "core::array::Span::<core::felt252>"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
         "name": "update_salary_contract",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "owner",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "token",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "name": "update_treasury_contract",
         "type": "function",
         "inputs": [
           {
@@ -227,18 +323,6 @@
           {
             "name": "new_address",
             "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
-        "outputs": [],
-        "state_mutability": "external"
-      },
-      {
-        "name": "replace_salary_contract_hash",
-        "type": "function",
-        "inputs": [
-          {
-            "name": "new_salary_contract_class",
-            "type": "core::starknet::class_hash::ClassHash"
           }
         ],
         "outputs": [],
@@ -294,6 +378,10 @@
       {
         "name": "name",
         "type": "core::felt252"
+      },
+      {
+        "name": "metadata",
+        "type": "core::array::Span::<core::felt252>"
       },
       {
         "name": "owner",
@@ -380,6 +468,23 @@
   },
   {
     "kind": "struct",
+    "name": "coordination_stack_core::organisation::Organisation::MetadataUpdated",
+    "type": "event",
+    "members": [
+      {
+        "kind": "data",
+        "name": "old_metadata",
+        "type": "core::array::Span::<core::felt252>"
+      },
+      {
+        "kind": "data",
+        "name": "new_metadata",
+        "type": "core::array::Span::<core::felt252>"
+      }
+    ]
+  },
+  {
+    "kind": "struct",
     "name": "openzeppelin::access::ownable::ownable::OwnableComponent::OwnershipTransferred",
     "type": "event",
     "members": [
@@ -431,6 +536,11 @@
         "kind": "nested",
         "name": "NameChanged",
         "type": "coordination_stack_core::organisation::Organisation::NameChanged"
+      },
+      {
+        "kind": "nested",
+        "name": "MetadataUpdated",
+        "type": "coordination_stack_core::organisation::Organisation::MetadataUpdated"
       },
       {
         "kind": "flat",
