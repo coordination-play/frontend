@@ -7,7 +7,7 @@ const PWAManifestConfig = {
   name: "coordination",
   short_name: "coordination",
   description: "Coordination Play",
-  theme_color: "#1c1c1c",
+  theme_color: "#262626",
   icons: [
     {
       src: "pwa-192x192.png",
