@@ -1,9 +1,24 @@
+import { shortString } from "starknet";
 import { UseContractReadProps, useContractRead } from ".";
 import { GuildABI } from "../contracts";
 
 import * as z from "zod";
 
 const readGuild = {
+  name: {
+    returnType: z.bigint(),
+    parsedType: z.string().optional(),
+    parse: function (data: unknown): z.infer<typeof this.parsedType> {
+      console.log("name", data);
+
+      if (!data) return undefined;
+
+      // parse
+      const parsedData = this.returnType.parse(data);
+
+      return shortString.decodeShortString(parsedData.toString());
+    },
+  },
   get_cum_contribution_points: {
     returnType: z.bigint(),
     parsedType: z.number(),
@@ -66,6 +81,13 @@ const useReadGuildContract = <R,>(props: UseContractReadProps) =>
   useContractRead<R>({
     abi: GuildABI,
     ...props,
+  });
+
+export const useGetGuildName = ({ address }: { address: string }) =>
+  useReadGuildContract<z.infer<typeof readGuild.name.parsedType>>({
+    address,
+    functionName: "name",
+    parseResultFn: (d) => readGuild.name.parse(d),
   });
 
 export const useGetGuildCumContributionPoints = ({

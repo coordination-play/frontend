@@ -54,7 +54,7 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       devOptions: {
-        enabled: true, // <== to enable PWA on dev
+        // enabled: true, // <== to enable PWA on dev
       },
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.png"],
       manifest: PWAManifestConfig,

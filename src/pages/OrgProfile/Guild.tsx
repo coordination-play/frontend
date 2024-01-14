@@ -1,17 +1,9 @@
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import { Skeleton } from "@/components/ui/skeleton";
-import {
-  useGetGuildCumContributionPoints,
-  useGetGuildMonthlyContributionPoints,
-  useGetGuildMonthlyTotalContribution,
-} from "@/contracts/read/guild";
+import { useGetGuildMonthlyContributionPoints } from "@/contracts/read/guild";
 import { useOrganisation } from "@/hooks/useOrganisation";
-import { truncateAddress } from "@/lib/utils";
+import { cn, truncateAddress } from "@/lib/utils";
+import { setActiveGuild, useGuildState } from "@/state/guild";
 import { useAccount } from "@starknet-react/core";
+import { Circle } from "lucide-react";
 
 type GuildProps = {
   name: string;
@@ -19,123 +11,44 @@ type GuildProps = {
 };
 
 export const Guild = ({ name, address }: GuildProps) => {
-  const { monthId } = useOrganisation();
-  const { address: account = "", isConnected } = useAccount();
+  const { activeGuild } = useGuildState();
 
-  const { data: totalContribution = 0, isLoading: isTotalContributionLoading } =
-    useGetGuildMonthlyTotalContribution({
+  const { monthId } = useOrganisation();
+  const { address: account = "" } = useAccount();
+
+  const { data: monthlyContributionPoints = 0 } =
+    useGetGuildMonthlyContributionPoints({
       address,
+      contributor: account,
       monthId,
     });
 
-  const {
-    data: cumContributionPoints = 0,
-    isLoading: isCumContributionPointsLoading,
-  } = useGetGuildCumContributionPoints({
-    address,
-    contributor: account,
-  });
-
-  const {
-    data: monthlyContributionPoints = 0,
-    isLoading: isMonthlyContributionPointsLoading,
-  } = useGetGuildMonthlyContributionPoints({
-    address,
-    contributor: account,
-    monthId,
-  });
-
-  //   console.log({
-  //     totalContribution,
-  //     cumContributionPoints,
-  //     monthlyContributionPoints,
-  //   });
-
   return (
-    <HoverCard>
-      <HoverCardTrigger>
-        <div className="flex p-4 bg-foreground/5 gap-6 items-start flex-col rounded-sm border border-border">
-          <div className="flex flex-col gap-1 max-w-xl">
-            <p className="text text-foreground font-medium">{name}</p>
+    <div
+      className={cn(
+        "flex p-4 bg-foreground/5 gap-6 items-start flex-col rounded-sm border border-border cursor-pointer",
+        activeGuild === address
+          ? "bg-primary/20 border border-primary/50 transition-colors"
+          : ""
+      )}
+      onClick={() => setActiveGuild(address)}
+    >
+      <div className="flex flex-col gap-1 max-w-xl w-full">
+        <p className="text text-foreground font-medium">{name}</p>
 
-            <p className="font-normal text-sm text-foreground/80">
-              {/* 8 Contributors */}
-              {truncateAddress(address)}
+        <div className="flex items-center justify-between w-full">
+          <p className="font-normal text-sm text-foreground/80">
+            {truncateAddress(address)}
+          </p>
+
+          {monthlyContributionPoints ? (
+            <p className="text-success text-sm flex items-center gap-1">
+              <Circle className="w-1.5 h-1.5 fill-current" />
+              {monthlyContributionPoints} points
             </p>
-          </div>
+          ) : null}
         </div>
-      </HoverCardTrigger>
-
-      <HoverCardContent className="w-80 space-y-4">
-        <div className="space-y-1">
-          <p className="font-bold">Guild</p>
-
-          <div className="space-y-2">
-            {[
-              {
-                label: "Total Points this month:",
-                value: totalContribution,
-                isLoading: isTotalContributionLoading,
-              },
-            ].map((c, i) => (
-              <div key={i} className="space-x-2 flex items-center">
-                <p className="text-sm">{c.label}</p>
-
-                {isTotalContributionLoading ? (
-                  <Skeleton className="w-20 h-6" />
-                ) : (
-                  <span className="text-sm text-foreground font-bold">
-                    {c.value}
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {isConnected ? (
-          <div className="space-y-1">
-            <p className="font-bold">You</p>
-
-            <div className="space-y-2">
-              {[
-                {
-                  label: "Total Earned this month:",
-                  value:
-                    monthlyContributionPoints +
-                    " " +
-                    (monthlyContributionPoints
-                      ? `(${(
-                          (monthlyContributionPoints / totalContribution) *
-                          100
-                        ).toFixed(2)}%)`
-                      : ""),
-                  isLoading:
-                    isMonthlyContributionPointsLoading ||
-                    isTotalContributionLoading,
-                },
-                {
-                  label: "Total Points all time:",
-                  value: cumContributionPoints,
-                  isLoading: isCumContributionPointsLoading,
-                },
-              ].map((c, i) => (
-                <div key={i} className="space-x-2 flex items-center">
-                  <p className="text-sm">{c.label}</p>
-
-                  {isTotalContributionLoading ? (
-                    <Skeleton className="w-20 h-6" />
-                  ) : (
-                    <span className="text-sm text-foreground font-bold">
-                      {c.value}
-                    </span>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : null}
-      </HoverCardContent>
-    </HoverCard>
+      </div>
+    </div>
   );
 };

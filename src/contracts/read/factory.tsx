@@ -15,8 +15,6 @@ export const readFactory = {
       })
       .optional(),
     parse: function (data: unknown): z.infer<typeof this.parsedType> {
-      console.log("get_all_organisations", data);
-
       if (!data) return undefined;
 
       // parse
@@ -56,8 +54,6 @@ export const readFactory = {
       })
       .optional(),
     parse: function (data: unknown): z.infer<typeof this.parsedType> {
-      console.log("get_all_organisations_details", data);
-
       if (!data) return undefined;
 
       // parse

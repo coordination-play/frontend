@@ -6,6 +6,7 @@ import { useOrganisation } from "@/hooks/useOrganisation";
 import { useAccount } from "@starknet-react/core";
 
 import { Guild } from "./Guild";
+import { ActiveGuild } from "./ActiveGuild";
 
 const gridClassName =
   "grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 md:gap-3.5 grid-flow-row";
@@ -85,6 +86,8 @@ export const AllGuilds = () => {
           ))}
         </div>
       ) : null}
+
+      <ActiveGuild />
     </>
   );
 };
