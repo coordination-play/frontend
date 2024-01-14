@@ -15,6 +15,11 @@ const PWAManifestConfig: Partial<ManifestOptions> = {
       src: "screenshot.png",
       form_factor: "wide",
     },
+    {
+      sizes: "1920x960",
+      src: "screenshot.png",
+      form_factor: "narrow",
+    },
   ],
   icons: [
     {
