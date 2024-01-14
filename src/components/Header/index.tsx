@@ -28,8 +28,11 @@ export const Header = () => {
 
   return (
     <div className="flex items-center justify-between gap-2 px-5 py-5 border-b border-border">
-      <Link to="/">
-        <img alt="logo" src="/assets/img/logo.png" />
+      <Link to="/" className="flex items-center gap-4">
+        <img alt="logo" src="/logo.svg" className="w-8 h-8" />
+        <p className="font-semibold text-xl hidden sm:block">
+          Coordination Play
+        </p>
       </Link>
 
       <div className="flex gap-3 items-center justify-between">

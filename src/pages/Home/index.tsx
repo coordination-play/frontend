@@ -1,4 +1,3 @@
-import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useAccount } from "@starknet-react/core";
@@ -17,7 +16,7 @@ export const HomePage = () => {
   const { data, isLoading } = useGetAllOrganisationDetails();
 
   return (
-    <div className="h-full flex-1 mt-16 max-w-5xl mx-auto flex flex-col gap-4 w-full">
+    <div className="h-full flex-1 mt-16 max-w-5xl mx-auto flex flex-col gap-6 w-full">
       <div className="flex flex-col gap-2 w-full">
         <h5 className="text-3xl font-medium">Explore Organizations</h5>
         <p className="text-foreground/50">
@@ -25,12 +24,12 @@ export const HomePage = () => {
         </p>
       </div>
 
-      <div>
+      {/* <div>
         <Input
           className="w-full"
           placeholder="Search organisation with name and contract address"
         />
-      </div>
+      </div> */}
 
       <Tabs
         defaultValue="allorgs"
