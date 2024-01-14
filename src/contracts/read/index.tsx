@@ -22,7 +22,7 @@ export const useContractRead = <R,>(
   const res = useStarketContractRead(props);
 
   const data = useMemo<R | undefined>(() => {
-    if (!res.data || res.isError) return undefined;
+    if (res.isError) return undefined;
 
     try {
       const retunedData = props.parseResultFn?.(res.data) as R;

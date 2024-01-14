@@ -4,12 +4,12 @@ import {
   useGetOrgMetadata,
   useGetOrgName,
 } from "@/contracts/read/organisation";
-import { useOrganisation } from "@/hooks/organisation";
+import { useOrganisation } from "@/hooks/useOrganisation";
 
 export const OrgHeader = () => {
   const { address } = useOrganisation();
   const { data: name, isLoading: isNameLoading } = useGetOrgName({ address });
-  const { data: metadata, isLoading: isMetadataLoading } = useGetOrgMetadata({
+  const { isLoading: isMetadataLoading } = useGetOrgMetadata({
     address,
   });
 

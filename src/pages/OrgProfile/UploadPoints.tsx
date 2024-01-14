@@ -1,11 +1,4 @@
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -18,7 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useWriteOrganisationContract } from "@/contracts/write";
+import { useWriteGuildContract } from "@/contracts/write";
 import { Spinner } from "@/components/ui/spinner";
 import {
   Select,
@@ -27,21 +20,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useOrganisation } from "@/hooks/useOrganisation";
+import { useGetOrgAllGuilds } from "@/contracts/read/organisation";
+import { useState } from "react";
+import { DrawerDialog } from "@/components/DrawerDialog";
 
 export const UploadPointsDialog = () => {
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button className="w-full">Upload Points</Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Upload Points</DialogTitle>
-        </DialogHeader>
+  const [open, setOpen] = useState(false);
 
-        <UploadPointsForm />
-      </DialogContent>
-    </Dialog>
+  return (
+    <DrawerDialog
+      trigger={<Button className="w-full">Upload Points</Button>}
+      open={open}
+      onOpenChange={setOpen}
+      title="Upload Points"
+    >
+      <UploadPointsForm onClose={() => setOpen(false)} />
+    </DrawerDialog>
   );
 };
 
@@ -49,30 +44,66 @@ const formSchema = z.object({
   //   logo: z.string().url(),
   guild: z.string(),
   monthId: z.string(),
-  points: z.string().min(0),
+  pointsData: z
+    .instanceof(File, {
+      message: "Please upload a .csv file",
+    })
+    .refine((file) => file.type === "text/csv")
+    .transform(
+      async (file): Promise<Array<{ contributor: string; point: number }>> => {
+        const text = await file.text();
+        const contributorsData = text.split("\n").map((line) => {
+          const [contributor, point] = line.split(",");
+          return {
+            contributor,
+            point: Number(point),
+          };
+        });
+        console.log(contributorsData);
+
+        return contributorsData;
+      }
+    ),
 });
 
-const UploadPointsForm = () => {
+const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
+  const { address, monthId } = useOrganisation();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      guild: "",
-      monthId: "",
-      points: "",
+      guild: undefined,
+      monthId: String(monthId),
+      pointsData: undefined,
     },
   });
 
-  const uploadPointsMutate = useWriteOrganisationContract("add_guild", {
-    successMessage: "Guild created successfully",
+  const { data: guilds, isLoading: isAllGuildsLoading } = useGetOrgAllGuilds({
+    address,
   });
+
+  const guildAddress = form.watch("guild");
+  const uploadPointsMutate = useWriteGuildContract(
+    guildAddress,
+    "update_contibutions",
+    {
+      successMessage: "Contributions uploaded successfully",
+    }
+  );
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     await uploadPointsMutate.writeAsyncAndWait([
-      values.guild,
       values.monthId,
-      values.points,
+      values.pointsData,
     ]);
+
+    onClose();
   };
+
+  const fieldDisabled =
+    isAllGuildsLoading ||
+    uploadPointsMutate.isLoading ||
+    uploadPointsMutate.isSuccess;
 
   return (
     <Form {...form}>
@@ -80,19 +111,22 @@ const UploadPointsForm = () => {
         <FormField
           control={form.control}
           name="guild"
+          disabled={fieldDisabled}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Guild</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger disabled={field.disabled}>
                     <SelectValue placeholder="Select a guild" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
+                  {guilds?.guilds.map((g, i) => (
+                    <SelectItem key={i} value={g.address}>
+                      {g.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
 
@@ -104,6 +138,7 @@ const UploadPointsForm = () => {
         <FormField
           control={form.control}
           name="monthId"
+          disabled={fieldDisabled}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Month ID</FormLabel>
@@ -117,12 +152,21 @@ const UploadPointsForm = () => {
 
         <FormField
           control={form.control}
-          name="points"
+          name="pointsData"
+          disabled={fieldDisabled}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Upload .CSV File</FormLabel>
               <FormControl>
-                <Input type="file" placeholder="Click to Select" {...field} />
+                <Input
+                  type="file"
+                  placeholder="Click to Select"
+                  accept=".csv"
+                  disabled={field.disabled}
+                  onChange={(e) =>
+                    field.onChange(e.target.files ? e.target.files[0] : null)
+                  }
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -135,11 +179,15 @@ const UploadPointsForm = () => {
           size="lg"
           disabled={
             uploadPointsMutate.isLoading ||
-            uploadPointsMutate.isError ||
-            uploadPointsMutate.isSuccess
+            uploadPointsMutate.isSuccess ||
+            isAllGuildsLoading
           }
         >
-          {uploadPointsMutate.isLoading ? <Spinner /> : "Update Points"}
+          {uploadPointsMutate.isLoading || isAllGuildsLoading ? (
+            <Spinner />
+          ) : (
+            "Update Points"
+          )}
         </Button>
       </form>
     </Form>

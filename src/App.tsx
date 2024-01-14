@@ -1,4 +1,4 @@
-import { Toaster } from "./components/ui/toaster";
+import { Toaster } from "./components/ui/sonner";
 
 import { Routing } from "./pages";
 import { StarknetProvider } from "./provider";

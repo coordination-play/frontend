@@ -2,9 +2,13 @@ import { ConnectWalletModal } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetOrgAllGuilds } from "@/contracts/read/organisation";
-import { useOrganisation } from "@/hooks/organisation";
-import { truncateAddress } from "@/lib/utils";
+import { useOrganisation } from "@/hooks/useOrganisation";
 import { useAccount } from "@starknet-react/core";
+
+import { Guild } from "./Guild";
+
+const gridClassName =
+  "grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 md:gap-3.5 grid-flow-row";
 
 export const AllGuilds = () => {
   const { isConnected } = useAccount();
@@ -20,38 +24,16 @@ export const AllGuilds = () => {
 
   if (isLoading) {
     return (
-      <div className="grid gap-3.5 grid-cols-3 grid-flow-row">
-        {[...Array(3)].map((_, i) => (
-          <>
-            <Skeleton key={i} className="h-32" />
-          </>
-        ))}
+      <div className={gridClassName}>
+        <Skeleton className="h-32" />
+        <Skeleton className="h-32" />
+        <Skeleton className="h-32" />
       </div>
     );
   }
 
   return (
     <>
-      {data?.guilds.length ? (
-        <div className="grid gap-3.5 grid-cols-3 grid-flow-row">
-          {data?.guilds.map((guild, i) => (
-            <div
-              key={i}
-              className="flex p-4 bg-foreground/5 gap-6 items-start flex-col rounded-sm border border-border"
-            >
-              <div className="flex flex-col gap-1 max-w-xl">
-                <p className="text text-foreground font-medium">{guild.name}</p>
-
-                <p className="font-normal text-sm text-foreground/80">
-                  {/* 8 Contributors */}
-                  {truncateAddress(guild.address)}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : null}
-
       {!hasGuilds && isOwner ? (
         <div className="w-full bg-foreground/5 flex px-4 py-8 gap-1 items-center justify-center flex-col rounded-sm border border-border">
           <h6 className="font-medium text-2xl">Create a Guild</h6>
@@ -93,6 +75,14 @@ export const AllGuilds = () => {
           </div>
 
           <Button>Start Contributing</Button>
+        </div>
+      ) : null}
+
+      {data?.guilds.length ? (
+        <div className={gridClassName}>
+          {data?.guilds.map((guild, i) => (
+            <Guild key={i} {...guild} />
+          ))}
         </div>
       ) : null}
     </>

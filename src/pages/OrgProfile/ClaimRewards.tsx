@@ -4,9 +4,9 @@ import { useGetOrgSalaryContract } from "@/contracts/read/organisation";
 import {
   useGetClaimedSalary,
   useGetCumSalary,
-  useGetSalaryToken,
+  // useGetSalaryToken,
 } from "@/contracts/read/salary";
-import { useOrganisation } from "@/hooks/organisation";
+import { useOrganisation } from "@/hooks/useOrganisation";
 import { useAccount } from "@starknet-react/core";
 import { GiftIcon } from "lucide-react";
 
@@ -16,9 +16,9 @@ export const ClaimRewards = () => {
   const { address } = useOrganisation();
   const { data: salaryAddress = "" } = useGetOrgSalaryContract({ address });
 
-  const { data: token, isLoading: isTokenLoading } = useGetSalaryToken({
-    address: salaryAddress,
-  });
+  // const { data: token, isLoading: isTokenLoading } = useGetSalaryToken({
+  //   address: salaryAddress,
+  // });
 
   const { data: cumSalary = 0, isLoading: isCumSalaryLoading } =
     useGetCumSalary({

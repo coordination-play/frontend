@@ -38,7 +38,7 @@ export const HomePage = () => {
         value={activeTab}
         onValueChange={setActiveTab}
       >
-        <TabsList className="flex w-full justify-start">
+        <TabsList className="flex w-full justify-start gap-2 flex-wrap h-full">
           <TabsTrigger value="allorgs">
             <Globe className="w-4 h-4" />
             All Organizations {data?.count ? `(${data.count})` : ""}
@@ -47,8 +47,11 @@ export const HomePage = () => {
             <TabsTrigger value="myorgs">My Organizations</TabsTrigger>
           ) : null}
 
-          {isConnected ? <CreateOrgDialog triggerClassName="ml-auto" /> : null}
+          {isConnected ? (
+            <CreateOrgDialog triggerClassName="hidden ml-auto sm:flex" />
+          ) : null}
         </TabsList>
+
         <TabsContent value="allorgs">
           {isLoading ? (
             <Spinner />
@@ -61,6 +64,10 @@ export const HomePage = () => {
               ))}
             </div>
           )}
+
+          {isConnected ? (
+            <CreateOrgDialog triggerClassName="flex sm:hidden mt-8 w-full" />
+          ) : null}
         </TabsContent>
         <TabsContent value="myorgs">
           <div className="w-full flex px-4 py-8 gap-6 items-center justify-center flex-col rounded-sm border border-border mt-4">
@@ -74,13 +81,14 @@ export const HomePage = () => {
               </p>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-col sm:flex-row">
               <Button
                 variant="secondary"
                 onClick={() => setActiveTab("allorgs")}
               >
                 Explore All Organisations
               </Button>
+
               <CreateOrgDialog />
             </div>
           </div>

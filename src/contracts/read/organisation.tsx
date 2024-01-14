@@ -21,8 +21,6 @@ const readOrganisation = {
     returnType: z.array(z.bigint()),
     parsedType: z.string().optional(),
     parse: function (data: unknown): z.infer<typeof this.parsedType> {
-      console.log("metadata", data);
-
       if (!data) return undefined;
 
       const parsedData = this.returnType.parse(data);
@@ -51,8 +49,6 @@ const readOrganisation = {
       })
       .optional(),
     parse: function (data: unknown): z.infer<typeof this.parsedType> {
-      console.log("get_all_guilds_details", data);
-
       if (!data) return undefined;
 
       // parse
@@ -75,6 +71,8 @@ const readOrganisation = {
       return { count: guildsCount, guilds };
     },
   },
+  // get_guild_monthly_total_contribution: {
+
   get_salary_contract: {
     returnType: z.bigint(),
     parsedType: z.string().optional(),

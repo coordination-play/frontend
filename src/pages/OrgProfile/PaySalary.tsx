@@ -1,11 +1,4 @@
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -18,7 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useWriteOrganisationContract } from "@/contracts/write";
+import { useWriteGuildContract } from "@/contracts/write";
 import { Spinner } from "@/components/ui/spinner";
 import {
   Select,
@@ -27,52 +20,89 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useOrganisation } from "@/hooks/useOrganisation";
+import { useGetOrgAllGuilds } from "@/contracts/read/organisation";
+import { useState } from "react";
+import { DrawerDialog } from "@/components/DrawerDialog";
 
 export const PaySalaryDialog = () => {
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button className="w-full">Pay Salary</Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Pay Salary</DialogTitle>
-        </DialogHeader>
+  const [open, setOpen] = useState(false);
 
-        <PaySalaryForm />
-      </DialogContent>
-    </Dialog>
+  return (
+    <DrawerDialog
+      trigger={<Button className="w-full">Pay Salary</Button>}
+      open={open}
+      onOpenChange={setOpen}
+      title="Pay Salary"
+    >
+      <UploadPointsForm onClose={() => setOpen(false)} />
+    </DrawerDialog>
   );
 };
 
 const formSchema = z.object({
-  //   logo: z.string().url(),
   guild: z.string(),
-  salaryAmount: z.string().min(0),
   monthId: z.string(),
+  pointsData: z
+    .instanceof(File, {
+      message: "Please upload a .csv file",
+    })
+    .refine((file) => file.type === "text/csv")
+    .transform(
+      async (file): Promise<Array<{ contributor: string; point: number }>> => {
+        const text = await file.text();
+        const contributorsData = text.split("\n").map((line) => {
+          const [contributor, point] = line.split(",");
+          return {
+            contributor,
+            point: Number(point),
+          };
+        });
+        console.log(contributorsData);
+
+        return contributorsData;
+      }
+    ),
 });
 
-const PaySalaryForm = () => {
+const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
+  const { address, monthId } = useOrganisation();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      guild: "",
-      salaryAmount: "",
-      monthId: "",
+      guild: undefined,
+      monthId: String(monthId),
+      pointsData: undefined,
     },
   });
 
-  const paySalaryMutate = useWriteOrganisationContract("add_guild", {
-    successMessage: "Guild created successfully",
+  const { data: guilds, isLoading: isAllGuildsLoading } = useGetOrgAllGuilds({
+    address,
   });
 
+  const guildAddress = form.watch("guild");
+  const uploadPointsMutate = useWriteGuildContract(
+    guildAddress,
+    "update_contibutions",
+    {
+      successMessage: "Contributions uploaded successfully",
+    }
+  );
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    await paySalaryMutate.writeAsyncAndWait([
-      values.guild,
-      values.salaryAmount,
+    await uploadPointsMutate.writeAsyncAndWait([
       values.monthId,
+      values.pointsData,
     ]);
+
+    onClose();
   };
+
+  const fieldDisabled =
+    isAllGuildsLoading ||
+    uploadPointsMutate.isLoading ||
+    uploadPointsMutate.isSuccess;
 
   return (
     <Form {...form}>
@@ -80,19 +110,22 @@ const PaySalaryForm = () => {
         <FormField
           control={form.control}
           name="guild"
+          disabled={fieldDisabled}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Guild</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger disabled={field.disabled}>
                     <SelectValue placeholder="Select a guild" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
+                  {guilds?.guilds.map((g, i) => (
+                    <SelectItem key={i} value={g.address}>
+                      {g.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
 
@@ -103,25 +136,8 @@ const PaySalaryForm = () => {
 
         <FormField
           control={form.control}
-          name="salaryAmount"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Salary Amount</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  placeholder="Enter Salary Amount"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
           name="monthId"
+          disabled={fieldDisabled}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Month ID</FormLabel>
@@ -133,17 +149,44 @@ const PaySalaryForm = () => {
           )}
         />
 
+        <FormField
+          control={form.control}
+          name="pointsData"
+          disabled={fieldDisabled}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Upload .CSV File</FormLabel>
+              <FormControl>
+                <Input
+                  type="file"
+                  placeholder="Click to Select"
+                  accept=".csv"
+                  disabled={field.disabled}
+                  onChange={(e) =>
+                    field.onChange(e.target.files ? e.target.files[0] : null)
+                  }
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <Button
           type="submit"
           className="w-full"
           size="lg"
           disabled={
-            paySalaryMutate.isLoading ||
-            paySalaryMutate.isError ||
-            paySalaryMutate.isSuccess
+            uploadPointsMutate.isLoading ||
+            uploadPointsMutate.isSuccess ||
+            isAllGuildsLoading
           }
         >
-          {paySalaryMutate.isLoading ? <Spinner /> : "Send Payment"}
+          {uploadPointsMutate.isLoading || isAllGuildsLoading ? (
+            <Spinner />
+          ) : (
+            "Update Points"
+          )}
         </Button>
       </form>
     </Form>

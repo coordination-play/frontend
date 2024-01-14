@@ -1,11 +1,5 @@
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -20,42 +14,45 @@ import {
 } from "@/components/ui/form";
 import { useWriteOrganisationContract } from "@/contracts/write";
 import { Spinner } from "@/components/ui/spinner";
-import { useOrganisation } from "@/hooks/organisation";
+import { useOrganisation } from "@/hooks/useOrganisation";
 import { useGetOrgAllGuilds } from "@/contracts/read/organisation";
 import { useState } from "react";
+import { DrawerDialog } from "@/components/DrawerDialog";
 
 export const CreateGuildDialog = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>Create Guild</Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Create Guild</DialogTitle>
-        </DialogHeader>
-
-        <CreateGuildForm onClose={() => setOpen(false)} />
-      </DialogContent>
-    </Dialog>
+    <DrawerDialog
+      open={open}
+      onOpenChange={setOpen}
+      trigger={<Button>Create Guild</Button>}
+      title="Create Guild"
+    >
+      <CreateGuildForm onClose={() => setOpen(false)} />
+    </DrawerDialog>
   );
 };
 
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Guild name must be at least 2 characters.",
+  name: z
+    .string({
+      required_error: "Guild name is required",
+    })
+    .min(2, {
+      message: "Guild name must be at least 2 characters.",
+    }),
+  owner: z.string({
+    required_error: "Guild Owner's address is required",
   }),
-  owner: z.string(),
 });
 
 const CreateGuildForm = ({ onClose }: { onClose: () => void }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      owner: "",
+      name: undefined,
+      owner: undefined,
     },
   });
 

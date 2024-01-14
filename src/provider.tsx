@@ -4,12 +4,13 @@ import React from "react";
 import { goerli } from "@starknet-react/chains";
 import {
   StarknetConfig,
-  publicProvider,
+  alchemyProvider,
   argent,
   braavos,
   useInjectedConnectors,
   voyager,
 } from "@starknet-react/core";
+import { getEnv } from "./lib/env";
 
 export const StarknetProvider = ({
   children,
@@ -28,7 +29,9 @@ export const StarknetProvider = ({
   return (
     <StarknetConfig
       chains={[goerli]}
-      provider={publicProvider()}
+      provider={alchemyProvider({
+        apiKey: getEnv("VITE_ALCHEMY_API_KEY"),
+      })}
       connectors={connectors}
       explorer={voyager}
     >

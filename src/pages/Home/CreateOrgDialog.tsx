@@ -13,35 +13,29 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { useWriteFactoryContract } from "@/contracts/write";
 import { Spinner } from "@/components/ui/spinner";
 import { useCreateOrganisationContract } from "@/contracts/write/factory";
+import { DrawerDialog } from "@/components/DrawerDialog";
+import { useState } from "react";
 
 export const CreateOrgDialog = ({
   triggerClassName,
 }: {
   triggerClassName?: string;
 }) => {
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button className={triggerClassName}>Create Organization</Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Create Organisation</DialogTitle>
-        </DialogHeader>
+  const [open, setOpen] = useState(false);
 
-        <CreateDAOForm />
-      </DialogContent>
-    </Dialog>
+  return (
+    <DrawerDialog
+      open={open}
+      onOpenChange={setOpen}
+      trigger={
+        <Button className={triggerClassName}>Create Organization</Button>
+      }
+      title="Create Organisation"
+    >
+      <CreateDAOForm />
+    </DrawerDialog>
   );
 };
 
