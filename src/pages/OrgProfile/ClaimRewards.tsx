@@ -1,11 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Spinner } from "@/components/ui/spinner";
 import { useGetOrgSalaryContract } from "@/contracts/read/organisation";
-import {
-  useGetClaimedSalary,
-  useGetCumSalary,
-  // useGetSalaryToken,
-} from "@/contracts/read/salary";
+import { useGetClaimedSalary, useGetCumSalary } from "@/contracts/read/salary";
+import { useWriteSalaryContract } from "@/contracts/write";
 import { useOrganisation } from "@/hooks/useOrganisation";
 import { useAccount } from "@starknet-react/core";
 import { GiftIcon } from "lucide-react";
@@ -15,10 +13,6 @@ export const ClaimRewards = () => {
 
   const { address } = useOrganisation();
   const { data: salaryAddress = "" } = useGetOrgSalaryContract({ address });
-
-  // const { data: token, isLoading: isTokenLoading } = useGetSalaryToken({
-  //   address: salaryAddress,
-  // });
 
   const { data: cumSalary = 0, isLoading: isCumSalaryLoading } =
     useGetCumSalary({
@@ -33,6 +27,18 @@ export const ClaimRewards = () => {
     });
 
   const hasClaimableSalary = !isCumSalaryLoading && cumSalary;
+
+  const claimSalaryMutate = useWriteSalaryContract(
+    salaryAddress,
+    "claim_salary",
+    {
+      successMessage: "Salary claimed successfully",
+    }
+  );
+
+  const onClaimSalary = async () => {
+    claimSalaryMutate.writeAsyncAndWait([]);
+  };
 
   if (!account) {
     return null;
@@ -62,8 +68,16 @@ export const ClaimRewards = () => {
             </p>
           )}
 
-          <Button className="w-full" disabled={!hasClaimableSalary}>
-            Claim
+          <Button
+            className="w-full"
+            disabled={
+              !hasClaimableSalary ||
+              claimSalaryMutate.isLoading ||
+              claimSalaryMutate.isSuccess
+            }
+            onClick={onClaimSalary}
+          >
+            {claimSalaryMutate.isLoading ? <Spinner /> : "Claim"}
           </Button>
         </div>
       )}

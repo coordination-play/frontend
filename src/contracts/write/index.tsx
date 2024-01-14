@@ -7,8 +7,8 @@ import {
 } from "../contracts";
 
 import { useAccount, useContract, useProvider } from "@starknet-react/core";
-import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
+import { toast } from "sonner";
 
 type WriteOptions = {
   successMessage?: string;
@@ -84,8 +84,6 @@ const useWriteContract = ({
     provider,
   });
 
-  const { toast } = useToast();
-
   const [state, setState] = useState<{
     isLoading: boolean;
     isError: boolean;
@@ -111,6 +109,8 @@ const useWriteContract = ({
         error: null,
       });
 
+      toast("Transaction in progress..");
+
       const call = contract.populate(fnName, args as undefined);
       const tx = await contract[fnName](call.calldata);
       await provider.waitForTransaction(tx.transaction_hash);
@@ -122,8 +122,7 @@ const useWriteContract = ({
         error: null,
       });
 
-      toast({
-        title: "Transaction successful",
+      toast("Transaction successful", {
         description: successMessage,
       });
     } catch (err) {
@@ -136,9 +135,7 @@ const useWriteContract = ({
 
       console.error(`failed to execute '${fnName}': `, { error: err });
 
-      toast({
-        variant: "destructive",
-        title: "Transaction Failed",
+      toast.error("Transaction Failed", {
         description: `failed to execute '${fnName}'`,
       });
     }

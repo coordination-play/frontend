@@ -71,8 +71,6 @@ const readOrganisation = {
       return { count: guildsCount, guilds };
     },
   },
-  // get_guild_monthly_total_contribution: {
-
   get_salary_contract: {
     returnType: z.bigint(),
     parsedType: z.string().optional(),

@@ -1,4 +1,4 @@
-import { Check, Copy } from "lucide-react";
+import { Copy } from "lucide-react";
 import { Button } from "../ui/button";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { toast } from "sonner";
@@ -24,12 +24,7 @@ export const CopyButton = ({
         onCopy?.();
 
         if (showToast) {
-          toast(
-            <>
-              <Check className="w-4 g-4 text-foreground/60" />{" "}
-              <p className="font-medium">{label} copied to clipboard</p>
-            </>
-          );
+          toast.success(`${label} copied to clipboard`);
         }
       }}
     >
