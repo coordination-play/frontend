@@ -9,6 +9,13 @@ const PWAManifestConfig: Partial<ManifestOptions> = {
   description: "Coordination Play",
   theme_color: "#262626",
   background_color: "#262626",
+  screenshots: [
+    {
+      sizes: "1920x960",
+      src: "screenshot.png",
+      form_factor: "wide",
+    },
+  ],
   icons: [
     {
       src: "pwa-192x192.png",
@@ -27,7 +34,7 @@ const PWAManifestConfig: Partial<ManifestOptions> = {
       purpose: "any",
     },
     {
-      src: "pwa-512x512.png",
+      src: "maskable-icon.png",
       sizes: "512x512",
       type: "image/png",
       purpose: "maskable",
