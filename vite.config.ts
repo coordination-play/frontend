@@ -1,13 +1,14 @@
 import path from "path";
 import react from "@vitejs/plugin-react-swc";
 import { defineConfig } from "vite";
-import { VitePWA } from "vite-plugin-pwa";
+import { VitePWA, ManifestOptions } from "vite-plugin-pwa";
 
-const PWAManifestConfig = {
-  name: "coordination",
-  short_name: "coordination",
+const PWAManifestConfig: Partial<ManifestOptions> = {
+  name: "Coordination",
+  short_name: "Coordination",
   description: "Coordination Play",
   theme_color: "#262626",
+  background_color: "#262626",
   icons: [
     {
       src: "pwa-192x192.png",
