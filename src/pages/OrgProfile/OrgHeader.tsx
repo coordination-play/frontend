@@ -60,15 +60,15 @@ export const OrgHeader = () => {
         <div className="flex-1 flex flex-col items-start">
           <p className="text-xs text-foreground">Treasury</p>
 
-          <div className="w-full h-6">
+          <div className="w-full h-6 text-left">
             {isTreasuryAdrLoading || isTreasuryBalanceLoading ? (
               <Skeleton className="h-full w-28 bg-foreground/10" />
             ) : (
-              <p className="text-foreground text-left">
+              <Tooltip text={Number(treasuryBalance) / Math.pow(10, 18)}>
                 {Number(Number(treasuryBalance) / Math.pow(10, 18)).toFixed(
                   2
                 ) || "--"}
-              </p>
+              </Tooltip>
             )}
           </div>
         </div>
