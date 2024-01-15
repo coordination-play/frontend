@@ -122,7 +122,7 @@ const useWriteContract = ({
         error: null,
       });
 
-      toast("Transaction successful", {
+      toast.success("Transaction successful", {
         description: successMessage,
       });
     } catch (err) {
