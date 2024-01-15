@@ -150,7 +150,7 @@ const ActiveGuildContent = ({ address }: ActiveGuildContentProps) => {
                     ? `(${(
                         (monthlyContributionPoints / totalContribution) *
                         100
-                      ).toFixed(2)}%)`
+                      ).toFixed()}%)`
                     : ""),
                 isLoading:
                   isMonthlyContributionPointsLoading ||
@@ -165,7 +165,7 @@ const ActiveGuildContent = ({ address }: ActiveGuildContentProps) => {
                     ? `(${(
                         (cumContributionPoints / totalContribution) *
                         100
-                      ).toFixed(2)}%)`
+                      ).toFixed()}%)`
                     : ""),
                 isLoading:
                   isCumContributionPointsLoading || isTotalContributionLoading,

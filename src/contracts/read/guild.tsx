@@ -109,7 +109,7 @@ export const useGetGuildMonthlyTotalContribution = ({
   monthId,
 }: {
   address: string;
-  monthId: number;
+  monthId: string;
 }) =>
   useReadGuildContract<
     z.infer<typeof readGuild.get_monthly_total_contribution.parsedType>
@@ -143,7 +143,7 @@ export const useGetGuildMonthlyContributionPoints = ({
 }: {
   address: string;
   contributor: string;
-  monthId: number;
+  monthId: string;
 }) =>
   useReadGuildContract<
     z.infer<typeof readGuild.get_monthly_contribution_points.parsedType>
