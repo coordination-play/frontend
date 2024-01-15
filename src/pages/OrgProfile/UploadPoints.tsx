@@ -25,6 +25,7 @@ import { useGetOrgAllGuilds } from "@/contracts/read/organisation";
 import { useState } from "react";
 import { DrawerDialog } from "@/components/DrawerDialog";
 import { months, years } from "@/lib/time";
+import { getMonthId } from "@/lib/utils";
 
 export const UploadPointsDialog = () => {
   const [open, setOpen] = useState(false);
@@ -96,11 +97,7 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
   );
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const monthIdStr = `${
-      values.month.toString().length === 1 ? `0${values.month}` : values.month
-    }${values.year}`; // => i.e. Jan 2024 -> 012024
-
-    console.log(monthIdStr);
+    const monthIdStr = getMonthId(values.month, values.year);
 
     await uploadPointsMutate.writeAsyncAndWait([monthIdStr, values.pointsData]);
 

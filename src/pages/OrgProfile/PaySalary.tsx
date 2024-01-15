@@ -11,17 +11,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useWriteGuildContract } from "@/contracts/write";
+import { useWriteSalaryContract } from "@/contracts/write";
 import { Spinner } from "@/components/ui/spinner";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { useOrganisation } from "@/hooks/useOrganisation";
-import { useGetOrgAllGuilds } from "@/contracts/read/organisation";
+import {
+  useGetOrgAllGuilds,
+  useGetOrgSalaryContract,
+} from "@/contracts/read/organisation";
 import { useState } from "react";
 import { DrawerDialog } from "@/components/DrawerDialog";
 
@@ -41,28 +38,13 @@ export const PaySalaryDialog = () => {
 };
 
 const formSchema = z.object({
-  guild: z.string(),
   monthId: z.string(),
-  pointsData: z
-    .instanceof(File, {
-      message: "Please upload a .csv file",
-    })
-    .refine((file) => file.type === "text/csv")
-    .transform(
-      async (file): Promise<Array<{ contributor: string; point: number }>> => {
-        const text = await file.text();
-        const contributorsData = text.split("\n").map((line) => {
-          const [contributor, point] = line.split(",");
-          return {
-            contributor,
-            point: Number(point),
-          };
-        });
-        console.log(contributorsData);
-
-        return contributorsData;
-      }
-    ),
+  amounts: z.array(
+    z
+      .string()
+      .optional()
+      .transform((v) => Number(v) || 0)
+  ),
 });
 
 const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
@@ -71,9 +53,8 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      guild: undefined,
       monthId: String(monthId),
-      pointsData: undefined,
+      amounts: [],
     },
   });
 
@@ -81,19 +62,24 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
     address,
   });
 
-  const guildAddress = form.watch("guild");
-  const uploadPointsMutate = useWriteGuildContract(
-    guildAddress,
-    "update_contibutions",
+  const { data: salaryAdr = "", isLoading: isSalaryAdrLoading } =
+    useGetOrgSalaryContract({ address });
+
+  const uploadPointsMutate = useWriteSalaryContract(
+    salaryAdr,
+    "add_fund_to_salary_pools",
     {
-      successMessage: "Contributions uploaded successfully",
+      successMessage: "Funds added to salary pool successfully",
     }
   );
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log(values);
+
     await uploadPointsMutate.writeAsyncAndWait([
       values.monthId,
-      values.pointsData,
+      values.amounts,
+      guilds?.guilds.map((g) => g.address),
     ]);
 
     onClose();
@@ -101,39 +87,13 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
 
   const fieldDisabled =
     isAllGuildsLoading ||
+    isSalaryAdrLoading ||
     uploadPointsMutate.isLoading ||
     uploadPointsMutate.isSuccess;
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
-        <FormField
-          control={form.control}
-          name="guild"
-          disabled={fieldDisabled}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Guild</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger disabled={field.disabled}>
-                    <SelectValue placeholder="Select a guild" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {guilds?.guilds.map((g, i) => (
-                    <SelectItem key={i} value={g.address}>
-                      {g.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <FormField
           control={form.control}
           name="monthId"
@@ -149,28 +109,40 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="pointsData"
-          disabled={fieldDisabled}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Upload .CSV File</FormLabel>
-              <FormControl>
-                <Input
-                  type="file"
-                  placeholder="Click to Select"
-                  accept=".csv"
-                  disabled={field.disabled}
-                  onChange={(e) =>
-                    field.onChange(e.target.files ? e.target.files[0] : null)
-                  }
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="flex flex-col gap-2">
+          <p className="font-medium text-foreground/90 text-sm">
+            Guild Amounts
+          </p>
+
+          <div className="flex-col gap-2">
+            {guilds?.guilds.map((guild, i) => (
+              <FormField
+                key={i}
+                control={form.control}
+                name={`amounts.${i}`}
+                disabled={fieldDisabled}
+                render={({ field }) => (
+                  <div className="flex flex-col gap-1">
+                    <FormItem className="flex justify-between items-center">
+                      <FormLabel>{guild.name}</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="w-[70%]"
+                          placeholder="Enter Amount"
+                          type="number"
+                          defaultValue=""
+                          {...field}
+                        />
+                      </FormControl>
+                    </FormItem>
+
+                    <FormMessage className="ml-auto" />
+                  </div>
+                )}
+              />
+            ))}
+          </div>
+        </div>
 
         <Button
           type="submit"
@@ -185,7 +157,7 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
           {uploadPointsMutate.isLoading || isAllGuildsLoading ? (
             <Spinner />
           ) : (
-            "Update Points"
+            "Add Funds"
           )}
         </Button>
       </form>
