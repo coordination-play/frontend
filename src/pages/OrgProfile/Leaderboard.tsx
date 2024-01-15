@@ -16,7 +16,7 @@ export const DAOLeaderboard = () => {
     { address }
   );
 
-  const [activeGuild, setActiveGuild] = useState("");
+  const [activeGuild, setActiveGuild] = useState("allguilds");
 
   return (
     <div className="flex flex-col gap-2">

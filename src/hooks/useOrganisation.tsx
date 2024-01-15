@@ -8,7 +8,9 @@ export const useOrganisation = () => {
   const { address: account } = useAccount();
   const { data: owner } = useGetOrgOwner({ address });
 
-  const monthId = 1;
-
-  return { address, isOwner: account && owner && account === owner, monthId };
+  return {
+    address,
+    isOwner: account && owner && account === owner,
+    monthId: new Date().getMonth() + 1,
+  };
 };

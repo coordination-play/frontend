@@ -9,8 +9,6 @@ const readGuild = {
     returnType: z.bigint(),
     parsedType: z.string().optional(),
     parse: function (data: unknown): z.infer<typeof this.parsedType> {
-      console.log("name", data);
-
       if (!data) return undefined;
 
       // parse
@@ -102,7 +100,7 @@ export const useGetGuildCumContributionPoints = ({
   >({
     address,
     args: [contributor],
-    functionName: "get_cum_contribution_points",
+    functionName: "get_cum_contributions_points",
     parseResultFn: (d) => readGuild.get_cum_contribution_points.parse(d),
   });
 

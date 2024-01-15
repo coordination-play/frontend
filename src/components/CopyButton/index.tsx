@@ -29,7 +29,7 @@ export const CopyButton = ({
       }}
     >
       <Button variant="ghost" size="icon">
-        <Copy className="text-inherit w-4 h-4" />
+        <Copy className="w-4 h-4 text-foreground/60" />
       </Button>
     </CopyToClipboard>
   );

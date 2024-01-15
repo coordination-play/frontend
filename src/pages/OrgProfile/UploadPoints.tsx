@@ -24,6 +24,7 @@ import { useOrganisation } from "@/hooks/useOrganisation";
 import { useGetOrgAllGuilds } from "@/contracts/read/organisation";
 import { useState } from "react";
 import { DrawerDialog } from "@/components/DrawerDialog";
+import { months, years } from "@/lib/time";
 
 export const UploadPointsDialog = () => {
   const [open, setOpen] = useState(false);
@@ -43,7 +44,9 @@ export const UploadPointsDialog = () => {
 const formSchema = z.object({
   //   logo: z.string().url(),
   guild: z.string(),
-  monthId: z.string(),
+  month: z.string(),
+  year: z.string(),
+
   pointsData: z
     .instanceof(File, {
       message: "Please upload a .csv file",
@@ -67,13 +70,14 @@ const formSchema = z.object({
 });
 
 const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
-  const { address, monthId } = useOrganisation();
+  const { address } = useOrganisation();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       guild: undefined,
-      monthId: String(monthId),
+      month: String(new Date().getMonth() + 1),
+      year: String(new Date().getFullYear()),
       pointsData: undefined,
     },
   });
@@ -92,10 +96,13 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
   );
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    await uploadPointsMutate.writeAsyncAndWait([
-      values.monthId,
-      values.pointsData,
-    ]);
+    const monthIdStr = `${
+      values.month.toString().length === 1 ? `0${values.month}` : values.month
+    }${values.year}`; // => i.e. Jan 2024 -> 012024
+
+    console.log(monthIdStr);
+
+    await uploadPointsMutate.writeAsyncAndWait([monthIdStr, values.pointsData]);
 
     onClose();
   };
@@ -135,20 +142,67 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="monthId"
-          disabled={fieldDisabled}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Month ID</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter Month ID" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="flex gap-2 w-full">
+          <FormField
+            control={form.control}
+            name="month"
+            disabled={fieldDisabled}
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Month</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={String(field.value)}
+                >
+                  <FormControl>
+                    <SelectTrigger disabled={field.disabled}>
+                      <SelectValue placeholder="Select a guild" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {months.map((m, i) => (
+                      <SelectItem key={i} value={String(i + 1)}>
+                        {m}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="year"
+            disabled={fieldDisabled}
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Year</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={String(field.value)}
+                >
+                  <FormControl>
+                    <SelectTrigger disabled={field.disabled}>
+                      <SelectValue placeholder="Select a guild" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {years.map((year, i) => (
+                      <SelectItem key={i} value={String(year)}>
+                        {year}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <FormField
           control={form.control}

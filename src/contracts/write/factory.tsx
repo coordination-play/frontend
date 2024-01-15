@@ -2,8 +2,9 @@ import { useAccount, useContract, useProvider } from "@starknet-react/core";
 import { CONTRACTS_ADDRESSES, FactoryABI } from "../contracts";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
-import { CallData, cairo } from "starknet";
+import { CallData, cairo, shortString } from "starknet";
 import { useOrgCreationDeposit } from "../read/factory";
+import { useHelia } from "@/hooks/useHelia";
 
 export const useCreateOrganisationContract = () => {
   const { provider } = useProvider();
@@ -17,12 +18,12 @@ export const useCreateOrganisationContract = () => {
 
   const {
     data: creationDeposit = 0,
-    // isLoading: isCreationDepositLoading,
     isError: isCreationDepositError,
     error: creationDepositError,
   } = useOrgCreationDeposit();
 
   const { toast } = useToast();
+  const { helia } = useHelia();
 
   const [state, setState] = useState<{
     isLoading: boolean;
@@ -36,10 +37,18 @@ export const useCreateOrganisationContract = () => {
     error: null,
   });
 
-  const createOrganisation = async ({ name }: { name: string }) => {
+  const createOrganisation = async ({
+    name,
+    description,
+    discord,
+    website,
+  }: {
+    name: string;
+    description: string;
+    discord?: string;
+    website?: string;
+  }) => {
     if (!contract || !account) return;
-
-    console.log("creationDeposit", creationDeposit);
 
     try {
       if (isCreationDepositError) {
@@ -52,6 +61,14 @@ export const useCreateOrganisationContract = () => {
         isSuccess: false,
         error: null,
       });
+
+      // IPFS
+      const metadata = await helia.add({
+        description,
+        discord,
+        website,
+      });
+      const cid = metadata.toString();
 
       // transaction
       const multiCall = await account.execute([
@@ -70,10 +87,11 @@ export const useCreateOrganisationContract = () => {
           entrypoint: "create_organisation",
           calldata: CallData.compile({
             name: cairo.felt(name),
-            metadata: [cairo.felt(0)],
+            metadata: shortString.splitLongString(cid),
           }),
         },
       ]);
+
       await provider.waitForTransaction(multiCall.transaction_hash);
 
       setState({

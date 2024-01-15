@@ -25,11 +25,15 @@ const readOrganisation = {
 
       const parsedData = this.returnType.parse(data);
 
-      return parsedData
+      const cid = parsedData
         .map((shortStr: bigint) => {
           return shortString.decodeShortString(num.toHex(shortStr));
         })
         .join("");
+
+      return cid;
+
+      // const await j.get(myImmutableAddress))
     },
   },
   all_guilds_details: {

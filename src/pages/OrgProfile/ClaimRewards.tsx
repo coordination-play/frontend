@@ -12,7 +12,8 @@ export const ClaimRewards = () => {
   const { address: account = "" } = useAccount();
 
   const { address } = useOrganisation();
-  const { data: salaryAddress = "" } = useGetOrgSalaryContract({ address });
+  const { data: salaryAddress = "", isLoading: isSalaryAdrLoading } =
+    useGetOrgSalaryContract({ address });
 
   const { data: cumSalary = 0, isLoading: isCumSalaryLoading } =
     useGetCumSalary({
@@ -40,7 +41,7 @@ export const ClaimRewards = () => {
     claimSalaryMutate.writeAsyncAndWait([]);
   };
 
-  if (!account) {
+  if (!account || isSalaryAdrLoading) {
     return null;
   }
 

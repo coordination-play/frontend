@@ -16,6 +16,8 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import { CopyButton } from "@/components/CopyButton";
+import { truncateAddress } from "@/lib/utils";
 
 export const ActiveGuild = () => {
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -33,15 +35,22 @@ export const ActiveGuild = () => {
   if (isDesktop) {
     return (
       <div className="flex flex-col gap-6 pt-4 mt-6 border-t border-t-border">
-        <div className="h-12">
-          {isGuildNameLoading ? (
-            <Skeleton className="h-full w-36" />
-          ) : (
-            <p className="font-semibold text-3xl bg-foreground/5 rounded-md px-2 py-2 w-fit">
-              {guildName}
-            </p>
-          )}
+        <div className="flex flex-col">
+          <div className="h-12">
+            {isGuildNameLoading ? (
+              <Skeleton className="h-full w-36" />
+            ) : (
+              <p className="font-semibold text-3xl bg-foreground/5 rounded-md px-2 py-2 w-fit">
+                {guildName}
+              </p>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            {truncateAddress(activeGuildAddress)}
+            <CopyButton text={activeGuildAddress} />
+          </div>
         </div>
+
         <ActiveGuildContent address={activeGuildAddress} />
       </div>
     );
@@ -149,8 +158,17 @@ const ActiveGuildContent = ({ address }: ActiveGuildContentProps) => {
               },
               {
                 label: "Total Points all time:",
-                value: cumContributionPoints,
-                isLoading: isCumContributionPointsLoading,
+                value:
+                  cumContributionPoints +
+                  " " +
+                  (cumContributionPoints
+                    ? `(${(
+                        (cumContributionPoints / totalContribution) *
+                        100
+                      ).toFixed(2)}%)`
+                    : ""),
+                isLoading:
+                  isCumContributionPointsLoading || isTotalContributionLoading,
               },
             ].map((c, i) => (
               <div key={i} className="space-x-2 flex items-center">

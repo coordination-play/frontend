@@ -31,6 +31,9 @@
     --success: 90 62.8% 60.6%;
     --success-foreground: 90 0% 98%;
 
+    --warn: 60 62.8% 60.6%;
+    --warn-foreground: 60 0% 98%;
+
     --border: 0 0% 22%;
     --input: 0 0% 14.9%;
     /* --ring: 0 0% 83.1%; */

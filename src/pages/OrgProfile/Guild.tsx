@@ -1,5 +1,4 @@
-import { useGetGuildMonthlyContributionPoints } from "@/contracts/read/guild";
-import { useOrganisation } from "@/hooks/useOrganisation";
+import { useGetGuildCumContributionPoints } from "@/contracts/read/guild";
 import { cn, truncateAddress } from "@/lib/utils";
 import { setActiveGuild, useGuildState } from "@/state/guild";
 import { useAccount } from "@starknet-react/core";
@@ -13,14 +12,12 @@ type GuildProps = {
 export const Guild = ({ name, address }: GuildProps) => {
   const { activeGuild } = useGuildState();
 
-  const { monthId } = useOrganisation();
   const { address: account = "" } = useAccount();
 
   const { data: monthlyContributionPoints = 0 } =
-    useGetGuildMonthlyContributionPoints({
+    useGetGuildCumContributionPoints({
       address,
       contributor: account,
-      monthId,
     });
 
   return (

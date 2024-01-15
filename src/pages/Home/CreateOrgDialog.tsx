@@ -40,23 +40,18 @@ export const CreateOrgDialog = ({
 };
 
 const formSchema = z.object({
-  //   logo: z.string().url(),
   name: z.string().min(2, {
     message: "Organization name must be at least 2 characters.",
   }),
-  description: z
-    .string()
-    // .min(10, {
-    //   message: "Organization description must be at least 10 characters.",
-    // })
-    .optional(),
+  description: z.string(),
+  discord: z.string().url().optional(),
+  website: z.string().url().optional(),
 });
 
 const CreateDAOForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      //   logo: "",
       name: "",
       description: "",
     },
@@ -65,8 +60,7 @@ const CreateDAOForm = () => {
   const createOrgMutate = useCreateOrganisationContract();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("values", values);
-    await createOrgMutate.createOrganisation({ name: values.name });
+    await createOrgMutate.createOrganisation(values);
   };
 
   return (
@@ -100,18 +94,58 @@ const CreateDAOForm = () => {
           )}
         />
 
-        <Button
-          type="submit"
-          className="w-full"
-          size="lg"
-          disabled={
-            createOrgMutate.isLoading ||
-            // createOrgMutate.isError ||
-            createOrgMutate.isSuccess
-          }
-        >
-          {createOrgMutate.isLoading ? <Spinner /> : "Create Organisation"}
-        </Button>
+        <FormField
+          control={form.control}
+          name="discord"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Add organisation discord</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter your discord link here..."
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="website"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Add organisation website</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter your website link here..."
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="flex flex-col gap-3">
+          <p className="text-warn font-medium text-xs">
+            Note: Creating organisation requires deposit of 0.1 ETH
+          </p>
+
+          <Button
+            type="submit"
+            className="w-full"
+            size="lg"
+            disabled={
+              createOrgMutate.isLoading ||
+              // createOrgMutate.isError ||
+              createOrgMutate.isSuccess
+            }
+          >
+            {createOrgMutate.isLoading ? <Spinner /> : "Create Organisation"}
+          </Button>
+        </div>
       </form>
     </Form>
   );

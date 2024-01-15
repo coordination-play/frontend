@@ -72,11 +72,13 @@ export const HomePage = () => {
           <div className="w-full flex px-4 py-8 gap-6 items-center justify-center flex-col rounded-sm border border-border mt-4">
             <div className="flex flex-col gap-1 items-center max-w-xl text-center">
               <h6 className="font-medium text-2xl">
-                Join or Create an Organisation
+                {/* Join or Create an Organisation */}
+                Coming Soon
               </h6>
               <p className="font-normal text-sm text-foreground/50">
-                You will see here a list of organisations you are a part of as a
-                contributor and the organisations you have created
+                This section is in development
+                {/* You will see here a list of organisations you are a part of as a */}
+                {/* contributor and the organisations you have created */}
               </p>
             </div>
 
