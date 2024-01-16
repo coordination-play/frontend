@@ -60,8 +60,8 @@ const formSchema = z.object({
         const contributorsData = text.split("\n").map((line) => {
           const [contributor, point] = line.split(",");
           return {
-            contributor,
-            point: Number(point),
+            contributor: contributor.trim(),
+            point: Number(point.trim()),
           };
         });
         console.log(contributorsData);

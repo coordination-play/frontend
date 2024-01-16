@@ -189,8 +189,6 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
                         } else {
                           setSelectedGuilds([...selectedGuilds, adr]);
                         }
-
-                        // setOpen(false);
                       }}
                     >
                       <Check

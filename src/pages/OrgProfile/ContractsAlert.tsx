@@ -29,15 +29,15 @@ export const ContractsAlert = () => {
   if (!isOwner) return null;
 
   if (
-    salaryAdr &&
-    tresuryAdr &&
-    !isSalaryAdrLoading &&
-    !isTresuryAdrLoading &&
-    !isSalaryAdrError &&
-    !isTreasuryAdrError
+    isSalaryAdrLoading ||
+    isTresuryAdrLoading ||
+    isSalaryAdrError ||
+    isTreasuryAdrError
   ) {
     return null;
   }
+
+  if (salaryAdr && tresuryAdr) return null;
 
   return (
     <Alert className="bg-foreground/5 flex items-center">
