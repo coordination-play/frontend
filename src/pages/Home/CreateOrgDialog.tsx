@@ -17,6 +17,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { useCreateOrganisationContract } from "@/contracts/write/factory";
 import { DrawerDialog } from "@/components/DrawerDialog";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export const CreateOrgDialog = ({
   triggerClassName,
@@ -34,7 +35,7 @@ export const CreateOrgDialog = ({
       }
       title="Create Organisation"
     >
-      <CreateDAOForm />
+      <CreateDAOForm onClose={() => setOpen(false)} />
     </DrawerDialog>
   );
 };
@@ -48,7 +49,7 @@ const formSchema = z.object({
   website: z.string().url().optional(),
 });
 
-const CreateDAOForm = () => {
+const CreateDAOForm = ({ onClose }: { onClose: () => void }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -60,7 +61,18 @@ const CreateDAOForm = () => {
   const createOrgMutate = useCreateOrganisationContract();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    await createOrgMutate.createOrganisation(values);
+    toast.promise(createOrgMutate.createOrganisation(values), {
+      loading: "Creating organisation...",
+      success: () => {
+        return `Successfully created ${values.name} Organisation. Data has take couple minutes to reflect`;
+      },
+      finally: () => {
+        onClose();
+      },
+      error: (err: { message: string }) => {
+        return err?.message || "Failed to create the organisation";
+      },
+    });
   };
 
   return (

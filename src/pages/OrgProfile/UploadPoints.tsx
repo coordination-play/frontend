@@ -26,6 +26,7 @@ import { useState } from "react";
 import { DrawerDialog } from "@/components/DrawerDialog";
 import { months, years } from "@/lib/time";
 import { getMonthId } from "@/lib/utils";
+import { toast } from "sonner";
 
 export const UploadPointsDialog = () => {
   const [open, setOpen] = useState(false);
@@ -99,9 +100,21 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const monthIdStr = getMonthId(values.month, values.year);
 
-    await uploadPointsMutate.writeAsyncAndWait([monthIdStr, values.pointsData]);
-
-    onClose();
+    toast.promise(
+      uploadPointsMutate.writeAsyncAndWait([monthIdStr, values.pointsData]),
+      {
+        loading: "Uploading points...",
+        success: () => {
+          return `Successfully added points to ${values.guild} Guild. Data can take couple minutes to reflect`;
+        },
+        finally: () => {
+          onClose();
+        },
+        error: (err) => {
+          return err?.message || "Failed to upload points";
+        },
+      }
+    );
   };
 
   const fieldDisabled =

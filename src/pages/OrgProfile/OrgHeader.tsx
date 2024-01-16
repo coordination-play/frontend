@@ -8,22 +8,24 @@ import {
 } from "@/contracts/read/organisation";
 import { useOrganisation } from "@/hooks/useOrganisation";
 
-import { useGetHelia } from "@/hooks/useHelia";
+// import { useGetHelia } from "@/hooks/useHelia";
 import { useReadETHContract } from "@/contracts/read/eth";
 
 export const OrgHeader = () => {
   const { address } = useOrganisation();
   const { data: name, isLoading: isNameLoading } = useGetOrgName({ address });
 
-  const { data: metadataCid = "", isLoading: isMetadataCidLoading } =
-    useGetOrgMetadata({
-      address,
-    });
-
-  const { data: metadata } = useGetHelia({
-    cid: metadataCid,
+  const {
+    // data: metadataCid = "",
+    isLoading: isMetadataCidLoading,
+  } = useGetOrgMetadata({
+    address,
   });
-  console.log("metadata", metadata);
+
+  // const { data: metadata } = useGetHelia({
+  //   cid: metadataCid,
+  // });
+  // console.log("metadata", metadata);
 
   // treasury
   const { data: treasuryAdr = "", isLoading: isTreasuryAdrLoading } =
@@ -33,6 +35,7 @@ export const OrgHeader = () => {
     useReadETHContract({
       functionName: "balanceOf",
       args: [treasuryAdr],
+      enabled: !!treasuryAdr,
     });
 
   if (isNameLoading || isMetadataCidLoading) {
@@ -57,17 +60,15 @@ export const OrgHeader = () => {
 
         <Separator orientation="vertical" className="bg-foreground/40" />
 
-        <div className="flex-1 flex flex-col items-start">
+        <div className="flex-1 flex flex-col items-start max-w-[50%] overflow-hidden">
           <p className="text-xs text-foreground">Treasury</p>
 
-          <div className="w-full h-6 text-left">
+          <div className="w-full h-6 text-left overflow-ellipsis">
             {isTreasuryAdrLoading || isTreasuryBalanceLoading ? (
               <Skeleton className="h-full w-28 bg-foreground/10" />
             ) : (
               <Tooltip text={Number(treasuryBalance) / Math.pow(10, 18)}>
-                {Number(Number(treasuryBalance) / Math.pow(10, 18)).toFixed(
-                  2
-                ) || "--"}
+                {Number(Number(treasuryBalance) / Math.pow(10, 18)) || "--"}
               </Tooltip>
             )}
           </div>

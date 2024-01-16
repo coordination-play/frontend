@@ -1,10 +1,9 @@
 import { useAccount, useContract, useProvider } from "@starknet-react/core";
 import { CONTRACTS_ADDRESSES, FactoryABI } from "../contracts";
-import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { CallData, cairo, shortString } from "starknet";
 import { useOrgCreationDeposit } from "../read/factory";
-import { useHelia } from "@/hooks/useHelia";
+// import { useHelia } from "@/hooks/useHelia";
 
 export const useCreateOrganisationContract = () => {
   const { provider } = useProvider();
@@ -22,8 +21,7 @@ export const useCreateOrganisationContract = () => {
     error: creationDepositError,
   } = useOrgCreationDeposit();
 
-  const { toast } = useToast();
-  const { helia } = useHelia();
+  // const { helia } = useHelia();
 
   const [state, setState] = useState<{
     isLoading: boolean;
@@ -39,10 +37,10 @@ export const useCreateOrganisationContract = () => {
 
   const createOrganisation = async ({
     name,
-    description,
-    discord,
-    website,
-  }: {
+  }: // description,
+  // discord,
+  // website,
+  {
     name: string;
     description: string;
     discord?: string;
@@ -63,12 +61,12 @@ export const useCreateOrganisationContract = () => {
       });
 
       // IPFS
-      const metadata = await helia.add({
-        description,
-        discord,
-        website,
-      });
-      const cid = metadata.toString();
+      // const metadata = await helia.add({
+      //   description,
+      //   discord,
+      //   website,
+      // });
+      // const cid = metadata.toString();
 
       // transaction
       const multiCall = await account.execute([
@@ -87,7 +85,8 @@ export const useCreateOrganisationContract = () => {
           entrypoint: "create_organisation",
           calldata: CallData.compile({
             name: cairo.felt(name),
-            metadata: shortString.splitLongString(cid),
+            // metadata: shortString.splitLongString(cid),
+            metadata: shortString.splitLongString(""),
           }),
         },
       ]);
@@ -100,11 +99,6 @@ export const useCreateOrganisationContract = () => {
         isSuccess: true,
         error: null,
       });
-
-      toast({
-        title: "Organization Created",
-        // description: "successMessage",
-      });
     } catch (err) {
       setState({
         isLoading: false,
@@ -113,13 +107,16 @@ export const useCreateOrganisationContract = () => {
         error: err,
       });
 
-      console.error(`failed to create organisation: `, { error: err });
+      console.error(`failed to create organistion: `, { error: err });
 
-      toast({
-        variant: "destructive",
-        title: "Transaction Failed",
-        description: `failed to create organisation`,
-      });
+      if (
+        ((err as unknown as { message?: string })?.message as string) ===
+        "User abort"
+      ) {
+        throw new Error(`User aborted the transaction`);
+      }
+
+      throw new Error(`Failed to create organistion`);
     }
   };
 

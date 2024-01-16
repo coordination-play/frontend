@@ -1,6 +1,5 @@
 import { useAccount, useContract, useProvider } from "@starknet-react/core";
 import { CONTRACTS_ADDRESSES, OrganisationABI } from "../contracts";
-import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { CallData } from "starknet";
 import {
@@ -25,8 +24,6 @@ export const useDeployOrganisationContracts = ({
 
   const { refetch: refetchSalary } = useGetOrgSalaryContract({ address });
   const { refetch: refetchTreasury } = useGetOrgTreasuryContract({ address });
-
-  const { toast } = useToast();
 
   const [state, setState] = useState<{
     isLoading: boolean;
@@ -82,11 +79,6 @@ export const useDeployOrganisationContracts = ({
         isSuccess: true,
         error: null,
       });
-
-      toast({
-        title: "Contracts Deployed",
-        // description: "successMessage",
-      });
     } catch (err) {
       setState({
         isLoading: false,
@@ -97,11 +89,14 @@ export const useDeployOrganisationContracts = ({
 
       console.error(`failed to deploy contracts: `, { error: err });
 
-      toast({
-        variant: "destructive",
-        title: "Transaction Failed",
-        description: `failed to deploy contracts`,
-      });
+      if (
+        ((err as unknown as { message?: string })?.message as string) ===
+        "User abort"
+      ) {
+        throw new Error(`User aborted the transaction`);
+      }
+
+      throw new Error(`Failed to deploy contracts`);
     }
   };
 

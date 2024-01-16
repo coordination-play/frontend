@@ -7,6 +7,7 @@ import { useWriteSalaryContract } from "@/contracts/write";
 import { useOrganisation } from "@/hooks/useOrganisation";
 import { useAccount } from "@starknet-react/core";
 import { GiftIcon } from "lucide-react";
+import { toast } from "sonner";
 
 export const ClaimRewards = () => {
   const { address: account = "" } = useAccount();
@@ -38,7 +39,15 @@ export const ClaimRewards = () => {
   );
 
   const onClaimSalary = async () => {
-    claimSalaryMutate.writeAsyncAndWait([]);
+    toast.promise(claimSalaryMutate.writeAsyncAndWait([]), {
+      loading: "Claiming salary...",
+      success: () => {
+        return `Successfully claimed the salary. Data can take couple minutes to reflect`;
+      },
+      error: (err: { message: string }) => {
+        return err?.message || "Failed to claim the salary";
+      },
+    });
   };
 
   if (!account || isSalaryAdrLoading) {

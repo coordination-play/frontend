@@ -1,5 +1,4 @@
-import { UseContractReadProps } from "@starknet-react/core";
-import { useContractRead } from ".";
+import { UseContractReadProps, useContractRead } from "@starknet-react/core";
 import { CONTRACTS_ADDRESSES, ETHTokenABI } from "../contracts";
 
 export const useReadETHContract = (

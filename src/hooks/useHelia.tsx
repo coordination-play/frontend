@@ -1,51 +1,53 @@
-import { useCallback, useEffect, useState } from "react";
+// import { useCallback, useEffect, useState } from "react";
 
-import { createHelia } from "helia";
-import { JSON, json } from "@helia/json";
-import { CID } from "multiformats/cid";
+// import { createHelia } from "helia";
+// import { JSON, json } from "@helia/json";
+// import { CID } from "multiformats/cid";
 
-export const useHelia = () => {
-  const [helia, setHelia] = useState<JSON>();
+export const useHelia = () => {};
 
-  const setupHelia = async () => {
-    const heliaProvider = await createHelia();
-    const heliaJson = json(heliaProvider);
+// export const useHelia = () => {
+//   const [helia, setHelia] = useState<JSON>();
 
-    setHelia(heliaJson);
-  };
+//   const setupHelia = async () => {
+//     const heliaProvider = await createHelia();
+//     const heliaJson = json(heliaProvider);
 
-  useEffect(() => {
-    // IPFS
-    setupHelia();
-  }, []);
+//     setHelia(heliaJson);
+//   };
 
-  return { helia: helia! };
-};
+//   useEffect(() => {
+//     // IPFS
+//     setupHelia();
+//   }, []);
 
-export const useGetHelia = ({ cid = "" }: { cid?: string }) => {
-  const [data, setData] = useState<Record<string, string>>();
-  const [loading, setLoading] = useState(false);
+//   return { helia: helia! };
+// };
 
-  const { helia } = useHelia();
+// export const useGetHelia = ({ cid = "" }: { cid?: string }) => {
+//   const [data, setData] = useState<Record<string, string>>();
+//   const [loading, setLoading] = useState(false);
 
-  const getMetadata = useCallback(async () => {
-    if (!cid) return;
+//   const { helia } = useHelia();
 
-    setLoading(true);
-    const data: Record<string, string> = await helia.get(CID.parse(cid));
+//   const getMetadata = useCallback(async () => {
+//     if (!cid) return;
 
-    setData(data);
-    setLoading(false);
+//     setLoading(true);
+//     const data: Record<string, string> = await helia.get(CID.parse(cid));
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cid]);
+//     setData(data);
+//     setLoading(false);
 
-  useEffect(() => {
-    if (cid) {
-      getMetadata();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cid]);
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, [cid]);
 
-  return { data, loading };
-};
+//   useEffect(() => {
+//     if (cid) {
+//       getMetadata();
+//     }
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, [cid]);
+
+//   return { data, loading };
+// };

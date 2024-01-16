@@ -18,6 +18,7 @@ import { useOrganisation } from "@/hooks/useOrganisation";
 import { useGetOrgAllGuilds } from "@/contracts/read/organisation";
 import { useState } from "react";
 import { DrawerDialog } from "@/components/DrawerDialog";
+import { toast } from "sonner";
 
 export const CreateGuildDialog = () => {
   const [open, setOpen] = useState(false);
@@ -66,12 +67,23 @@ const CreateGuildForm = ({ onClose }: { onClose: () => void }) => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("values", values);
-    await createGuildMutate.writeAsyncAndWait([values.name, values.owner]);
+    toast.promise(
+      createGuildMutate.writeAsyncAndWait([values.name, values.owner]),
+      {
+        loading: "Creating guild...",
+        success: () => {
+          refetchAllGuilds();
 
-    await refetchAllGuilds();
-
-    onClose();
+          return `Successfully created ${values.name} Guild. Data has take couple minutes to reflect`;
+        },
+        finally: () => {
+          onClose();
+        },
+        error: (err: { message: string }) => {
+          return err?.message || "Failed to create the guild";
+        },
+      }
+    );
   };
 
   const disableField =
