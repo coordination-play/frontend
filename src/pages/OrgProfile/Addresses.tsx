@@ -67,7 +67,11 @@ export const OrgAddresses = () => {
             ) : (
               <p className="text-foreground">{text}</p>
             )}
-            <CopyButton label={`${label} address`} text={value} />
+            <CopyButton
+              label={`${label} address`}
+              text={value}
+              disabled={!value}
+            />
           </div>
         </div>
       ))}
