@@ -8,6 +8,7 @@ import {
 import { useDeployOrganisationContracts } from "@/contracts/write/organisation";
 import { useOrganisation } from "@/hooks/useOrganisation";
 import { RocketIcon } from "lucide-react";
+import { toast } from "sonner";
 
 export const ContractsAlert = () => {
   const { address, isOwner } = useOrganisation();
@@ -24,6 +25,18 @@ export const ContractsAlert = () => {
   } = useGetOrgTreasuryContract({ address });
 
   const deployContractsMutate = useDeployOrganisationContracts({ address });
+
+  const onClickDeploy = () => {
+    toast.promise(deployContractsMutate.deploySalaryAndTreasuryContract, {
+      loading: "Deploying contracts...",
+      success: () => {
+        return `Successfully deployed the Treasury & Salary contracts. Data has take couple minutes to reflect`;
+      },
+      error: (err: { message: string }) => {
+        return err?.message || "Failed to deploy the contracts";
+      },
+    });
+  };
 
   // should be owner
   if (!isOwner) return null;
@@ -55,7 +68,7 @@ export const ContractsAlert = () => {
         disabled={
           deployContractsMutate.isLoading || deployContractsMutate.isSuccess
         }
-        onClick={deployContractsMutate.deploySalaryAndTreasuryContract}
+        onClick={onClickDeploy}
       >
         {deployContractsMutate.isLoading ? <Spinner /> : "Deploy"}
       </Button>
