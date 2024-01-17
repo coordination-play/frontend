@@ -7,6 +7,7 @@ import { useAccount } from "@starknet-react/core";
 
 import { Guild } from "./Guild";
 import { ActiveGuild } from "./ActiveGuild";
+import { CreateGuildDialog } from "./CreateGuild";
 
 const gridClassName =
   "grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 md:gap-3.5 grid-flow-row";
@@ -38,11 +39,13 @@ export const AllGuilds = () => {
       {!hasGuilds && isOwner ? (
         <div className="w-full bg-foreground/5 flex px-4 py-8 gap-1 items-center justify-center flex-col rounded-sm border border-border">
           <h6 className="font-medium text-2xl">Create a Guild</h6>
-          <p className="font-normal text-sm text-foreground/50">
+          <p className="font-normal text-sm text-foreground/50 mb-4">
             All guilds of your organisation will be displayed here
           </p>
 
-          <Button className="mt-4">Create a Guild</Button>
+          {/* <Button className="mt-4">Create a Guild</Button> */}
+
+          <CreateGuildDialog />
         </div>
       ) : null}
       {!hasGuilds && !isOwner ? (
