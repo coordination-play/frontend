@@ -29,6 +29,7 @@ export const ORGProfile = () => {
           <div className="flex w-full rounded-xl gap-6 flex-col md:flex-row">
             <div className="flex flex-col gap-4 h-fit w-full md:max-w-[300px]">
               <OrgHeader />
+
               {isOwner ? (
                 <div className="w-full border border-border rounded-md p-4 gap-3 text-center flex flex-col items-center">
                   <PaySalaryDialog />

@@ -9,12 +9,14 @@ type CopyButtonProps = {
 
   label?: string;
   showToast?: boolean;
+  disabled?: boolean;
 };
 
 export const CopyButton = ({
   text,
   showToast = true,
   label = "Text",
+  disabled,
   onCopy,
 }: CopyButtonProps) => {
   return (
@@ -28,7 +30,7 @@ export const CopyButton = ({
         }
       }}
     >
-      <Button variant="ghost" size="icon">
+      <Button variant="ghost" size="icon" disabled={disabled}>
         <Copy className="w-4 h-4 text-foreground/60" />
       </Button>
     </CopyToClipboard>

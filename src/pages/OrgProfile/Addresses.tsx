@@ -1,5 +1,7 @@
 import { CopyButton } from "@/components/CopyButton";
+import { Spinner } from "@/components/ui/spinner";
 import {
+  useGetOrgOwner,
   useGetOrgSalaryContract,
   useGetOrgTreasuryContract,
 } from "@/contracts/read/organisation";
@@ -14,6 +16,9 @@ export const OrgAddresses = () => {
     useGetOrgSalaryContract({ address });
   const { data: tresuryAdr = "", isLoading: isTresuryAdrLoading } =
     useGetOrgTreasuryContract({ address });
+  const { data: ownerAdr = "", isLoading: isOwnerAdrLoading } = useGetOrgOwner({
+    address,
+  });
 
   const addresses = useMemo(() => {
     return [
@@ -34,17 +39,35 @@ export const OrgAddresses = () => {
         value: tresuryAdr,
         loading: isTresuryAdrLoading,
       },
+      {
+        label: "Owner",
+        text: ownerAdr ? truncateAddress(ownerAdr) : "---",
+        value: ownerAdr,
+        loading: isOwnerAdrLoading,
+      },
     ];
-  }, [address, salaryAdr, isSalaryAdrLoading, tresuryAdr, isTresuryAdrLoading]);
+  }, [
+    address,
+    salaryAdr,
+    isSalaryAdrLoading,
+    tresuryAdr,
+    isTresuryAdrLoading,
+    ownerAdr,
+    isOwnerAdrLoading,
+  ]);
 
   return (
     <div className="flex flex-col gap-3">
-      {addresses.map(({ label, text, value }, i) => (
+      {addresses.map(({ label, text, value, loading }, i) => (
         <div key={i} className="flex justify-between items-center gap-2">
           <p className="text-foreground/50 text-sm">{label}</p>
           <div className="flex items-center gap-2">
-            <p className="text-foreground">{text}</p>
-            <CopyButton text={value} />
+            {loading ? (
+              <Spinner className="w-4 h-4" />
+            ) : (
+              <p className="text-foreground">{text}</p>
+            )}
+            <CopyButton label={`${label} address`} text={value} />
           </div>
         </div>
       ))}
