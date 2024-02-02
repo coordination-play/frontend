@@ -4,6 +4,7 @@ import {
   GuildABI,
   OrganisationABI,
   SalaryABI,
+  TreasuryABI,
 } from "../contracts";
 
 import { useAccount, useContract, useProvider } from "@starknet-react/core";
@@ -56,6 +57,18 @@ export const useWriteSalaryContract = (
   useWriteContract({
     address,
     abi: SalaryABI,
+    fnName,
+    ...options,
+  });
+
+export const useWriteTreasuryContract = (
+  address: string,
+  fnName: string,
+  options: WriteOptions
+) =>
+  useWriteContract({
+    address,
+    abi: TreasuryABI,
     fnName,
     ...options,
   });

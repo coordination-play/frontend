@@ -11,13 +11,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useWriteSalaryContract } from "@/contracts/write";
+import { useWriteTreasuryContract } from "@/contracts/write";
 import { Spinner } from "@/components/ui/spinner";
 
 import { useOrganisation } from "@/hooks/useOrganisation";
 import {
   useGetOrgAllGuilds,
-  useGetOrgSalaryContract,
+  useGetOrgTreasuryContract,
 } from "@/contracts/read/organisation";
 import { useState } from "react";
 import { DrawerDialog } from "@/components/DrawerDialog";
@@ -83,12 +83,12 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
     address,
   });
 
-  const { data: salaryAdr = "", isLoading: isSalaryAdrLoading } =
-    useGetOrgSalaryContract({ address });
+  const { data: trasuryAdr = "", isLoading: isTrasuryAdrLoading } =
+    useGetOrgTreasuryContract({ address });
 
-  const uploadPointsMutate = useWriteSalaryContract(
-    salaryAdr,
-    "allocate_funds_for_salary",
+  const uploadPointsMutate = useWriteTreasuryContract(
+    trasuryAdr,
+    "add_fund_to_salary_pools",
     {
       successMessage: "Funds added to salary pool successfully",
     }
@@ -97,7 +97,7 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const args = [
       values.monthId,
-      Object.values(values.amounts),
+      Object.values(values.amounts).map((v) => BigInt(v)),
       Object.keys(values.amounts),
     ];
     console.log("args", args);
@@ -118,7 +118,7 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
 
   const fieldDisabled =
     isAllGuildsLoading ||
-    isSalaryAdrLoading ||
+    isTrasuryAdrLoading ||
     uploadPointsMutate.isLoading ||
     uploadPointsMutate.isSuccess;
 
