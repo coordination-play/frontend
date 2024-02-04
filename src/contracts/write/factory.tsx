@@ -3,7 +3,7 @@ import { CONTRACTS_ADDRESSES, FactoryABI } from "../contracts";
 import { useState } from "react";
 import { CallData, cairo, shortString } from "starknet";
 import { useOrgCreationDeposit } from "../read/factory";
-// import { useHelia } from "@/hooks/useHelia";
+import { useHelia } from "@/hooks/useHelia";
 
 export const useCreateOrganisationContract = () => {
   const { provider } = useProvider();
@@ -21,7 +21,7 @@ export const useCreateOrganisationContract = () => {
     error: creationDepositError,
   } = useOrgCreationDeposit();
 
-  // const { helia } = useHelia();
+  const helia = useHelia();
 
   const [state, setState] = useState<{
     isLoading: boolean;
@@ -37,14 +37,16 @@ export const useCreateOrganisationContract = () => {
 
   const createOrganisation = async ({
     name,
-  }: // description,
-  // discord,
-  // website,
-  {
+    description,
+    discord,
+    website,
+    logo,
+  }: {
     name: string;
     description: string;
     discord?: string;
     website?: string;
+    logo?: Buffer;
   }) => {
     if (!contract || !account) return;
 
@@ -60,13 +62,14 @@ export const useCreateOrganisationContract = () => {
         error: null,
       });
 
-      // IPFS
-      // const metadata = await helia.add({
-      //   description,
-      //   discord,
-      //   website,
-      // });
-      // const cid = metadata.toString();
+      // IPFS - metadata & logo
+      const logoCid = await helia.strings.add(logo?.toString() || "");
+      const metadataCid = await helia.json.add({
+        logo: logoCid.toString(),
+        description,
+        discord,
+        website,
+      });
 
       // transaction
       const multiCall = await account.execute([
@@ -86,7 +89,7 @@ export const useCreateOrganisationContract = () => {
           calldata: CallData.compile({
             name: cairo.felt(name),
             // metadata: shortString.splitLongString(cid),
-            metadata: shortString.splitLongString(""),
+            metadata: shortString.splitLongString(metadataCid.toString()),
           }),
         },
       ]);

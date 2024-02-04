@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import buffer from "buffer";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +19,7 @@ import { useCreateOrganisationContract } from "@/contracts/write/factory";
 import { DrawerDialog } from "@/components/DrawerDialog";
 import { useState } from "react";
 import { toast } from "sonner";
+import { ImgUpload } from "@/components/ImgUpload";
 
 export const CreateOrgDialog = ({
   triggerClassName,
@@ -44,6 +46,9 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: "Organization name must be at least 2 characters.",
   }),
+  logo: z.instanceof(File, {
+    message: "Please upload an image file",
+  }), // TODO: Validate image format
   description: z.string(),
   discord: z.string().url().optional(),
   website: z.string().url().optional(),
@@ -53,31 +58,51 @@ const CreateDAOForm = ({ onClose }: { onClose: () => void }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      description: "",
+      name: "sdjhfb",
+      description: "askjfbskdf",
+      discord: "https://ww.gg",
+      website: "https://web.dev",
+      logo: undefined,
     },
   });
 
   const createOrgMutate = useCreateOrganisationContract();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    toast.promise(createOrgMutate.createOrganisation(values), {
-      loading: "Creating organisation...",
-      success: () => {
-        return `Successfully created ${values.name} Organisation. Data has take couple minutes to reflect`;
-      },
-      finally: () => {
-        onClose();
-      },
-      error: (err: { message: string }) => {
-        return err?.message || "Failed to create the organisation";
-      },
-    });
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      if (!reader.result) {
+        return null;
+      }
+
+      const logoBuf = buffer.Buffer.from(reader.result.toString()); // Convert data into buffer
+
+      toast.promise(
+        createOrgMutate.createOrganisation({ ...values, logo: logoBuf }),
+        {
+          loading: "Creating organisation...",
+          success: () => {
+            return `Successfully created ${values.name} Organisation. Data has take couple minutes to reflect`;
+          },
+          finally: () => {
+            onClose();
+          },
+          error: (err: { message: string }) => {
+            return err?.message || "Failed to create the organisation";
+          },
+        }
+      );
+    };
+
+    reader.readAsArrayBuffer(values.logo);
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
+        <ImgUpload name="logo" control={form.control} />
+
         <FormField
           control={form.control}
           name="name"
