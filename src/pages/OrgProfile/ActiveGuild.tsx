@@ -157,15 +157,19 @@ const ActiveGuildContent = ({ address }: ActiveGuildContentProps) => {
                   isTotalContributionLoading,
               },
               {
-                label: "Total Points all time:",
+                label: "Total Earned Points all time:",
                 value:
                   cumContributionPoints +
                   " " +
                   (cumContributionPoints
-                    ? `(${(
-                        (cumContributionPoints / totalContribution) *
-                        100
-                      ).toFixed()}%)`
+                    ? `(${
+                        totalContribution
+                          ? (
+                              (cumContributionPoints / totalContribution) *
+                              100
+                            ).toFixed()
+                          : 0
+                      }%)`
                     : ""),
                 isLoading:
                   isCumContributionPointsLoading || isTotalContributionLoading,
