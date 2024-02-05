@@ -4,7 +4,6 @@ import { Control, FieldValues, Path } from "react-hook-form";
 
 import {
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -13,6 +12,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { ChangeEvent, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "../ui/button";
+import { EditIcon, PlusIcon } from "lucide-react";
 
 export const ImgUpload = <T extends FieldValues = FieldValues>({
   control,
@@ -25,20 +26,59 @@ export const ImgUpload = <T extends FieldValues = FieldValues>({
 
   return (
     <>
-      <Avatar className="w-24 h-24">
-        <AvatarImage src={preview} />
-        <AvatarFallback>BU</AvatarFallback>
-      </Avatar>
-
       <FormField
         control={control}
         name={name}
         render={({ field: { onChange, ...rest } }) => (
           <>
             <FormItem>
-              <FormLabel>Circle Image</FormLabel>
+              <FormLabel>
+                <div className="relative border-2 w-full h-40 p-3 flex-col gap-2 rounded-md border-foreground/660 border-dotted flex items-center justify-center">
+                  {preview ? (
+                    <>
+                      <Button
+                        asChild
+                        size="sm"
+                        variant="outline"
+                        className="absolute top-3 right-3 flex gap-2 items-center"
+                      >
+                        <div>
+                          <EditIcon className="w-3 h-3" />
+                          Edit
+                        </div>
+                      </Button>
+
+                      <Avatar className="w-24 h-24">
+                        <AvatarImage className="object-fit" src={preview} />
+                        <AvatarFallback>BU</AvatarFallback>
+                      </Avatar>
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="lg"
+                        className="border-dotted border-2 rounded-full h-20 w-20 p-0 cursor-pointer"
+                      >
+                        <div>
+                          <PlusIcon className="w-8 h-8" />
+                        </div>
+                      </Button>
+
+                      <p className="text font-normal text-foreground/80">
+                        Click to Upload
+                      </p>
+
+                      <FormMessage />
+                    </>
+                  )}
+                </div>
+              </FormLabel>
+
               <FormControl>
                 <Input
+                  className="hidden"
                   type="file"
                   {...rest}
                   value=""
@@ -54,10 +94,6 @@ export const ImgUpload = <T extends FieldValues = FieldValues>({
                   }}
                 />
               </FormControl>
-              <FormDescription>
-                Choose best image that bring spirits to your circle.
-              </FormDescription>
-              <FormMessage />
             </FormItem>
           </>
         )}
