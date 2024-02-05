@@ -75,7 +75,7 @@ export const OrgHeader = () => {
       <div className="flex items-center justify-center">
         {discord ? (
           <Button
-            variant="icon"
+            variant="ghost"
             size="icon"
             className="opacity-60 hover:opacity-100 transition-opacity"
           >
@@ -87,7 +87,7 @@ export const OrgHeader = () => {
 
         {website ? (
           <Button
-            variant="icon"
+            variant="ghost"
             size="icon"
             className="opacity-60 hover:opacity-100 transition-opacity"
           >
