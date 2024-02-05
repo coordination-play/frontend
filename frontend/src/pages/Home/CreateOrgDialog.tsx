@@ -48,7 +48,9 @@ const formSchema = z.object({
   logo: z.instanceof(File, {
     message: "Please upload an image file",
   }), // TODO: Validate image format
-  description: z.string(),
+  description: z.string({
+    required_error: "Short description is required",
+  }),
   discord: z.string().url().optional(),
   website: z.string().url().optional(),
 });
@@ -58,9 +60,9 @@ const CreateDAOForm = ({ onClose }: { onClose: () => void }) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      description: "",
-      discord: "",
-      website: "",
+      description: undefined,
+      discord: undefined,
+      website: undefined,
       logo: undefined,
     },
   });

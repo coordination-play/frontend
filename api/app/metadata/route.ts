@@ -1,8 +1,13 @@
-import { NextResponse } from "next/server";
 import pinataSDK from "@pinata/sdk";
 import { Readable } from "stream";
 
 const pinata = new pinataSDK({ pinataJWTKey: process.env.PINATA_API_JWT });
+
+const resOptions: RequestInit = {
+  headers: {
+    "Access-Control-Allow-Origin": process.env.FRONTEND_URL || "",
+  },
+};
 
 export async function POST(request: Request): Promise<Response> {
   try {
@@ -13,9 +18,9 @@ export async function POST(request: Request): Promise<Response> {
     if (!logo) {
       console.error("no logo!");
 
-      return NextResponse.json(
+      return Response.json(
         { message: "No logo received." },
-        { status: 400 }
+        { ...resOptions, status: 400 }
       );
     }
 
@@ -48,9 +53,12 @@ export async function POST(request: Request): Promise<Response> {
       }
     );
 
-    return Response.json({ cid: metadataRes.IpfsHash });
+    return Response.json({ cid: metadataRes.IpfsHash }, resOptions);
   } catch (err) {
     console.log("metadata err", err);
-    return Response.json({ message: "Error uploading file" }, { status: 500 });
+    return Response.json(
+      { message: "Error uploading file" },
+      { ...resOptions, status: 500 }
+    );
   }
 }
