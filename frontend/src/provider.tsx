@@ -11,6 +11,7 @@ import {
   voyager,
 } from "@starknet-react/core";
 import { getEnv } from "./lib/env";
+// import { queryClient } from "./lib/queryClient";
 
 export const StarknetProvider = ({
   children,
@@ -34,6 +35,8 @@ export const StarknetProvider = ({
       })}
       connectors={connectors}
       explorer={voyager}
+      autoConnect
+      // queryClient={queryClient}
     >
       {children}
     </StarknetConfig>

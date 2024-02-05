@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import buffer from "buffer";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -69,33 +68,18 @@ const CreateDAOForm = ({ onClose }: { onClose: () => void }) => {
   const createOrgMutate = useCreateOrganisationContract();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      if (!reader.result) {
-        return null;
-      }
-
-      const logoBuf = buffer.Buffer.from(reader.result.toString()); // Convert data into buffer
-
-      toast.promise(
-        createOrgMutate.createOrganisation({ ...values, logo: logoBuf }),
-        {
-          loading: "Creating organisation...",
-          success: () => {
-            return `Successfully created ${values.name} Organisation. Data has take couple minutes to reflect`;
-          },
-          finally: () => {
-            onClose();
-          },
-          error: (err: { message: string }) => {
-            return err?.message || "Failed to create the organisation";
-          },
-        }
-      );
-    };
-
-    reader.readAsArrayBuffer(values.logo);
+    toast.promise(createOrgMutate.createOrganisation(values), {
+      loading: "Creating organisation...",
+      success: () => {
+        return `Successfully created ${values.name} Organisation. Data has take couple minutes to reflect`;
+      },
+      finally: () => {
+        onClose();
+      },
+      error: (err: { message: string }) => {
+        return err?.message || "Failed to create the organisation";
+      },
+    });
   };
 
   return (
