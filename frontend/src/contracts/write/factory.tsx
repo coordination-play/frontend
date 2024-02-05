@@ -3,7 +3,7 @@ import { CONTRACTS_ADDRESSES, FactoryABI } from "../contracts";
 import { useState } from "react";
 import { CallData, cairo, shortString } from "starknet";
 import { useOrgCreationDeposit } from "../read/factory";
-import { useHelia } from "@/hooks/useHelia";
+import { FetchAPI } from "@/lib/api";
 
 export const useCreateOrganisationContract = () => {
   const { provider } = useProvider();
@@ -21,8 +21,6 @@ export const useCreateOrganisationContract = () => {
     error: creationDepositError,
   } = useOrgCreationDeposit();
 
-  const helia = useHelia();
-
   const [state, setState] = useState<{
     isLoading: boolean;
     isError: boolean;
@@ -38,15 +36,15 @@ export const useCreateOrganisationContract = () => {
   const createOrganisation = async ({
     name,
     description,
-    discord,
-    website,
+    discord = "",
+    website = "",
     logo,
   }: {
     name: string;
     description: string;
     discord?: string;
     website?: string;
-    logo?: Buffer;
+    logo?: File;
   }) => {
     if (!contract || !account) return;
 
@@ -62,14 +60,22 @@ export const useCreateOrganisationContract = () => {
         error: null,
       });
 
-      // IPFS - metadata & logo
-      const logoCid = await helia.strings.add(logo?.toString() || "");
-      const metadataCid = await helia.json.add({
-        logo: logoCid.toString(),
-        description,
-        discord,
-        website,
+      const formData = new FormData();
+      formData.append("logo", logo as Blob); // file is a Blob
+      formData.append("name", name);
+      formData.append("description", description);
+      formData.append("discord", discord);
+      formData.append("website", website);
+
+      const metadataRes = await FetchAPI("/metadata", {
+        method: "POST",
+        body: formData,
+        // mode: "no-cors", // TODO
       });
+      const metadataJson = await metadataRes.json();
+      console.log("metadataJson", metadataJson);
+
+      const metadataCid = metadataJson.cid;
 
       // transaction
       const multiCall = await account.execute([
