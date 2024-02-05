@@ -49,7 +49,7 @@ export const ImgUpload = <T extends FieldValues = FieldValues>({
                       </Button>
 
                       <Avatar className="w-24 h-24">
-                        <AvatarImage className="object-fit" src={preview} />
+                        <AvatarImage src={preview} />
                         <AvatarFallback>BU</AvatarFallback>
                       </Avatar>
                     </>

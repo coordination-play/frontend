@@ -35,7 +35,7 @@ export const StarknetProvider = ({
       })}
       connectors={connectors}
       explorer={voyager}
-      autoConnect
+      // autoConnect
       // queryClient={queryClient}
     >
       {children}
