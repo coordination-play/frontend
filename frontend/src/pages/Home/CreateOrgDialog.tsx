@@ -57,10 +57,10 @@ const CreateDAOForm = ({ onClose }: { onClose: () => void }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "sdjhfb",
-      description: "askjfbskdf",
-      discord: "https://ww.gg",
-      website: "https://web.dev",
+      name: "",
+      description: "",
+      discord: "",
+      website: "",
       logo: undefined,
     },
   });
