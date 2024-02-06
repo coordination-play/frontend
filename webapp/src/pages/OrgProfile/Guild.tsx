@@ -1,6 +1,6 @@
 import { useGetGuildCumContributionPoints } from "@/contracts/read/guild";
 import { cn, truncateAddress } from "@/lib/utils";
-import { setActiveGuild, useGuildState } from "@/state/guild";
+import { setActiveGuild, useOrgState } from "@/state/organisation";
 import { useAccount } from "@starknet-react/core";
 import { Circle } from "lucide-react";
 
@@ -10,7 +10,7 @@ type GuildProps = {
 };
 
 export const Guild = ({ name, address }: GuildProps) => {
-  const { activeGuild } = useGuildState();
+  const { activeGuild } = useOrgState();
 
   const { address: account = "" } = useAccount();
 

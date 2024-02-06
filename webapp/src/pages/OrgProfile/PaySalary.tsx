@@ -35,6 +35,7 @@ import {
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { useOrgState } from "@/state/organisation";
 
 export const PaySalaryDialog = () => {
   const [open, setOpen] = useState(false);
@@ -66,7 +67,8 @@ const formSchema = z.object({
 });
 
 const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
-  const { address, monthId } = useOrganisation();
+  const { address } = useOrganisation();
+  const { monthId } = useOrgState();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

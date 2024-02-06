@@ -5,11 +5,10 @@ import {
   useGetGuildMonthlyTotalContribution,
   useGetGuildName,
 } from "@/contracts/read/guild";
-import { useOrganisation } from "@/hooks/useOrganisation";
 import { useAccount } from "@starknet-react/core";
 
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { setActiveGuild, useGuildState } from "@/state/guild";
+import { setActiveGuild, useOrgState } from "@/state/organisation";
 import {
   Drawer,
   DrawerContent,
@@ -22,7 +21,7 @@ import { truncateAddress } from "@/lib/utils";
 export const ActiveGuild = () => {
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
-  const { activeGuild: activeGuildAddress } = useGuildState();
+  const { activeGuild: activeGuildAddress } = useOrgState();
 
   const { data: guildName, isLoading: isGuildNameLoading } = useGetGuildName({
     address: activeGuildAddress,
@@ -81,7 +80,8 @@ type ActiveGuildContentProps = {
 };
 
 const ActiveGuildContent = ({ address }: ActiveGuildContentProps) => {
-  const { monthId } = useOrganisation();
+  const { monthId } = useOrgState();
+
   const { address: account = "", isConnected } = useAccount();
 
   const { data: totalContribution = 0, isLoading: isTotalContributionLoading } =

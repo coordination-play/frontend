@@ -14,6 +14,7 @@ import { useOrganisation } from "@/hooks/useOrganisation";
 import { Button } from "@/components/ui/button";
 import { OrgAddresses } from "./Addresses";
 import { ContractsAlert } from "./ContractsAlert";
+import { MonthIDSlider } from "./MonthIdSlider";
 
 export const ORGProfile = () => {
   const { isOwner } = useOrganisation();
@@ -61,11 +62,10 @@ export const ORGProfile = () => {
                     Leaderboard
                   </TabsTrigger>
 
-                  {isOwner ? (
-                    <div className="">
-                      <CreateGuildDialog />
-                    </div>
-                  ) : null}
+                  <div className="flex items-center gap-3">
+                    <MonthIDSlider />
+                    {isOwner ? <CreateGuildDialog /> : null}
+                  </div>
                 </TabsList>
                 <TabsContent
                   value="allguilds"
