@@ -74,7 +74,7 @@ const CreateGuildForm = ({ onClose }: { onClose: () => void }) => {
         success: () => {
           refetchAllGuilds();
 
-          return `Successfully created ${values.name} Guild. Data has take couple minutes to reflect`;
+          return `Successfully created ${values.name} Guild. Data can take couple minutes to reflect`;
         },
         finally: () => {
           onClose();

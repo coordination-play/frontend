@@ -11,12 +11,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useWriteTreasuryContract } from "@/contracts/write";
+import {
+  useWriteSalaryContract,
+  useWriteTreasuryContract,
+} from "@/contracts/write";
 import { Spinner } from "@/components/ui/spinner";
 
 import { useOrganisation } from "@/hooks/useOrganisation";
 import {
   useGetOrgAllGuilds,
+  useGetOrgSalaryContract,
   useGetOrgTreasuryContract,
 } from "@/contracts/read/organisation";
 import { useState } from "react";
@@ -88,6 +92,9 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
   const { data: trasuryAdr = "", isLoading: isTrasuryAdrLoading } =
     useGetOrgTreasuryContract({ address });
 
+  // const { data: salaryAdr = "", isLoading: isSalaryAdrLoading } =
+  //   useGetOrgSalaryContract({ address });
+
   const uploadPointsMutate = useWriteTreasuryContract(
     trasuryAdr,
     "add_fund_to_salary_pools",
@@ -96,18 +103,26 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
     }
   );
 
+  // const uploadPointsMutate = useWriteSalaryContract(
+  //   salaryAdr,
+  //   "allocate_funds_for_salary",
+  //   {
+  //     successMessage: "Funds added to salary pool successfully",
+  //   }
+  // );
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const args = [
       values.monthId,
       Object.values(values.amounts).map((v) => BigInt(v)),
-      Object.keys(values.amounts),
+      Object.keys(values.amounts), // addresses
     ];
     console.log("args", args);
 
     toast.promise(uploadPointsMutate.writeAsyncAndWait(args), {
       loading: "Adding funds...",
       success: () => {
-        return `Salary has been add to guilds. Data has take couple minutes to reflect`;
+        return `Salary has been add to guilds. Data can take couple minutes to reflect`;
       },
       finally: () => {
         onClose();
@@ -121,6 +136,7 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
   const fieldDisabled =
     isAllGuildsLoading ||
     isTrasuryAdrLoading ||
+    // isSalaryAdrLoading ||
     uploadPointsMutate.isLoading ||
     uploadPointsMutate.isSuccess;
 

@@ -16,9 +16,12 @@ import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { useCreateOrganisationContract } from "@/contracts/write/factory";
 import { DrawerDialog } from "@/components/DrawerDialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ImgUpload } from "@/components/ImgUpload";
+import { useReadETHBalanceOf } from "@/contracts/read/eth";
+import { useAccount } from "@starknet-react/core";
+import { useOrgCreationDeposit } from "@/contracts/read/factory";
 
 export const CreateOrgDialog = ({
   triggerClassName,
@@ -69,11 +72,20 @@ const CreateDAOForm = ({ onClose }: { onClose: () => void }) => {
 
   const createOrgMutate = useCreateOrganisationContract();
 
+  const { address } = useAccount();
+  const { data: balance, isLoading: isBalanceLoading } =
+    useReadETHBalanceOf(address);
+  const {
+    data: creationDeposit = 0,
+    isLoading: isCreationDepositLoading,
+    isError: isCreationDepositError,
+  } = useOrgCreationDeposit();
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     toast.promise(createOrgMutate.createOrganisation(values), {
       loading: "Creating organisation...",
       success: () => {
-        return `Successfully created ${values.name} Organisation. Data has take couple minutes to reflect`;
+        return `Successfully created ${values.name} Organisation. Data can take couple minutes to reflect`;
       },
       finally: () => {
         onClose();
@@ -83,6 +95,20 @@ const CreateDAOForm = ({ onClose }: { onClose: () => void }) => {
       },
     });
   };
+
+  const noEnoughBalance =
+    balance && creationDeposit
+      ? BigInt(balance?.toString()) < BigInt(creationDeposit?.toString())
+      : false;
+
+  const isDisabled =
+    noEnoughBalance ||
+    isCreationDepositLoading ||
+    isCreationDepositError ||
+    isBalanceLoading ||
+    createOrgMutate.isLoading ||
+    // createOrgMutate.isError ||
+    createOrgMutate.isSuccess;
 
   return (
     <Form {...form}>
@@ -152,19 +178,42 @@ const CreateDAOForm = ({ onClose }: { onClose: () => void }) => {
         />
 
         <div className="flex flex-col gap-3">
-          <p className="text-warn font-medium text-xs">
-            Note: Creating organisation requires deposit of 0.1 ETH
-          </p>
+          {isCreationDepositError ? (
+            <p className="text-destructive font-medium text-xs">
+              Error fetching creation deposit
+            </p>
+          ) : (
+            <>
+              <p className="text-warn font-medium text-xs">
+                Note: Creating organisation requires deposit of{" "}
+                {!isCreationDepositLoading ? (
+                  <>
+                    {String(
+                      Number(
+                        BigInt(creationDeposit.toString()) /
+                          BigInt(Math.pow(10, 6))
+                      ).toFixed(3)
+                    )}
+                  </>
+                ) : (
+                  "..."
+                )}{" "}
+                ETH
+              </p>
+            </>
+          )}
+
+          {noEnoughBalance ? (
+            <p className="text-destructive font-medium text-xs">
+              You don't have enough balance to submit org. creation fee
+            </p>
+          ) : null}
 
           <Button
             type="submit"
             className="w-full"
             size="lg"
-            disabled={
-              createOrgMutate.isLoading ||
-              // createOrgMutate.isError ||
-              createOrgMutate.isSuccess
-            }
+            disabled={isDisabled}
           >
             {createOrgMutate.isLoading ? <Spinner /> : "Create Organisation"}
           </Button>

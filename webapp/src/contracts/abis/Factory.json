@@ -1,12 +1,12 @@
 [
   {
-    "name": "Factory",
     "type": "impl",
+    "name": "Factory",
     "interface_name": "coordination_stack_core::factory::IFactory"
   },
   {
-    "name": "core::integer::u256",
     "type": "struct",
+    "name": "core::integer::u256",
     "members": [
       {
         "name": "low",
@@ -19,8 +19,8 @@
     ]
   },
   {
-    "name": "core::array::Span::<core::felt252>",
     "type": "struct",
+    "name": "core::array::Span::<core::felt252>",
     "members": [
       {
         "name": "snapshot",
@@ -29,8 +29,8 @@
     ]
   },
   {
-    "name": "coordination_stack_core::factory::Organisation",
     "type": "struct",
+    "name": "coordination_stack_core::factory::Organisation",
     "members": [
       {
         "name": "name",
@@ -47,12 +47,12 @@
     ]
   },
   {
-    "name": "coordination_stack_core::factory::IFactory",
     "type": "interface",
+    "name": "coordination_stack_core::factory::IFactory",
     "items": [
       {
-        "name": "get_creation_deposit",
         "type": "function",
+        "name": "get_creation_fee",
         "inputs": [],
         "outputs": [
           {
@@ -62,19 +62,8 @@
         "state_mutability": "view"
       },
       {
-        "name": "get_lock_duration",
         "type": "function",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::integer::u64"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
         "name": "get_all_organisations",
-        "type": "function",
         "inputs": [],
         "outputs": [
           {
@@ -84,8 +73,8 @@
         "state_mutability": "view"
       },
       {
-        "name": "get_all_organisations_details",
         "type": "function",
+        "name": "get_all_organisations_details",
         "inputs": [],
         "outputs": [
           {
@@ -95,8 +84,8 @@
         "state_mutability": "view"
       },
       {
-        "name": "get_num_of_organisations",
         "type": "function",
+        "name": "get_num_of_organisations",
         "inputs": [],
         "outputs": [
           {
@@ -106,8 +95,8 @@
         "state_mutability": "view"
       },
       {
+        "type": "function",
         "name": "get_organisation_contract_class_hash",
-        "type": "function",
         "inputs": [],
         "outputs": [
           {
@@ -117,8 +106,8 @@
         "state_mutability": "view"
       },
       {
+        "type": "function",
         "name": "get_guild_contract_class_hash",
-        "type": "function",
         "inputs": [],
         "outputs": [
           {
@@ -128,8 +117,8 @@
         "state_mutability": "view"
       },
       {
+        "type": "function",
         "name": "get_salary_contract_class_hash",
-        "type": "function",
         "inputs": [],
         "outputs": [
           {
@@ -139,8 +128,8 @@
         "state_mutability": "view"
       },
       {
+        "type": "function",
         "name": "get_treasury_contract_class_hash",
-        "type": "function",
         "inputs": [],
         "outputs": [
           {
@@ -150,11 +139,11 @@
         "state_mutability": "view"
       },
       {
-        "name": "update_creation_deposit",
         "type": "function",
+        "name": "update_creation_fee",
         "inputs": [
           {
-            "name": "new_deposit",
+            "name": "new_fee",
             "type": "core::integer::u256"
           }
         ],
@@ -162,8 +151,8 @@
         "state_mutability": "external"
       },
       {
-        "name": "create_organisation",
         "type": "function",
+        "name": "create_organisation",
         "inputs": [
           {
             "name": "name",
@@ -182,13 +171,9 @@
         "state_mutability": "external"
       },
       {
-        "name": "withdraw_deposit",
         "type": "function",
+        "name": "withdraw_fee",
         "inputs": [
-          {
-            "name": "organisation",
-            "type": "core::starknet::contract_address::ContractAddress"
-          },
           {
             "name": "receipent",
             "type": "core::starknet::contract_address::ContractAddress"
@@ -198,8 +183,8 @@
         "state_mutability": "external"
       },
       {
-        "name": "replace_organisation_contract_hash",
         "type": "function",
+        "name": "replace_organisation_contract_hash",
         "inputs": [
           {
             "name": "new_organisation_contract_class",
@@ -210,8 +195,8 @@
         "state_mutability": "external"
       },
       {
-        "name": "replace_guild_contract_hash",
         "type": "function",
+        "name": "replace_guild_contract_hash",
         "inputs": [
           {
             "name": "new_guild_contract_class",
@@ -222,8 +207,8 @@
         "state_mutability": "external"
       },
       {
-        "name": "replace_implementation_class",
         "type": "function",
+        "name": "replace_implementation_class",
         "inputs": [
           {
             "name": "new_implementation_class",
@@ -234,8 +219,8 @@
         "state_mutability": "external"
       },
       {
-        "name": "replace_salary_contract_hash",
         "type": "function",
+        "name": "replace_salary_contract_hash",
         "inputs": [
           {
             "name": "new_salary_contract_class",
@@ -246,8 +231,8 @@
         "state_mutability": "external"
       },
       {
-        "name": "replace_treasury_contract_hash",
         "type": "function",
+        "name": "replace_treasury_contract_hash",
         "inputs": [
           {
             "name": "new_treasury_contract_class",
@@ -260,17 +245,17 @@
     ]
   },
   {
-    "name": "OwnableImpl",
     "type": "impl",
+    "name": "OwnableImpl",
     "interface_name": "openzeppelin::access::ownable::interface::IOwnable"
   },
   {
-    "name": "openzeppelin::access::ownable::interface::IOwnable",
     "type": "interface",
+    "name": "openzeppelin::access::ownable::interface::IOwnable",
     "items": [
       {
-        "name": "owner",
         "type": "function",
+        "name": "owner",
         "inputs": [],
         "outputs": [
           {
@@ -280,8 +265,8 @@
         "state_mutability": "view"
       },
       {
-        "name": "transfer_ownership",
         "type": "function",
+        "name": "transfer_ownership",
         "inputs": [
           {
             "name": "new_owner",
@@ -292,8 +277,8 @@
         "state_mutability": "external"
       },
       {
-        "name": "renounce_ownership",
         "type": "function",
+        "name": "renounce_ownership",
         "inputs": [],
         "outputs": [],
         "state_mutability": "external"
@@ -301,8 +286,8 @@
     ]
   },
   {
-    "name": "constructor",
     "type": "constructor",
+    "name": "constructor",
     "inputs": [
       {
         "name": "organisation_contract_class_hash",
@@ -327,87 +312,87 @@
     ]
   },
   {
-    "kind": "struct",
+    "type": "event",
     "name": "coordination_stack_core::factory::Factory::OrganisationCreated",
-    "type": "event",
+    "kind": "struct",
     "members": [
       {
-        "kind": "data",
         "name": "name",
-        "type": "core::felt252"
+        "type": "core::felt252",
+        "kind": "data"
       },
       {
-        "kind": "data",
         "name": "organisation",
-        "type": "core::starknet::contract_address::ContractAddress"
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
       },
       {
-        "kind": "data",
         "name": "id",
-        "type": "core::integer::u32"
+        "type": "core::integer::u32",
+        "kind": "data"
       }
     ]
   },
   {
-    "kind": "struct",
-    "name": "coordination_stack_core::factory::Factory::DepositUpdated",
     "type": "event",
+    "name": "coordination_stack_core::factory::Factory::CreationFeeUpdated",
+    "kind": "struct",
     "members": [
       {
-        "kind": "data",
-        "name": "new_deposit",
-        "type": "core::integer::u256"
+        "name": "new_fee",
+        "type": "core::integer::u256",
+        "kind": "data"
       }
     ]
   },
   {
-    "kind": "struct",
+    "type": "event",
     "name": "openzeppelin::access::ownable::ownable::OwnableComponent::OwnershipTransferred",
-    "type": "event",
+    "kind": "struct",
     "members": [
       {
-        "kind": "data",
         "name": "previous_owner",
-        "type": "core::starknet::contract_address::ContractAddress"
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
       },
       {
-        "kind": "data",
         "name": "new_owner",
-        "type": "core::starknet::contract_address::ContractAddress"
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
       }
     ]
   },
   {
-    "kind": "enum",
+    "type": "event",
     "name": "openzeppelin::access::ownable::ownable::OwnableComponent::Event",
-    "type": "event",
+    "kind": "enum",
     "variants": [
       {
-        "kind": "nested",
         "name": "OwnershipTransferred",
-        "type": "openzeppelin::access::ownable::ownable::OwnableComponent::OwnershipTransferred"
+        "type": "openzeppelin::access::ownable::ownable::OwnableComponent::OwnershipTransferred",
+        "kind": "nested"
       }
     ]
   },
   {
-    "kind": "enum",
-    "name": "coordination_stack_core::factory::Factory::Event",
     "type": "event",
+    "name": "coordination_stack_core::factory::Factory::Event",
+    "kind": "enum",
     "variants": [
       {
-        "kind": "nested",
         "name": "OrganisationCreated",
-        "type": "coordination_stack_core::factory::Factory::OrganisationCreated"
+        "type": "coordination_stack_core::factory::Factory::OrganisationCreated",
+        "kind": "nested"
       },
       {
-        "kind": "nested",
-        "name": "DepositUpdated",
-        "type": "coordination_stack_core::factory::Factory::DepositUpdated"
+        "name": "CreationFeeUpdated",
+        "type": "coordination_stack_core::factory::Factory::CreationFeeUpdated",
+        "kind": "nested"
       },
       {
-        "kind": "flat",
         "name": "OwnableEvent",
-        "type": "openzeppelin::access::ownable::ownable::OwnableComponent::Event"
+        "type": "openzeppelin::access::ownable::ownable::OwnableComponent::Event",
+        "kind": "flat"
       }
     ]
   }

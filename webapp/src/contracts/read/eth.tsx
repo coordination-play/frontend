@@ -9,3 +9,10 @@ export const useReadETHContract = (
     address: CONTRACTS_ADDRESSES.ETH_TOKEN,
     ...props,
   });
+
+export const useReadETHBalanceOf = (adr?: string) =>
+  useReadETHContract({
+    functionName: "balanceOf",
+    args: [String(adr)],
+    enabled: !!adr,
+  });

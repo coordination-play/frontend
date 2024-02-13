@@ -81,7 +81,7 @@ export const readFactory = {
       return { count: orgsCount, orgs };
     },
   },
-  get_creation_deposit: {
+  get_creation_fee: {
     returnType: z.bigint(),
     parsedType: z.number().optional(),
     parse: function (data: unknown): z.infer<typeof this.parsedType> {
@@ -131,10 +131,10 @@ export const useGetAllOrganisationDetails = () =>
 
 export const useOrgCreationDeposit = () => {
   return useReadFactoryContract<
-    z.infer<typeof readFactory.get_creation_deposit.parsedType>
+    z.infer<typeof readFactory.get_creation_fee.parsedType>
   >({
-    functionName: "get_creation_deposit",
-    parseResultFn: (d) => readFactory.get_creation_deposit.parse(d),
+    functionName: "get_creation_fee",
+    parseResultFn: (d) => readFactory.get_creation_fee.parse(d),
   });
 };
 

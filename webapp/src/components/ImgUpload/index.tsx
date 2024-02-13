@@ -80,6 +80,7 @@ export const ImgUpload = <T extends FieldValues = FieldValues>({
                 <Input
                   className="hidden"
                   type="file"
+                  accept="image/*"
                   {...rest}
                   value=""
                   onChange={(event) => {

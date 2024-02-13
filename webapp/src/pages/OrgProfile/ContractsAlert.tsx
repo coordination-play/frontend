@@ -30,7 +30,7 @@ export const ContractsAlert = () => {
     toast.promise(deployContractsMutate.deploySalaryAndTreasuryContract, {
       loading: "Deploying contracts...",
       success: () => {
-        return `Successfully deployed the Treasury & Salary contracts. Data has take couple minutes to reflect`;
+        return `Successfully deployed the Treasury & Salary contracts. Data can take couple minutes to reflect`;
       },
       error: (err: { message: string }) => {
         return err?.message || "Failed to deploy the contracts";
