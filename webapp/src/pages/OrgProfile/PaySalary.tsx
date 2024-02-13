@@ -11,16 +11,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  useWriteSalaryContract,
-  useWriteTreasuryContract,
-} from "@/contracts/write";
+import { useWriteTreasuryContract } from "@/contracts/write";
 import { Spinner } from "@/components/ui/spinner";
 
 import { useOrganisation } from "@/hooks/useOrganisation";
 import {
   useGetOrgAllGuilds,
-  useGetOrgSalaryContract,
   useGetOrgTreasuryContract,
 } from "@/contracts/read/organisation";
 import { useState } from "react";

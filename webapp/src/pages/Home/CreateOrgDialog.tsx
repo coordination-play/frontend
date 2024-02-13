@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { useCreateOrganisationContract } from "@/contracts/write/factory";
 import { DrawerDialog } from "@/components/DrawerDialog";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { ImgUpload } from "@/components/ImgUpload";
 import { useReadETHBalanceOf } from "@/contracts/read/eth";
