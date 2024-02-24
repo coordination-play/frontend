@@ -19,7 +19,6 @@ export const ContractsAlert = () => {
     data: salaryAdr = "",
     isLoading: isSalaryAdrLoading,
     isError: isSalaryAdrError,
-    error: salaryAdrError,
   } = useGetOrgSalaryContract({ address });
   const {
     data: tresuryAdr = "",
@@ -42,7 +41,7 @@ export const ContractsAlert = () => {
   };
 
   // should be owner
-  // if (!isOwner) return null;
+  if (!isOwner) return null;
 
   if (
     isSalaryAdrLoading ||
