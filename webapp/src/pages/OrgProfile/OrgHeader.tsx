@@ -8,7 +8,6 @@ import {
 } from "@/contracts/read/organisation";
 import { useOrganisation } from "@/hooks/useOrganisation";
 
-// import { useGetHelia } from "@/hooks/useHelia";
 import { useReadETHContract } from "@/contracts/read/eth";
 import { useOrgMetadataJSON } from "@/hooks/useMetadata";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
