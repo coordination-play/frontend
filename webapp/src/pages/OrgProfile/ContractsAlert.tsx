@@ -7,16 +7,19 @@ import {
 } from "@/contracts/read/organisation";
 import { useDeployOrganisationContracts } from "@/contracts/write/organisation";
 import { useOrganisation } from "@/hooks/useOrganisation";
+import { useAccount } from "@starknet-react/core";
 import { RocketIcon } from "lucide-react";
 import { toast } from "sonner";
 
 export const ContractsAlert = () => {
+  const { isConnected } = useAccount();
   const { address, isOwner } = useOrganisation();
 
   const {
     data: salaryAdr = "",
     isLoading: isSalaryAdrLoading,
     isError: isSalaryAdrError,
+    error: salaryAdrError,
   } = useGetOrgSalaryContract({ address });
   const {
     data: tresuryAdr = "",
@@ -39,7 +42,7 @@ export const ContractsAlert = () => {
   };
 
   // should be owner
-  if (!isOwner) return null;
+  // if (!isOwner) return null;
 
   if (
     isSalaryAdrLoading ||
@@ -66,7 +69,9 @@ export const ContractsAlert = () => {
       <Button
         className="ml-auto w-fit"
         disabled={
-          deployContractsMutate.isLoading || deployContractsMutate.isSuccess
+          deployContractsMutate.isLoading ||
+          deployContractsMutate.isSuccess ||
+          !isConnected
         }
         onClick={onClickDeploy}
       >

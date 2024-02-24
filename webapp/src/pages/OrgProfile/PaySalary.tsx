@@ -88,34 +88,23 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
   const { data: trasuryAdr = "", isLoading: isTrasuryAdrLoading } =
     useGetOrgTreasuryContract({ address });
 
-  // const { data: salaryAdr = "", isLoading: isSalaryAdrLoading } =
-  //   useGetOrgSalaryContract({ address });
-
-  const uploadPointsMutate = useWriteTreasuryContract(
+  const paySalaryMutate = useWriteTreasuryContract(
     trasuryAdr,
-    "add_fund_to_salary_pools",
+    "allocate_funds_for_salary",
     {
       successMessage: "Funds added to salary pool successfully",
     }
   );
 
-  // const uploadPointsMutate = useWriteSalaryContract(
-  //   salaryAdr,
-  //   "allocate_funds_for_salary",
-  //   {
-  //     successMessage: "Funds added to salary pool successfully",
-  //   }
-  // );
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const args = [
-      values.monthId,
+      Number(values.monthId),
       Object.values(values.amounts).map((v) => BigInt(v)),
       Object.keys(values.amounts), // addresses
     ];
     console.log("args", args);
 
-    toast.promise(uploadPointsMutate.writeAsyncAndWait(args), {
+    toast.promise(paySalaryMutate.writeAsyncAndWait(args), {
       loading: "Adding funds...",
       success: () => {
         return `Salary has been add to guilds. Data can take couple minutes to reflect`;
@@ -132,9 +121,8 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
   const fieldDisabled =
     isAllGuildsLoading ||
     isTrasuryAdrLoading ||
-    // isSalaryAdrLoading ||
-    uploadPointsMutate.isLoading ||
-    uploadPointsMutate.isSuccess;
+    paySalaryMutate.isLoading ||
+    paySalaryMutate.isSuccess;
 
   return (
     <Form {...form}>
@@ -267,12 +255,12 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
           className="w-full"
           size="lg"
           disabled={
-            uploadPointsMutate.isLoading ||
-            uploadPointsMutate.isSuccess ||
+            paySalaryMutate.isLoading ||
+            paySalaryMutate.isSuccess ||
             isAllGuildsLoading
           }
         >
-          {uploadPointsMutate.isLoading || isAllGuildsLoading ? (
+          {paySalaryMutate.isLoading || isAllGuildsLoading ? (
             <Spinner />
           ) : (
             "Add Funds"

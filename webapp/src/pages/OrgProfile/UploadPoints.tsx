@@ -91,7 +91,7 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
   const guildAddress = form.watch("guild");
   const uploadPointsMutate = useWriteGuildContract(
     guildAddress,
-    "update_contibutions",
+    "update_contributions",
     {
       successMessage: "Contributions uploaded successfully",
     }

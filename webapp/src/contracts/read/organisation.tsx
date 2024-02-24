@@ -95,14 +95,14 @@ const readOrganisation = {
       return num.toHex(parsedData.toString());
     },
   },
-  owner: {
-    returnType: z.bigint(),
-    parsedType: z.string().optional(),
+  is_granted: {
+    returnType: z.boolean(),
+    parsedType: z.boolean().optional(),
     parse: function (data: unknown): z.infer<typeof this.parsedType> {
       if (!data) return undefined;
 
       const parsedData = this.returnType.parse(data);
-      return num.toHex(parsedData.toString());
+      return parsedData;
     },
   },
 } as const;
@@ -152,7 +152,7 @@ export const useGetOrgSalaryContract = (props: Props) => {
   return useReadOrganisationContract<
     z.infer<typeof readOrganisation.get_salary_contract.parsedType>
   >({
-    functionName: "get_salary_contract",
+    functionName: "get_salary_distributor_contract",
     address: props.address,
     parseResultFn: (d) => readOrganisation.get_salary_contract.parse(d),
   });
@@ -168,12 +168,15 @@ export const useGetOrgTreasuryContract = (props: Props) => {
   });
 };
 
-export const useGetOrgOwner = (props: Props) => {
+export const useGetOrgIsGranted = (
+  props: Props & { where: string; who: string; permissionId: string }
+) => {
   return useReadOrganisationContract<
-    z.infer<typeof readOrganisation.owner.parsedType>
+    z.infer<typeof readOrganisation.is_granted.parsedType>
   >({
-    functionName: "owner",
+    functionName: "is_granted",
     address: props.address,
-    parseResultFn: (d) => readOrganisation.owner.parse(d),
+    args: [props.where, props.who, props.permissionId],
+    parseResultFn: (d) => readOrganisation.is_granted.parse(d),
   });
 };

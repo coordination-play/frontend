@@ -102,7 +102,7 @@ const CreateDAOForm = ({ onClose }: { onClose: () => void }) => {
       : false;
 
   const isDisabled =
-    noEnoughBalance ||
+    // noEnoughBalance ||
     isCreationDepositLoading ||
     isCreationDepositError ||
     isBalanceLoading ||
@@ -191,7 +191,7 @@ const CreateDAOForm = ({ onClose }: { onClose: () => void }) => {
                     {String(
                       Number(
                         BigInt(creationDeposit.toString()) /
-                          BigInt(Math.pow(10, 6))
+                          BigInt(Math.pow(10, 18))
                       ).toFixed(3)
                     )}
                   </>

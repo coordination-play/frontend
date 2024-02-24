@@ -1,12 +1,12 @@
 [
   {
-    "name": "Organisation",
     "type": "impl",
+    "name": "Organisation",
     "interface_name": "coordination_stack_core::organisation::IOrganisation"
   },
   {
-    "name": "core::array::Span::<core::felt252>",
     "type": "struct",
+    "name": "core::array::Span::<core::felt252>",
     "members": [
       {
         "name": "snapshot",
@@ -15,8 +15,8 @@
     ]
   },
   {
-    "name": "coordination_stack_core::organisation::Guild",
     "type": "struct",
+    "name": "coordination_stack_core::organisation::Guild",
     "members": [
       {
         "name": "name",
@@ -29,8 +29,8 @@
     ]
   },
   {
-    "name": "core::bool",
     "type": "enum",
+    "name": "core::bool",
     "variants": [
       {
         "name": "False",
@@ -43,12 +43,12 @@
     ]
   },
   {
-    "name": "coordination_stack_core::organisation::IOrganisation",
     "type": "interface",
+    "name": "coordination_stack_core::organisation::IOrganisation",
     "items": [
       {
-        "name": "name",
         "type": "function",
+        "name": "name",
         "inputs": [],
         "outputs": [
           {
@@ -58,8 +58,8 @@
         "state_mutability": "view"
       },
       {
-        "name": "metadata",
         "type": "function",
+        "name": "metadata",
         "inputs": [],
         "outputs": [
           {
@@ -69,8 +69,8 @@
         "state_mutability": "view"
       },
       {
-        "name": "get_cum_contributions_points",
         "type": "function",
+        "name": "get_cum_contributions_points",
         "inputs": [
           {
             "name": "contributor",
@@ -85,8 +85,8 @@
         "state_mutability": "view"
       },
       {
-        "name": "get_all_guilds",
         "type": "function",
+        "name": "get_all_guilds",
         "inputs": [],
         "outputs": [
           {
@@ -96,8 +96,8 @@
         "state_mutability": "view"
       },
       {
-        "name": "get_all_guilds_details",
         "type": "function",
+        "name": "get_all_guilds_details",
         "inputs": [],
         "outputs": [
           {
@@ -107,8 +107,8 @@
         "state_mutability": "view"
       },
       {
-        "name": "get_guild_monthly_total_contribution",
         "type": "function",
+        "name": "get_guild_monthly_total_contribution",
         "inputs": [
           {
             "name": "month_id",
@@ -127,8 +127,8 @@
         "state_mutability": "view"
       },
       {
-        "name": "get_guild_contributions_data",
         "type": "function",
+        "name": "get_guild_contributions_data",
         "inputs": [
           {
             "name": "contributor",
@@ -147,8 +147,8 @@
         "state_mutability": "view"
       },
       {
-        "name": "get_guild_points",
         "type": "function",
+        "name": "get_guild_points",
         "inputs": [
           {
             "name": "contributor",
@@ -167,8 +167,8 @@
         "state_mutability": "view"
       },
       {
-        "name": "get_guild_contribution_for_month",
         "type": "function",
+        "name": "get_guild_contribution_for_month",
         "inputs": [
           {
             "name": "contributor",
@@ -191,8 +191,8 @@
         "state_mutability": "view"
       },
       {
-        "name": "get_migartion_queued_state",
         "type": "function",
+        "name": "get_migartion_queued_state",
         "inputs": [
           {
             "name": "hash",
@@ -207,8 +207,8 @@
         "state_mutability": "view"
       },
       {
-        "name": "get_salary_contract",
         "type": "function",
+        "name": "get_salary_distributor_contract",
         "inputs": [],
         "outputs": [
           {
@@ -218,8 +218,8 @@
         "state_mutability": "view"
       },
       {
+        "type": "function",
         "name": "get_treasury",
-        "type": "function",
         "inputs": [],
         "outputs": [
           {
@@ -229,8 +229,8 @@
         "state_mutability": "view"
       },
       {
-        "name": "add_guild",
         "type": "function",
+        "name": "add_guild",
         "inputs": [
           {
             "name": "guild_name",
@@ -249,8 +249,8 @@
         "state_mutability": "external"
       },
       {
-        "name": "update_organisation_name",
         "type": "function",
+        "name": "update_organisation_name",
         "inputs": [
           {
             "name": "new_name",
@@ -261,8 +261,8 @@
         "state_mutability": "external"
       },
       {
-        "name": "update_organisation_metadata",
         "type": "function",
+        "name": "update_organisation_metadata",
         "inputs": [
           {
             "name": "new_metadata",
@@ -273,13 +273,9 @@
         "state_mutability": "external"
       },
       {
-        "name": "update_salary_contract",
         "type": "function",
+        "name": "update_salary_distributor_contract",
         "inputs": [
-          {
-            "name": "owner",
-            "type": "core::starknet::contract_address::ContractAddress"
-          },
           {
             "name": "token",
             "type": "core::starknet::contract_address::ContractAddress"
@@ -289,8 +285,8 @@
         "state_mutability": "external"
       },
       {
-        "name": "update_treasury_contract",
         "type": "function",
+        "name": "add_treasury_contract",
         "inputs": [
           {
             "name": "owner",
@@ -301,8 +297,8 @@
         "state_mutability": "external"
       },
       {
-        "name": "migrate_points_initiated_by_holder",
         "type": "function",
+        "name": "migrate_points_initiated_by_holder",
         "inputs": [
           {
             "name": "new_address",
@@ -313,8 +309,8 @@
         "state_mutability": "external"
       },
       {
-        "name": "execute_migrate_points_initiated_by_holder",
         "type": "function",
+        "name": "execute_migrate_points_initiated_by_holder",
         "inputs": [
           {
             "name": "old_address",
@@ -331,49 +327,165 @@
     ]
   },
   {
-    "name": "OwnableImpl",
     "type": "impl",
-    "interface_name": "openzeppelin::access::ownable::interface::IOwnable"
+    "name": "OwnableImpl",
+    "interface_name": "coordination_stack_core::component::permission_manager::IPermissionManager"
   },
   {
-    "name": "openzeppelin::access::ownable::interface::IOwnable",
+    "type": "enum",
+    "name": "coordination_stack_core::component::permission_manager::Operation",
+    "variants": [
+      {
+        "name": "Grant",
+        "type": "()"
+      },
+      {
+        "name": "Revoke",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "coordination_stack_core::component::permission_manager::SingleTargetPermission",
+    "members": [
+      {
+        "name": "operation",
+        "type": "coordination_stack_core::component::permission_manager::Operation"
+      },
+      {
+        "name": "who",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "permission_id",
+        "type": "core::felt252"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "coordination_stack_core::component::permission_manager::MultiTargetPermission",
+    "members": [
+      {
+        "name": "operation",
+        "type": "coordination_stack_core::component::permission_manager::Operation"
+      },
+      {
+        "name": "who",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "where",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "permission_id",
+        "type": "core::felt252"
+      }
+    ]
+  },
+  {
     "type": "interface",
+    "name": "coordination_stack_core::component::permission_manager::IPermissionManager",
     "items": [
       {
-        "name": "owner",
         "type": "function",
-        "inputs": [],
+        "name": "is_granted",
+        "inputs": [
+          {
+            "name": "where",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "who",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "permission_id",
+            "type": "core::felt252"
+          }
+        ],
         "outputs": [
           {
-            "type": "core::starknet::contract_address::ContractAddress"
+            "type": "core::bool"
           }
         ],
         "state_mutability": "view"
       },
       {
-        "name": "transfer_ownership",
         "type": "function",
+        "name": "grant",
         "inputs": [
           {
-            "name": "new_owner",
+            "name": "where",
             "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "who",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "permission_id",
+            "type": "core::felt252"
           }
         ],
         "outputs": [],
         "state_mutability": "external"
       },
       {
-        "name": "renounce_ownership",
         "type": "function",
-        "inputs": [],
+        "name": "revoke",
+        "inputs": [
+          {
+            "name": "where",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "who",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "permission_id",
+            "type": "core::felt252"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "apply_single_target_permission",
+        "inputs": [
+          {
+            "name": "where",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "permissions",
+            "type": "core::array::Array::<coordination_stack_core::component::permission_manager::SingleTargetPermission>"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "apply_multiple_target_permission",
+        "inputs": [
+          {
+            "name": "permissions",
+            "type": "core::array::Array::<coordination_stack_core::component::permission_manager::MultiTargetPermission>"
+          }
+        ],
         "outputs": [],
         "state_mutability": "external"
       }
     ]
   },
   {
-    "name": "constructor",
     "type": "constructor",
+    "name": "constructor",
     "inputs": [
       {
         "name": "name",
@@ -394,158 +506,190 @@
     ]
   },
   {
-    "kind": "struct",
+    "type": "event",
     "name": "coordination_stack_core::organisation::Organisation::MigrationQueued",
-    "type": "event",
+    "kind": "struct",
     "members": [
       {
-        "kind": "data",
         "name": "old_address",
-        "type": "core::starknet::contract_address::ContractAddress"
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
       },
       {
-        "kind": "data",
         "name": "new_address",
-        "type": "core::starknet::contract_address::ContractAddress"
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
       }
     ]
   },
   {
-    "kind": "struct",
+    "type": "event",
     "name": "coordination_stack_core::organisation::Organisation::Migrated",
-    "type": "event",
+    "kind": "struct",
     "members": [
       {
-        "kind": "data",
         "name": "old_address",
-        "type": "core::starknet::contract_address::ContractAddress"
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
       },
       {
-        "kind": "data",
         "name": "new_address",
-        "type": "core::starknet::contract_address::ContractAddress"
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
       }
     ]
   },
   {
-    "kind": "struct",
+    "type": "event",
     "name": "coordination_stack_core::organisation::Organisation::GuildAdded",
-    "type": "event",
+    "kind": "struct",
     "members": [
       {
-        "kind": "data",
         "name": "name",
-        "type": "core::felt252"
+        "type": "core::felt252",
+        "kind": "data"
       },
       {
-        "kind": "data",
         "name": "id",
-        "type": "core::integer::u8"
+        "type": "core::integer::u8",
+        "kind": "data"
       },
       {
-        "kind": "data",
         "name": "guild",
-        "type": "core::starknet::contract_address::ContractAddress"
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
       }
     ]
   },
   {
-    "kind": "struct",
+    "type": "event",
     "name": "coordination_stack_core::organisation::Organisation::NameChanged",
-    "type": "event",
+    "kind": "struct",
     "members": [
       {
-        "kind": "data",
         "name": "old_name",
-        "type": "core::felt252"
+        "type": "core::felt252",
+        "kind": "data"
       },
       {
-        "kind": "data",
         "name": "new_name",
-        "type": "core::felt252"
+        "type": "core::felt252",
+        "kind": "data"
       }
     ]
   },
   {
-    "kind": "struct",
+    "type": "event",
     "name": "coordination_stack_core::organisation::Organisation::MetadataUpdated",
-    "type": "event",
-    "members": [
-      {
-        "kind": "data",
-        "name": "old_metadata",
-        "type": "core::array::Span::<core::felt252>"
-      },
-      {
-        "kind": "data",
-        "name": "new_metadata",
-        "type": "core::array::Span::<core::felt252>"
-      }
-    ]
-  },
-  {
     "kind": "struct",
-    "name": "openzeppelin::access::ownable::ownable::OwnableComponent::OwnershipTransferred",
-    "type": "event",
     "members": [
       {
-        "kind": "data",
-        "name": "previous_owner",
-        "type": "core::starknet::contract_address::ContractAddress"
+        "name": "old_metadata",
+        "type": "core::array::Span::<core::felt252>",
+        "kind": "data"
       },
       {
-        "kind": "data",
-        "name": "new_owner",
-        "type": "core::starknet::contract_address::ContractAddress"
+        "name": "new_metadata",
+        "type": "core::array::Span::<core::felt252>",
+        "kind": "data"
       }
     ]
   },
   {
-    "kind": "enum",
-    "name": "openzeppelin::access::ownable::ownable::OwnableComponent::Event",
     "type": "event",
+    "name": "coordination_stack_core::component::permission_manager::PermissionManagerComponent::Granted",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "who",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      },
+      {
+        "name": "where",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      },
+      {
+        "name": "permission_id",
+        "type": "core::felt252",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "coordination_stack_core::component::permission_manager::PermissionManagerComponent::Revoked",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "who",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      },
+      {
+        "name": "where",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      },
+      {
+        "name": "permission_id",
+        "type": "core::felt252",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "coordination_stack_core::component::permission_manager::PermissionManagerComponent::Event",
+    "kind": "enum",
     "variants": [
       {
-        "kind": "nested",
-        "name": "OwnershipTransferred",
-        "type": "openzeppelin::access::ownable::ownable::OwnableComponent::OwnershipTransferred"
+        "name": "Granted",
+        "type": "coordination_stack_core::component::permission_manager::PermissionManagerComponent::Granted",
+        "kind": "nested"
+      },
+      {
+        "name": "Revoked",
+        "type": "coordination_stack_core::component::permission_manager::PermissionManagerComponent::Revoked",
+        "kind": "nested"
       }
     ]
   },
   {
-    "kind": "enum",
+    "type": "event",
     "name": "coordination_stack_core::organisation::Organisation::Event",
-    "type": "event",
+    "kind": "enum",
     "variants": [
       {
-        "kind": "nested",
         "name": "MigrationQueued",
-        "type": "coordination_stack_core::organisation::Organisation::MigrationQueued"
+        "type": "coordination_stack_core::organisation::Organisation::MigrationQueued",
+        "kind": "nested"
       },
       {
-        "kind": "nested",
         "name": "Migrated",
-        "type": "coordination_stack_core::organisation::Organisation::Migrated"
+        "type": "coordination_stack_core::organisation::Organisation::Migrated",
+        "kind": "nested"
       },
       {
-        "kind": "nested",
         "name": "GuildAdded",
-        "type": "coordination_stack_core::organisation::Organisation::GuildAdded"
+        "type": "coordination_stack_core::organisation::Organisation::GuildAdded",
+        "kind": "nested"
       },
       {
-        "kind": "nested",
         "name": "NameChanged",
-        "type": "coordination_stack_core::organisation::Organisation::NameChanged"
+        "type": "coordination_stack_core::organisation::Organisation::NameChanged",
+        "kind": "nested"
       },
       {
-        "kind": "nested",
         "name": "MetadataUpdated",
-        "type": "coordination_stack_core::organisation::Organisation::MetadataUpdated"
+        "type": "coordination_stack_core::organisation::Organisation::MetadataUpdated",
+        "kind": "nested"
       },
       {
-        "kind": "flat",
-        "name": "OwnableEvent",
-        "type": "openzeppelin::access::ownable::ownable::OwnableComponent::Event"
+        "name": "PermissionManagerEvent",
+        "type": "coordination_stack_core::component::permission_manager::PermissionManagerComponent::Event",
+        "kind": "flat"
       }
     ]
   }

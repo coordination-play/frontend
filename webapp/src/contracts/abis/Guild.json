@@ -1,12 +1,12 @@
 [
   {
-    "name": "Guild",
     "type": "impl",
+    "name": "Guild",
     "interface_name": "coordination_stack_core::guild::IGuild"
   },
   {
-    "name": "coordination_stack_core::guild::MonthlyContribution",
     "type": "struct",
+    "name": "coordination_stack_core::guild::MonthlyContribution",
     "members": [
       {
         "name": "contributor",
@@ -19,12 +19,12 @@
     ]
   },
   {
-    "name": "coordination_stack_core::guild::IGuild",
     "type": "interface",
+    "name": "coordination_stack_core::guild::IGuild",
     "items": [
       {
-        "name": "name",
         "type": "function",
+        "name": "name",
         "inputs": [],
         "outputs": [
           {
@@ -34,8 +34,8 @@
         "state_mutability": "view"
       },
       {
-        "name": "get_cum_contributions_points",
         "type": "function",
+        "name": "get_cum_contributions_points",
         "inputs": [
           {
             "name": "contributor",
@@ -50,8 +50,8 @@
         "state_mutability": "view"
       },
       {
-        "name": "get_monthly_total_contribution",
         "type": "function",
+        "name": "get_monthly_total_contribution",
         "inputs": [
           {
             "name": "month_id",
@@ -66,8 +66,8 @@
         "state_mutability": "view"
       },
       {
-        "name": "get_contributions_data",
         "type": "function",
+        "name": "get_contributions_data",
         "inputs": [
           {
             "name": "contributor",
@@ -82,8 +82,8 @@
         "state_mutability": "view"
       },
       {
-        "name": "get_monthly_contribution_points",
         "type": "function",
+        "name": "get_monthly_contribution_points",
         "inputs": [
           {
             "name": "contributor",
@@ -102,8 +102,8 @@
         "state_mutability": "view"
       },
       {
-        "name": "update_contibutions",
         "type": "function",
+        "name": "update_contributions",
         "inputs": [
           {
             "name": "month_id",
@@ -118,8 +118,8 @@
         "state_mutability": "external"
       },
       {
-        "name": "migrate_points",
         "type": "function",
+        "name": "migrate_points",
         "inputs": [
           {
             "name": "old_address",
@@ -136,49 +136,8 @@
     ]
   },
   {
-    "name": "OwnableImpl",
-    "type": "impl",
-    "interface_name": "openzeppelin::access::ownable::interface::IOwnable"
-  },
-  {
-    "name": "openzeppelin::access::ownable::interface::IOwnable",
-    "type": "interface",
-    "items": [
-      {
-        "name": "owner",
-        "type": "function",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
-        "name": "transfer_ownership",
-        "type": "function",
-        "inputs": [
-          {
-            "name": "new_owner",
-            "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
-        "outputs": [],
-        "state_mutability": "external"
-      },
-      {
-        "name": "renounce_ownership",
-        "type": "function",
-        "inputs": [],
-        "outputs": [],
-        "state_mutability": "external"
-      }
-    ]
-  },
-  {
-    "name": "constructor",
     "type": "constructor",
+    "name": "constructor",
     "inputs": [
       {
         "name": "name",
@@ -187,100 +146,62 @@
       {
         "name": "organisation",
         "type": "core::starknet::contract_address::ContractAddress"
-      },
-      {
-        "name": "owner",
-        "type": "core::starknet::contract_address::ContractAddress"
       }
     ]
   },
   {
-    "kind": "struct",
+    "type": "event",
     "name": "coordination_stack_core::guild::Guild::ContributionUpdated",
-    "type": "event",
+    "kind": "struct",
     "members": [
       {
-        "kind": "data",
         "name": "contributor",
-        "type": "core::starknet::contract_address::ContractAddress"
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
       },
       {
-        "kind": "data",
         "name": "month_id",
-        "type": "core::integer::u32"
+        "type": "core::integer::u32",
+        "kind": "data"
       },
       {
-        "kind": "data",
         "name": "points_earned",
-        "type": "core::integer::u32"
+        "type": "core::integer::u32",
+        "kind": "data"
       }
     ]
   },
   {
-    "kind": "struct",
+    "type": "event",
     "name": "coordination_stack_core::guild::Guild::Migrated",
-    "type": "event",
-    "members": [
-      {
-        "kind": "data",
-        "name": "old_address",
-        "type": "core::starknet::contract_address::ContractAddress"
-      },
-      {
-        "kind": "data",
-        "name": "new_address",
-        "type": "core::starknet::contract_address::ContractAddress"
-      }
-    ]
-  },
-  {
     "kind": "struct",
-    "name": "openzeppelin::access::ownable::ownable::OwnableComponent::OwnershipTransferred",
-    "type": "event",
     "members": [
       {
-        "kind": "data",
-        "name": "previous_owner",
-        "type": "core::starknet::contract_address::ContractAddress"
+        "name": "old_address",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
       },
       {
-        "kind": "data",
-        "name": "new_owner",
-        "type": "core::starknet::contract_address::ContractAddress"
+        "name": "new_address",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
       }
     ]
   },
   {
-    "kind": "enum",
-    "name": "openzeppelin::access::ownable::ownable::OwnableComponent::Event",
     "type": "event",
-    "variants": [
-      {
-        "kind": "nested",
-        "name": "OwnershipTransferred",
-        "type": "openzeppelin::access::ownable::ownable::OwnableComponent::OwnershipTransferred"
-      }
-    ]
-  },
-  {
-    "kind": "enum",
     "name": "coordination_stack_core::guild::Guild::Event",
-    "type": "event",
+    "kind": "enum",
     "variants": [
       {
-        "kind": "nested",
         "name": "ContributionUpdated",
-        "type": "coordination_stack_core::guild::Guild::ContributionUpdated"
+        "type": "coordination_stack_core::guild::Guild::ContributionUpdated",
+        "kind": "nested"
       },
       {
-        "kind": "nested",
         "name": "Migrated",
-        "type": "coordination_stack_core::guild::Guild::Migrated"
-      },
-      {
-        "kind": "flat",
-        "name": "OwnableEvent",
-        "type": "openzeppelin::access::ownable::ownable::OwnableComponent::Event"
+        "type": "coordination_stack_core::guild::Guild::Migrated",
+        "kind": "nested"
       }
     ]
   }

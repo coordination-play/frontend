@@ -1,4 +1,4 @@
-import { useGetOrgOwner } from "@/contracts/read/organisation";
+import { useGetOrgIsGranted } from "@/contracts/read/organisation";
 import { setMonthId } from "@/state/organisation";
 import { useAccount } from "@starknet-react/core";
 import { useState } from "react";
@@ -8,8 +8,13 @@ import { toast } from "sonner";
 export const useOrganisation = () => {
   const { address = "" } = useParams();
 
-  const { address: account } = useAccount();
-  const { data: owner } = useGetOrgOwner({ address });
+  const { address: account = "" } = useAccount();
+  const { data: isOwner } = useGetOrgIsGranted({
+    address,
+    where: address,
+    who: account,
+    permissionId: "ROOT_PERMISSION_ID",
+  });
 
   const [monthYear, setMonthYear] = useState({ month: 0, year: 0 });
 
@@ -33,6 +38,6 @@ export const useOrganisation = () => {
     address,
     monthYear,
     updateMonthYear,
-    isOwner: account && owner && account === owner,
+    isOwner,
   };
 };

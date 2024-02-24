@@ -38,7 +38,13 @@ export const useDeployOrganisationContracts = ({
   });
 
   const deploySalaryAndTreasuryContract = async () => {
-    if (!contract || !account) return;
+    if (!contract) {
+      throw new Error(`Contract not found`);
+    }
+
+    if (!account || !address) {
+      throw new Error(`Wallet not connected`);
+    }
 
     try {
       setState({
@@ -52,15 +58,15 @@ export const useDeployOrganisationContracts = ({
       const multiCall = await account.execute([
         {
           contractAddress: address,
-          entrypoint: "update_salary_contract",
+          entrypoint: "update_salary_distributor_contract",
           calldata: CallData.compile({
-            owner: accountAddress,
+            // owner: accountAddress,
             token: CONTRACTS_ADDRESSES.ETH_TOKEN,
           }),
         },
         {
           contractAddress: address,
-          entrypoint: "update_treasury_contract",
+          entrypoint: "add_treasury_contract",
           calldata: CallData.compile({
             owner: accountAddress,
           }),
