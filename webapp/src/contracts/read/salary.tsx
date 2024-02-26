@@ -3,6 +3,7 @@ import { UseContractReadProps, useContractRead } from ".";
 import { SalaryABI } from "../contracts";
 
 import * as z from "zod";
+import { formatDecimals, formatDisplay } from "@/lib/numbers";
 
 const readSalary = {
   token: {
@@ -19,22 +20,28 @@ const readSalary = {
   },
   get_cum_salary: {
     returnType: z.bigint(),
-    parsedType: z.number().optional(),
+    parsedType: z.object({ value: z.bigint(), label: z.string() }).optional(),
     parse: function (data: unknown): z.infer<typeof this.parsedType> {
       if (!data) return undefined;
 
       const parsedData = this.returnType.parse(data);
-      return Number(parsedData.toString() || 0);
+      return {
+        value: parsedData,
+        label: formatDisplay(formatDecimals(parsedData, 18).toString()),
+      };
     },
   },
   get_claimed_salary: {
     returnType: z.bigint(),
-    parsedType: z.number().optional(),
+    parsedType: z.object({ value: z.bigint(), label: z.string() }).optional(),
     parse: function (data: unknown): z.infer<typeof this.parsedType> {
       if (!data) return undefined;
 
-      const parsedData = this.returnType.parse(data);
-      return Number(parsedData.toString() || 0);
+      const parsedData = this.returnType.parse(data) || 0n;
+      return {
+        value: parsedData,
+        label: formatDisplay(formatDecimals(parsedData, 18).toString()),
+      };
     },
   },
 } as const;

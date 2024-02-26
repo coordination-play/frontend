@@ -16,13 +16,12 @@ export const ClaimRewards = () => {
   const { data: salaryAddress = "", isLoading: isSalaryAdrLoading } =
     useGetOrgSalaryContract({ address });
 
-  const { data: cumSalary = 0, isLoading: isCumSalaryLoading } =
-    useGetCumSalary({
-      address: salaryAddress,
-      args: [account],
-    });
+  const { data: cumSalary, isLoading: isCumSalaryLoading } = useGetCumSalary({
+    address: salaryAddress,
+    args: [account],
+  });
 
-  const { data: claimedSalary = 0, isLoading: isClaimedSalaryLoading } =
+  const { data: claimedSalary, isLoading: isClaimedSalaryLoading } =
     useGetClaimedSalary({
       address: salaryAddress,
       args: [account],
@@ -50,8 +49,6 @@ export const ClaimRewards = () => {
     });
   };
 
-  console.log("c", cumSalary);
-
   if (!account || isSalaryAdrLoading) {
     return null;
   }
@@ -70,13 +67,13 @@ export const ClaimRewards = () => {
       ) : (
         <div className="p-4 flex flex-col gap-2 pt-2">
           <p className="font-semibold text-3xl text-foreground/90">
-            ${(cumSalary / Math.pow(10, 18)).toFixed(8)}
+            ${cumSalary?.label}
           </p>
           {isClaimedSalaryLoading ? (
             <Skeleton className="w-full h-5" />
           ) : (
             <p className="text-sm text-foreground/60">
-              {claimedSalary} claimed
+              {claimedSalary?.label} claimed
             </p>
           )}
 
