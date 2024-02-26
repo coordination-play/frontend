@@ -1,6 +1,7 @@
 import { useGetGuildCumContributionPoints } from "@/contracts/read/guild";
+import { useOrganisation } from "@/hooks/useOrganisation";
 import { cn, truncateAddress } from "@/lib/utils";
-import { setActiveGuild, useOrgState } from "@/state/organisation";
+import { setActiveGuild } from "@/state/organisation";
 import { useAccount } from "@starknet-react/core";
 import { Circle } from "lucide-react";
 
@@ -10,7 +11,7 @@ type GuildProps = {
 };
 
 export const Guild = ({ name, address }: GuildProps) => {
-  const { activeGuild } = useOrgState();
+  const { activeGuild } = useOrganisation();
 
   const { address: account = "" } = useAccount();
 
@@ -23,6 +24,7 @@ export const Guild = ({ name, address }: GuildProps) => {
   return (
     <div
       className={cn(
+        "h-20",
         "flex p-4 bg-foreground/5 gap-6 items-start flex-col rounded-sm border border-border cursor-pointer",
         activeGuild === address
           ? "bg-primary/20 border border-primary/50 transition-colors"

@@ -40,7 +40,20 @@ const readSalary = {
       const parsedData = this.returnType.parse(data) || 0n;
       return {
         value: parsedData,
-        label: formatDisplay(formatDecimals(parsedData, 18).toString()),
+        label: formatDisplay(formatDecimals(parsedData, 18).toString()) || "0",
+      };
+    },
+  },
+  get_pool_amount: {
+    returnType: z.bigint(),
+    parsedType: z.object({ value: z.bigint(), label: z.string() }).optional(),
+    parse: function (data: unknown): z.infer<typeof this.parsedType> {
+      if (!data) return undefined;
+
+      const parsedData = this.returnType.parse(data) || 0n;
+      return {
+        value: parsedData,
+        label: formatDisplay(formatDecimals(parsedData, 18).toString()) || "0",
       };
     },
   },
@@ -85,5 +98,21 @@ export const useGetClaimedSalary = (props: Props<[string]>) => {
     address: props.address,
     args: props.args,
     parseResultFn: (d) => readSalary.get_claimed_salary.parse(d),
+  });
+};
+
+export const useGetSalaryPoolAmount = (
+  props: Props<{ monthId: string | number; guildAddress: string }>
+) => {
+  return useReadSalaryContract<
+    z.infer<typeof readSalary.get_claimed_salary.parsedType>
+  >({
+    functionName: "get_pool_amount",
+    address: props.address,
+    args: props.args
+      ? [props.args?.monthId, props.args?.guildAddress]
+      : undefined,
+    parseResultFn: (d) => readSalary.get_claimed_salary.parse(d),
+    enabled: !!props.args?.guildAddress && !!props.args.monthId,
   });
 };

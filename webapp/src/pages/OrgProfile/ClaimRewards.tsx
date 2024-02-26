@@ -8,6 +8,9 @@ import { useOrganisation } from "@/hooks/useOrganisation";
 import { useAccount } from "@starknet-react/core";
 import { GiftIcon } from "lucide-react";
 import { toast } from "sonner";
+import BigNumber from "bignumber.js";
+import { formatDecimals, formatDisplay } from "@/lib/numbers";
+import { useMemo } from "react";
 
 export const ClaimRewards = () => {
   const { address: account = "" } = useAccount();
@@ -49,6 +52,17 @@ export const ClaimRewards = () => {
     });
   };
 
+  const unclaimedSalary = useMemo(() => {
+    return formatDecimals(
+      BigInt(
+        BigNumber(cumSalary?.value.toString() || "0")
+          .minus(claimedSalary?.value.toString() || "0")
+          .toString()
+      ),
+      18
+    );
+  }, [cumSalary, claimedSalary]);
+
   if (!account || isSalaryAdrLoading) {
     return null;
   }
@@ -66,14 +80,19 @@ export const ClaimRewards = () => {
         </p>
       ) : (
         <div className="p-4 flex flex-col gap-2 pt-2">
-          <p className="font-semibold text-3xl text-foreground/90">
-            ${cumSalary?.label}
-          </p>
+          {isCumSalaryLoading || isClaimedSalaryLoading ? (
+            <Skeleton className="w-full h-9" />
+          ) : (
+            <p className="font-semibold text-3xl text-foreground/90">
+              ${formatDisplay(unclaimedSalary)}
+            </p>
+          )}
+
           {isClaimedSalaryLoading ? (
             <Skeleton className="w-full h-5" />
           ) : (
             <p className="text-sm text-foreground/60">
-              {claimedSalary?.label} claimed
+              {claimedSalary?.label || "0"} claimed
             </p>
           )}
 
@@ -82,7 +101,8 @@ export const ClaimRewards = () => {
             disabled={
               !hasClaimableSalary ||
               claimSalaryMutate.isLoading ||
-              claimSalaryMutate.isSuccess
+              claimSalaryMutate.isSuccess ||
+              Number(unclaimedSalary) <= 0
             }
             onClick={onClaimSalary}
           >

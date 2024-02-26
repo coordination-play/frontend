@@ -9,7 +9,7 @@ function App() {
     <>
       <QueryClientProvider client={queryClient}>
         <StarknetProvider>
-          <Toaster />
+          <Toaster richColors />
           <Routing />
         </StarknetProvider>
       </QueryClientProvider>

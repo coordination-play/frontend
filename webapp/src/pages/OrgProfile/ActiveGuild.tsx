@@ -8,7 +8,7 @@ import {
 import { useAccount } from "@starknet-react/core";
 
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { setActiveGuild, useOrgState } from "@/state/organisation";
+import { setActiveGuild } from "@/state/organisation";
 import {
   Drawer,
   DrawerContent,
@@ -17,11 +17,14 @@ import {
 } from "@/components/ui/drawer";
 import { CopyButton } from "@/components/CopyButton";
 import { truncateAddress } from "@/lib/utils";
+import { useOrganisation } from "@/hooks/useOrganisation";
+import { useGetSalaryPoolAmount } from "@/contracts/read/salary";
+import { useGetOrgSalaryContract } from "@/contracts/read/organisation";
 
 export const ActiveGuild = () => {
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
-  const { activeGuild: activeGuildAddress } = useOrgState();
+  const { activeGuild: activeGuildAddress } = useOrganisation();
 
   const { data: guildName, isLoading: isGuildNameLoading } = useGetGuildName({
     address: activeGuildAddress,
@@ -80,7 +83,7 @@ type ActiveGuildContentProps = {
 };
 
 const ActiveGuildContent = ({ address }: ActiveGuildContentProps) => {
-  const { monthId } = useOrgState();
+  const { address: orgAddress, monthId, monthIdDate } = useOrganisation();
 
   const { address: account = "", isConnected } = useAccount();
 
@@ -107,89 +110,99 @@ const ActiveGuildContent = ({ address }: ActiveGuildContentProps) => {
     monthId,
   });
 
+  const { data: salaryAdr = "", isLoading: isSalaryAdrLoading } =
+    useGetOrgSalaryContract({ address: orgAddress });
+
+  const { data: salaryPoolAmount, isLoading: isSalaryPoolAmountLoading } =
+    useGetSalaryPoolAmount({
+      address: salaryAdr,
+      args: {
+        monthId,
+        guildAddress: address,
+      },
+    });
+
   return (
     <div className="flex flex-col gap-6">
       <div className="space-y-1">
-        <p className="font-semibold text-2xl">Guild</p>
+        {/* <p className="font-semibold text-2xl">Guild</p> */}
 
         <div className="space-y-2">
           {[
             {
-              label: "Total Points this month:",
+              label: `Total Points guild earned in ${monthIdDate.format(
+                "MMM YYYY"
+              )}:`,
               value: totalContribution,
               isLoading: isTotalContributionLoading,
             },
-          ].map((c, i) => (
-            <div key={i} className="space-x-2 flex items-center">
-              <p className="text-sm">{c.label}</p>
-
-              {isTotalContributionLoading ? (
-                <Skeleton className="w-20 h-6" />
-              ) : (
-                <span className="text-sm text-foreground font-bold">
-                  {c.value}
-                </span>
-              )}
-            </div>
-          ))}
+            salaryAdr
+              ? {
+                  label: `Pool amount earned in ${monthIdDate.format(
+                    "MMM YYYY"
+                  )}:`,
+                  value: salaryPoolAmount?.label || "0",
+                  isLoading: isSalaryAdrLoading || isSalaryPoolAmountLoading,
+                }
+              : null,
+          ].map((c, i) => {
+            if (!c) return;
+            return (
+              <InfoBox key={i} loading={isTotalContributionLoading} {...c} />
+            );
+          })}
         </div>
       </div>
 
       {isConnected ? (
         <div className="space-y-1">
-          <p className="font-semibold text-2xl">You</p>
+          {/* <p className="font-semibold text-2xl">You</p> */}
 
           <div className="space-y-2">
             {[
               {
-                label: "Total Earned this month:",
-                value:
-                  monthlyContributionPoints +
-                  " " +
-                  (monthlyContributionPoints
-                    ? `(${(
-                        (monthlyContributionPoints / totalContribution) *
-                        100
-                      ).toFixed()}%)`
-                    : ""),
+                label: `Total points you earned in ${monthIdDate.format(
+                  "MMM YYYY"
+                )}:`,
+                value: monthlyContributionPoints,
                 isLoading:
                   isMonthlyContributionPointsLoading ||
                   isTotalContributionLoading,
               },
               {
-                label: "Total Earned Points all time:",
-                value:
-                  cumContributionPoints +
-                  " " +
-                  (cumContributionPoints
-                    ? `(${
-                        totalContribution
-                          ? (
-                              (cumContributionPoints / totalContribution) *
-                              100
-                            ).toFixed()
-                          : 0
-                      }%)`
-                    : ""),
+                label: "Total points you earned all time:",
+                value: cumContributionPoints,
                 isLoading:
                   isCumContributionPointsLoading || isTotalContributionLoading,
               },
             ].map((c, i) => (
-              <div key={i} className="space-x-2 flex items-center">
-                <p className="text-sm">{c.label}</p>
-
-                {isTotalContributionLoading ? (
-                  <Skeleton className="w-20 h-6" />
-                ) : (
-                  <span className="text-sm text-foreground font-bold">
-                    {c.value}
-                  </span>
-                )}
-              </div>
+              <InfoBox key={i} loading={isTotalContributionLoading} {...c} />
             ))}
           </div>
         </div>
       ) : null}
+    </div>
+  );
+};
+
+const InfoBox = ({
+  label,
+  value,
+  loading,
+}: {
+  label: string;
+  value: string | number;
+  loading: boolean;
+}) => {
+  return (
+    <div className="space-x-2 flex items-center h-5">
+      <p className="text-sm">{label}</p>
+
+      {loading ? (
+        <Skeleton className="w-10 h-5" />
+      ) : (
+        <span className="text-sm text-foreground font-bold">{value}</span>
+      )}
     </div>
   );
 };

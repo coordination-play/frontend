@@ -51,7 +51,7 @@ export const ORGProfile = () => {
                 value={activeTab}
                 onValueChange={setActiveTab}
               >
-                <TabsList className="flex w-full justify-start flex-wrap gap-2">
+                <TabsList className="flex w-full justify-start flex-wrap gap-2 h-12">
                   <TabsTrigger value="allguilds">
                     <LayoutGrid className="w-4 h-4" />
                     All Guilds
@@ -67,6 +67,7 @@ export const ORGProfile = () => {
                     {isOwner ? <CreateGuildDialog /> : null}
                   </div>
                 </TabsList>
+
                 <TabsContent
                   value="allguilds"
                   className="flex flex-col gap-3.5"

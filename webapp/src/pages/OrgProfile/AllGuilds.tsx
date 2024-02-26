@@ -27,9 +27,9 @@ export const AllGuilds = () => {
   if (isLoading) {
     return (
       <div className={gridClassName}>
-        <Skeleton className="h-32" />
-        <Skeleton className="h-32" />
-        <Skeleton className="h-32" />
+        <Skeleton className="h-20" />
+        <Skeleton className="h-20" />
+        <Skeleton className="h-20" />
       </div>
     );
   }
