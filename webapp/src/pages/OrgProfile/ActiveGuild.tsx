@@ -138,7 +138,7 @@ const ActiveGuildContent = ({ address }: ActiveGuildContentProps) => {
             },
             salaryAdr
               ? {
-                  label: `Pool amount earned in ${monthIdDate.format(
+                  label: `Pool amount guild earned in ${monthIdDate.format(
                     "MMM YYYY"
                   )}:`,
                   value: salaryPoolAmount?.label || "0",

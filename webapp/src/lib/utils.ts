@@ -9,7 +9,13 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // blockchain stuff
-export const isAddress = (address: string) => validateAndParseAddress(address);
+export const isAddress = (address: string) => {
+  try {
+    return validateAndParseAddress(address);
+  } catch (err) {
+    return false;
+  }
+};
 
 export const truncateAddress = (address: string) =>
   `${address.slice(0, 6)}...${address.slice(-4)}`;

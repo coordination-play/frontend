@@ -1,7 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import {
+  useForm,
+  Control,
+  FieldValues,
+  Path,
+  UseFormReturn,
+} from "react-hook-form";
 import * as z from "zod";
 import {
   Form,
@@ -25,8 +31,20 @@ import { useGetOrgAllGuilds } from "@/contracts/read/organisation";
 import { useState } from "react";
 import { DrawerDialog } from "@/components/DrawerDialog";
 import { months, years } from "@/lib/time";
-import { getMonthId } from "@/lib/utils";
+import { getMonthId, isAddress, truncateAddress } from "@/lib/utils";
 import { toast } from "sonner";
+import { EditIcon, InfoIcon, PlusIcon } from "lucide-react";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+const COLUMNS = {
+  CONTRIBUTOR_ADDRESS: "contributor_address",
+  points: "points",
+};
 
 export const UploadPointsDialog = () => {
   const [open, setOpen] = useState(false);
@@ -49,26 +67,7 @@ const formSchema = z.object({
   month: z.string(),
   year: z.string(),
 
-  pointsData: z
-    .instanceof(File, {
-      message: "Please upload a .csv file",
-    })
-    .refine((file) => file.type === "text/csv")
-    .transform(
-      async (file): Promise<Array<{ contributor: string; point: number }>> => {
-        const text = await file.text();
-        const contributorsData = text.split("\n").map((line) => {
-          const [contributor, point] = line.split(",");
-          return {
-            contributor: contributor.trim(),
-            point: Number(point.trim()),
-          };
-        });
-        console.log(contributorsData);
-
-        return contributorsData;
-      }
-    ),
+  pointsData: z.array(z.object({ contributor: z.string(), point: z.number() })),
 });
 
 const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
@@ -214,27 +213,11 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
           />
         </div>
 
-        <FormField
-          control={form.control}
+        <CSVUpload
           name="pointsData"
+          form={form}
           disabled={fieldDisabled}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Upload .CSV File</FormLabel>
-              <FormControl>
-                <Input
-                  type="file"
-                  placeholder="Click to Select"
-                  accept=".csv"
-                  disabled={field.disabled}
-                  onChange={(e) =>
-                    field.onChange(e.target.files ? e.target.files[0] : null)
-                  }
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          control={form.control}
         />
 
         <Button
@@ -257,3 +240,203 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
     </Form>
   );
 };
+
+type ContributorData = {
+  contributor: string;
+  point: number;
+};
+
+export const CSVUpload = <T extends FieldValues = FieldValues>({
+  control,
+  form,
+  name,
+  disabled,
+}: {
+  control?: Control<T> | undefined;
+  form: UseFormReturn<T> | undefined;
+  name: Path<T>;
+  disabled?: boolean;
+}) => {
+  const [previewData, setPreviewData] = useState<ContributorData[]>([]);
+
+  return (
+    <>
+      <div className="flex flex-col gap-2">
+        <div className="w-full flex items-center justify-between">
+          <p>Upload .CSV File</p>
+          <CSVInfo />
+        </div>
+
+        <FormField
+          control={control}
+          name={name}
+          disabled={disabled}
+          render={({ field: { onChange, ...rest } }) => (
+            <>
+              <FormItem>
+                <FormLabel className="flex flex-col gap-2">
+                  <div className="relative border-2 w-full h-40 p-3 flex-col gap-2 rounded-md border-foreground/660 border-dotted flex items-center justify-center">
+                    {previewData.length ? (
+                      <>
+                        <Button
+                          asChild
+                          size="sm"
+                          variant="outline"
+                          className="absolute top-3 right-3 flex gap-2 items-center"
+                        >
+                          <div>
+                            <EditIcon className="w-3 h-3" />
+                            Edit
+                          </div>
+                        </Button>
+
+                        <ScrollArea className="w-full mt-10">
+                          {previewData?.map((c, i) => (
+                            <div
+                              key={i}
+                              className="w-full flex items-center justify-between border-b border-b-border px-4 py-2"
+                            >
+                              <p className="text-sm text-foreground/60">
+                                {truncateAddress(c.contributor)}
+                              </p>
+
+                              <p className="text-sm text-foreground/60">
+                                {c.point}
+                              </p>
+                            </div>
+                          ))}
+                        </ScrollArea>
+                      </>
+                    ) : (
+                      <>
+                        <Button
+                          asChild
+                          variant="outline"
+                          size="lg"
+                          className="border-dotted border-2 rounded-full h-20 w-20 p-0 cursor-pointer"
+                        >
+                          <div>
+                            <PlusIcon className="w-8 h-8" />
+                          </div>
+                        </Button>
+
+                        <p className="text font-normal text-foreground/80">
+                          Click to Upload
+                        </p>
+
+                        <FormMessage />
+                      </>
+                    )}
+                  </div>
+                </FormLabel>
+
+                <FormControl>
+                  <Input
+                    className="hidden"
+                    type="file"
+                    accept=".csv"
+                    {...rest}
+                    value=""
+                    onChange={async (event) => {
+                      try {
+                        const text = await event.target.files?.[0]?.text();
+
+                        // identify data indexes
+                        const cols = text?.split("\n")[0].split(",");
+
+                        const contributorAdrIndex = cols?.findIndex(
+                          (v) => v === COLUMNS.CONTRIBUTOR_ADDRESS
+                        );
+                        const pointsIndex = cols?.findIndex(
+                          (v) => v === COLUMNS.points
+                        );
+
+                        if (!contributorAdrIndex || !pointsIndex) {
+                          setPreviewData([]);
+                          // @ts-expect-error - Component prop typing issue
+                          form?.setError("pointsData", {
+                            message: "Required columns not found.",
+                          });
+
+                          return;
+                        }
+
+                        const data = (text?.split("\n") || [])
+                          .map((line) => {
+                            const cols = line.split(",");
+
+                            const contributorData = {
+                              contributor: cols[contributorAdrIndex].trim(),
+                              point: Number(cols[pointsIndex].trim()),
+                            };
+
+                            // validate
+                            if (
+                              contributorData.contributor &&
+                              contributorData.contributor
+                                .trim()
+                                .startsWith("0x") &&
+                              isAddress(contributorData.contributor) &&
+                              contributorData.point >= 0
+                            ) {
+                              return contributorData;
+                            }
+
+                            return undefined;
+                          })
+                          .filter(Boolean) as unknown as Array<ContributorData>;
+
+                        if (!data.length) {
+                          setPreviewData([]);
+                          // @ts-expect-error - Component prop typing issue
+                          form?.setError("pointsData", {
+                            message: "No contributor data found.",
+                          });
+
+                          return;
+                        }
+
+                        // @ts-expect-error - Component prop typing issue
+                        form?.clearErrors("pointsData");
+
+                        setPreviewData(data);
+                        onChange(data);
+                      } catch (err) {
+                        setPreviewData([]);
+                        // @ts-expect-error - Component prop typing issue
+                        form?.setError("pointsData", {
+                          message: "Unable to parse contributor data.",
+                        });
+                      }
+                    }}
+                  />
+                </FormControl>
+              </FormItem>
+            </>
+          )}
+        />
+      </div>
+    </>
+  );
+};
+
+const CSVInfo = () => (
+  <HoverCard>
+    <HoverCardTrigger asChild>
+      <Button type="button" variant="ghost" size="icon">
+        <InfoIcon className="w-4 h-4" />
+      </Button>
+    </HoverCardTrigger>
+    <HoverCardContent className="w-96 max-w-[100vw]">
+      <p className="text-sm text-foreground/80">
+        The table must have atleast two columns in a given row: <br />
+        1. `<b>{COLUMNS.CONTRIBUTOR_ADDRESS}</b>` - for contributor's address
+        <br /> 2. `<b>{COLUMNS.points}</b>` - for the given contributor's points
+        <br />
+        <br />
+        other columns, empty rows, or rows with invalid address/points will be
+        discarded.
+      </p>
+    </HoverCardContent>
+  </HoverCard>
+);
