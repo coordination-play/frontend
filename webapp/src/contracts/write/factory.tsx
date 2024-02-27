@@ -16,7 +16,7 @@ export const useCreateOrganisationContract = () => {
   });
 
   const {
-    data: creationDeposit = 0,
+    data: creationDeposit,
     isError: isCreationDepositError,
     error: creationDepositError,
   } = useOrgCreationDeposit();
@@ -85,7 +85,7 @@ export const useCreateOrganisationContract = () => {
           entrypoint: "approve",
           calldata: CallData.compile({
             spender: CONTRACTS_ADDRESSES.FACTORY,
-            amount: cairo.uint256(BigInt(creationDeposit)),
+            amount: cairo.uint256(BigInt(creationDeposit?.value || 0n)),
           }),
         },
         // Calling Factory contract
