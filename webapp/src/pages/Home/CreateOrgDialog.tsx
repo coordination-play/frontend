@@ -22,6 +22,7 @@ import { ImgUpload } from "@/components/ImgUpload";
 import { useReadETHBalanceOf } from "@/contracts/read/eth";
 import { useAccount } from "@starknet-react/core";
 import { useOrgCreationDeposit } from "@/contracts/read/factory";
+import BigNumber from "bignumber.js";
 
 export const CreateOrgDialog = ({
   triggerClassName,
@@ -76,7 +77,7 @@ const CreateDAOForm = ({ onClose }: { onClose: () => void }) => {
   const { data: balance, isLoading: isBalanceLoading } =
     useReadETHBalanceOf(address);
   const {
-    data: creationDeposit = 0,
+    data: creationDeposit,
     isLoading: isCreationDepositLoading,
     isError: isCreationDepositError,
   } = useOrgCreationDeposit();
@@ -98,7 +99,9 @@ const CreateDAOForm = ({ onClose }: { onClose: () => void }) => {
 
   const noEnoughBalance =
     balance && creationDeposit
-      ? BigInt(balance?.toString()) < BigInt(creationDeposit?.toString())
+      ? BigNumber(balance?.toString()).isLessThan(
+          BigNumber(creationDeposit.value.toString())
+        )
       : false;
 
   const isDisabled =
@@ -187,14 +190,7 @@ const CreateDAOForm = ({ onClose }: { onClose: () => void }) => {
               <p className="text-warn font-medium text-xs">
                 Note: Creating organisation requires deposit of{" "}
                 {!isCreationDepositLoading ? (
-                  <>
-                    {String(
-                      Number(
-                        BigInt(creationDeposit.toString()) /
-                          BigInt(Math.pow(10, 18))
-                      ).toFixed(3)
-                    )}
-                  </>
+                  <>{creationDeposit?.label}</>
                 ) : (
                   "..."
                 )}{" "}

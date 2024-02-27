@@ -13,7 +13,13 @@ import {
 } from "@/components/ui/form";
 import { useWriteTreasuryContract } from "@/contracts/write";
 import { Spinner } from "@/components/ui/spinner";
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useOrganisation } from "@/hooks/useOrganisation";
 import {
   useGetOrgAllGuilds,
@@ -33,8 +39,9 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, getMonthId } from "@/lib/utils";
 import { toast } from "sonner";
+import { months, years } from "@/lib/time";
 
 export const PaySalaryDialog = () => {
   const [open, setOpen] = useState(false);
@@ -52,7 +59,9 @@ export const PaySalaryDialog = () => {
 };
 
 const formSchema = z.object({
-  monthId: z.string(),
+  month: z.string(),
+  year: z.string(),
+
   amounts: z
     .record(z.string().min(1), z.string())
     .transform((amounts) =>
@@ -66,12 +75,14 @@ const formSchema = z.object({
 });
 
 const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
-  const { address, monthId } = useOrganisation();
+  const { address } = useOrganisation();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      monthId: String(monthId),
+      month: String(new Date().getMonth() + 1),
+      year: String(new Date().getFullYear()),
+
       amounts: {},
     },
   });
@@ -96,7 +107,7 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const args = [
-      Number(values.monthId),
+      getMonthId(values.month, values.year),
       Object.values(values.amounts).map((v) => BigInt(v)),
       Object.keys(values.amounts), // addresses
     ];
@@ -125,20 +136,67 @@ const UploadPointsForm = ({ onClose }: { onClose: () => void }) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
-        <FormField
-          control={form.control}
-          name="monthId"
-          disabled={fieldDisabled}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Month ID</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter Month ID" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="flex gap-2 w-full">
+          <FormField
+            control={form.control}
+            name="month"
+            disabled={fieldDisabled}
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Month</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={String(field.value)}
+                >
+                  <FormControl>
+                    <SelectTrigger disabled={field.disabled}>
+                      <SelectValue placeholder="Select a guild" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {months.map((m, i) => (
+                      <SelectItem key={i} value={String(i + 1)}>
+                        {m}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="year"
+            disabled={fieldDisabled}
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Year</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={String(field.value)}
+                >
+                  <FormControl>
+                    <SelectTrigger disabled={field.disabled}>
+                      <SelectValue placeholder="Select a guild" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {years.map((year, i) => (
+                      <SelectItem key={i} value={String(year)}>
+                        {year}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <div className="flex flex-col gap-2">
           <p className="font-medium text-foreground/90 text-sm">

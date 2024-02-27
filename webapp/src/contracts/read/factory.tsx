@@ -3,6 +3,7 @@ import { CONTRACTS_ADDRESSES, FactoryABI } from "../contracts";
 import * as z from "zod";
 import { UseContractReadProps, useContractRead } from ".";
 import { num, shortString } from "starknet";
+import { formatDecimals, formatDisplay } from "@/lib/numbers";
 
 export const readFactory = {
   // get_all_organisations
@@ -83,12 +84,18 @@ export const readFactory = {
   },
   get_creation_fee: {
     returnType: z.bigint(),
-    parsedType: z.number().optional(),
+    parsedType: z.object({ value: z.bigint(), label: z.string() }).optional(),
     parse: function (data: unknown): z.infer<typeof this.parsedType> {
       if (!data) return undefined;
 
-      const parsedData = this.returnType.parse(data);
-      return Number(parsedData.toString());
+      const parsedData = this.returnType.parse(data) || 0n;
+
+      console.log(parsedData, formatDecimals(parsedData, 18).toString());
+
+      return {
+        value: parsedData,
+        label: formatDisplay(formatDecimals(parsedData, 18).toString()) || "0",
+      };
     },
   },
   owner: {
