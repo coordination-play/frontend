@@ -55,8 +55,8 @@ const formSchema = z.object({
   description: z.string({
     required_error: "Short description is required",
   }),
-  discord: z.string().url().optional(),
-  website: z.string().url().optional(),
+  discord: z.string().trim().url().optional().or(z.literal("")),
+  website: z.string().trim().url().optional().or(z.literal("")),
 });
 
 const CreateDAOForm = ({ onClose }: { onClose: () => void }) => {
