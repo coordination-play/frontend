@@ -58,7 +58,7 @@ export const ORGProfile = () => {
                 value={activeTab}
                 onValueChange={setActiveTab}
               >
-                <TabsList className="flex w-full justify-start flex-wrap gap-2 h-12">
+                <TabsList className="flex w-full justify-start flex-wrap gap-2">
                   <TabsTrigger value="allguilds">
                     <LayoutGrid className="w-4 h-4" />
                     All Guilds
