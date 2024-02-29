@@ -18,6 +18,10 @@ export const setActiveGuild = (guildAddress: string) => {
   orgState.activeGuild = guildAddress;
 };
 
+export const clearActiveGuild = () => {
+  orgState.activeGuild = "";
+};
+
 export const setMonthId = (month: number, year: number) => {
   if (month === 0) {
     toast.error("0 is not a valid month id, months are 1 indexed");

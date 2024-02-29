@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { LayoutGrid, Trophy } from "lucide-react";
 
@@ -15,11 +15,18 @@ import { Button } from "@/components/ui/button";
 import { OrgAddresses } from "./Addresses";
 import { ContractsAlert } from "./ContractsAlert";
 import { MonthIDSlider } from "./MonthIdSlider";
+import { clearActiveGuild } from "@/state/organisation";
 
 export const ORGProfile = () => {
   const { isOwner } = useOrganisation();
 
   const [activeTab, setActiveTab] = useState("allguilds");
+
+  useEffect(() => {
+    return () => {
+      clearActiveGuild();
+    };
+  }, []);
 
   return (
     <>
