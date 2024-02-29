@@ -435,7 +435,7 @@ const CSVInfo = () => (
     </HoverCardTrigger>
     <HoverCardContent className="w-96 max-w-[100vw]">
       <p className="text-sm text-foreground/80">
-        The table must have these columns headers: <br />
+        The table must have these column headers: <br />
         1. `<b>{COLUMNS.CONTRIBUTOR_ADDRESS}</b>` - contributor's address
         <br /> 2. `<b>{COLUMNS.points}</b>` - points for given contributor
         <br />
