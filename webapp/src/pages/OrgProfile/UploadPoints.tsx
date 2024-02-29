@@ -44,7 +44,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 const COLUMNS = {
   CONTRIBUTOR_ADDRESS: "contributor_address",
   points: "points",
-};
+} as const;
 
 export const UploadPointsDialog = () => {
   const [open, setOpen] = useState(false);
@@ -342,7 +342,10 @@ export const CSVUpload = <T extends FieldValues = FieldValues>({
                         const text = await event.target.files?.[0]?.text();
 
                         // identify data indexes
-                        const cols = text?.split("\n")[0].split(",");
+                        const cols = text
+                          ?.split("\n")[0]
+                          .split(",")
+                          .map((c) => c.replace("\r", ""));
 
                         const contributorAdrIndex = cols?.findIndex(
                           (v) => v === COLUMNS.CONTRIBUTOR_ADDRESS
@@ -351,7 +354,10 @@ export const CSVUpload = <T extends FieldValues = FieldValues>({
                           (v) => v === COLUMNS.points
                         );
 
-                        if (!contributorAdrIndex || !pointsIndex) {
+                        if (
+                          contributorAdrIndex === undefined ||
+                          pointsIndex === undefined
+                        ) {
                           setPreviewData([]);
                           // @ts-expect-error - Component prop typing issue
                           form?.setError("pointsData", {
