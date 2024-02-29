@@ -345,7 +345,7 @@ export const CSVUpload = <T extends FieldValues = FieldValues>({
                         const cols = text
                           ?.split("\n")[0]
                           .split(",")
-                          .map((c) => c.replace("\r", ""));
+                          .map((c) => c.replace("\r", "").trim());
 
                         const contributorAdrIndex = cols?.findIndex(
                           (v) => v === COLUMNS.CONTRIBUTOR_ADDRESS
