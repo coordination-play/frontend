@@ -1,8 +1,9 @@
 import path from "path";
 import react from "@vitejs/plugin-react-swc";
 import { defineConfig } from "vite";
-import { VitePWA, ManifestOptions } from "vite-plugin-pwa";
+// import { ManifestOptions } from "vite-plugin-pwa";
 
+/*
 const PWAManifestConfig: Partial<ManifestOptions> = {
   name: "Coordination",
   short_name: "Coordination",
@@ -46,19 +47,20 @@ const PWAManifestConfig: Partial<ManifestOptions> = {
     },
   ],
 };
+*/
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
-    VitePWA({
-      registerType: "autoUpdate",
-      devOptions: {
-        // enabled: true, // <== to enable PWA on dev
-      },
-      includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.png"],
-      manifest: PWAManifestConfig,
-    }),
+    // VitePWA({
+    //   registerType: "autoUpdate",
+    //   devOptions: {
+    //     // enabled: true, // <== to enable PWA on dev
+    //   },
+    //   includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.png"],
+    //   manifest: PWAManifestConfig,
+    // }),
   ],
   resolve: {
     alias: {

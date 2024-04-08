@@ -90,8 +90,6 @@ export const readFactory = {
 
       const parsedData = this.returnType.parse(data) || 0n;
 
-      console.log(parsedData, formatDecimals(parsedData, 18).toString());
-
       return {
         value: parsedData,
         label: formatDisplay(formatDecimals(parsedData, 18).toString()) || "0",

@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
 
-import { goerli } from "@starknet-react/chains";
+import { Chain, sepolia } from "@starknet-react/chains";
 import {
   StarknetConfig,
-  alchemyProvider,
   argent,
   braavos,
+  jsonRpcProvider,
   useInjectedConnectors,
   voyager,
 } from "@starknet-react/core";
@@ -29,9 +29,20 @@ export const StarknetProvider = ({
 
   return (
     <StarknetConfig
-      chains={[goerli]}
-      provider={alchemyProvider({
-        apiKey: getEnv("VITE_ALCHEMY_API_KEY"),
+      chains={[sepolia]}
+      provider={jsonRpcProvider({
+        rpc: (chain: Chain) => {
+          if (chain.id !== sepolia.id) {
+            alert("Unsupported chain. Please switch to Startnet Sepolia");
+            return null;
+          }
+
+          return {
+            nodeUrl: `https://starknet-sepolia.g.alchemy.com/v2/${getEnv(
+              "VITE_ALCHEMY_API_KEY"
+            )}`,
+          };
+        },
       })}
       connectors={connectors}
       explorer={voyager}

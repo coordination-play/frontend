@@ -74,12 +74,16 @@ const CreateDAOForm = ({ onClose }: { onClose: () => void }) => {
   const createOrgMutate = useCreateOrganisationContract();
 
   const { address } = useAccount();
-  const { data: balance, isLoading: isBalanceLoading } =
-    useReadETHBalanceOf(address);
+  const {
+    data: balance,
+    isLoading: isBalanceLoading,
+    status: balanceStatus,
+  } = useReadETHBalanceOf(address);
   const {
     data: creationDeposit,
     isLoading: isCreationDepositLoading,
     isError: isCreationDepositError,
+    status: creationDepositStatus,
   } = useOrgCreationDeposit();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -98,14 +102,14 @@ const CreateDAOForm = ({ onClose }: { onClose: () => void }) => {
   };
 
   const noEnoughBalance =
-    balance && creationDeposit
-      ? BigNumber(balance?.toString()).isLessThan(
-          BigNumber(creationDeposit.value.toString())
+    balanceStatus === "success" && creationDepositStatus === "success"
+      ? BigNumber(balance?.toString() ?? "0").isLessThan(
+          BigNumber(creationDeposit?.value?.toString() ?? "0")
         )
       : false;
 
   const isDisabled =
-    // noEnoughBalance ||
+    noEnoughBalance ||
     isCreationDepositLoading ||
     isCreationDepositError ||
     isBalanceLoading ||
