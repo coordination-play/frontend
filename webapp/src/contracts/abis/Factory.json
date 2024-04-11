@@ -1,12 +1,12 @@
 [
   {
-    "type": "impl",
     "name": "Factory",
+    "type": "impl",
     "interface_name": "coordination_stack_core::factory::IFactory"
   },
   {
-    "type": "struct",
     "name": "core::integer::u256",
+    "type": "struct",
     "members": [
       {
         "name": "low",
@@ -19,8 +19,8 @@
     ]
   },
   {
-    "type": "struct",
     "name": "core::array::Span::<core::felt252>",
+    "type": "struct",
     "members": [
       {
         "name": "snapshot",
@@ -29,8 +29,8 @@
     ]
   },
   {
-    "type": "struct",
     "name": "coordination_stack_core::factory::Organisation",
+    "type": "struct",
     "members": [
       {
         "name": "name",
@@ -47,12 +47,12 @@
     ]
   },
   {
-    "type": "interface",
     "name": "coordination_stack_core::factory::IFactory",
+    "type": "interface",
     "items": [
       {
-        "type": "function",
         "name": "get_creation_fee",
+        "type": "function",
         "inputs": [],
         "outputs": [
           {
@@ -62,8 +62,8 @@
         "state_mutability": "view"
       },
       {
-        "type": "function",
         "name": "get_all_organisations",
+        "type": "function",
         "inputs": [],
         "outputs": [
           {
@@ -73,8 +73,8 @@
         "state_mutability": "view"
       },
       {
-        "type": "function",
         "name": "get_all_organisations_details",
+        "type": "function",
         "inputs": [],
         "outputs": [
           {
@@ -84,8 +84,8 @@
         "state_mutability": "view"
       },
       {
-        "type": "function",
         "name": "get_num_of_organisations",
+        "type": "function",
         "inputs": [],
         "outputs": [
           {
@@ -95,8 +95,8 @@
         "state_mutability": "view"
       },
       {
-        "type": "function",
         "name": "get_organisation_contract_class_hash",
+        "type": "function",
         "inputs": [],
         "outputs": [
           {
@@ -106,8 +106,8 @@
         "state_mutability": "view"
       },
       {
-        "type": "function",
         "name": "get_guild_contract_class_hash",
+        "type": "function",
         "inputs": [],
         "outputs": [
           {
@@ -117,8 +117,8 @@
         "state_mutability": "view"
       },
       {
-        "type": "function",
         "name": "get_salary_contract_class_hash",
+        "type": "function",
         "inputs": [],
         "outputs": [
           {
@@ -128,8 +128,8 @@
         "state_mutability": "view"
       },
       {
-        "type": "function",
         "name": "get_treasury_contract_class_hash",
+        "type": "function",
         "inputs": [],
         "outputs": [
           {
@@ -139,8 +139,8 @@
         "state_mutability": "view"
       },
       {
-        "type": "function",
         "name": "update_creation_fee",
+        "type": "function",
         "inputs": [
           {
             "name": "new_fee",
@@ -151,8 +151,8 @@
         "state_mutability": "external"
       },
       {
-        "type": "function",
         "name": "create_organisation",
+        "type": "function",
         "inputs": [
           {
             "name": "name",
@@ -171,8 +171,8 @@
         "state_mutability": "external"
       },
       {
-        "type": "function",
         "name": "withdraw_fee",
+        "type": "function",
         "inputs": [
           {
             "name": "receipent",
@@ -183,8 +183,8 @@
         "state_mutability": "external"
       },
       {
-        "type": "function",
         "name": "replace_organisation_contract_hash",
+        "type": "function",
         "inputs": [
           {
             "name": "new_organisation_contract_class",
@@ -195,8 +195,8 @@
         "state_mutability": "external"
       },
       {
-        "type": "function",
         "name": "replace_guild_contract_hash",
+        "type": "function",
         "inputs": [
           {
             "name": "new_guild_contract_class",
@@ -207,20 +207,8 @@
         "state_mutability": "external"
       },
       {
-        "type": "function",
-        "name": "replace_implementation_class",
-        "inputs": [
-          {
-            "name": "new_implementation_class",
-            "type": "core::starknet::class_hash::ClassHash"
-          }
-        ],
-        "outputs": [],
-        "state_mutability": "external"
-      },
-      {
-        "type": "function",
         "name": "replace_salary_contract_hash",
+        "type": "function",
         "inputs": [
           {
             "name": "new_salary_contract_class",
@@ -231,11 +219,23 @@
         "state_mutability": "external"
       },
       {
-        "type": "function",
         "name": "replace_treasury_contract_hash",
+        "type": "function",
         "inputs": [
           {
             "name": "new_treasury_contract_class",
+            "type": "core::starknet::class_hash::ClassHash"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "name": "upgrade",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "new_class_hash",
             "type": "core::starknet::class_hash::ClassHash"
           }
         ],
@@ -245,17 +245,17 @@
     ]
   },
   {
-    "type": "impl",
     "name": "OwnableImpl",
+    "type": "impl",
     "interface_name": "openzeppelin::access::ownable::interface::IOwnable"
   },
   {
-    "type": "interface",
     "name": "openzeppelin::access::ownable::interface::IOwnable",
+    "type": "interface",
     "items": [
       {
-        "type": "function",
         "name": "owner",
+        "type": "function",
         "inputs": [],
         "outputs": [
           {
@@ -265,8 +265,8 @@
         "state_mutability": "view"
       },
       {
-        "type": "function",
         "name": "transfer_ownership",
+        "type": "function",
         "inputs": [
           {
             "name": "new_owner",
@@ -277,8 +277,8 @@
         "state_mutability": "external"
       },
       {
-        "type": "function",
         "name": "renounce_ownership",
+        "type": "function",
         "inputs": [],
         "outputs": [],
         "state_mutability": "external"
@@ -286,8 +286,8 @@
     ]
   },
   {
-    "type": "constructor",
     "name": "constructor",
+    "type": "constructor",
     "inputs": [
       {
         "name": "organisation_contract_class_hash",
@@ -312,87 +312,143 @@
     ]
   },
   {
-    "type": "event",
+    "kind": "struct",
     "name": "coordination_stack_core::factory::Factory::OrganisationCreated",
-    "kind": "struct",
+    "type": "event",
     "members": [
       {
+        "kind": "data",
         "name": "name",
-        "type": "core::felt252",
-        "kind": "data"
+        "type": "core::felt252"
       },
       {
+        "kind": "data",
         "name": "organisation",
-        "type": "core::starknet::contract_address::ContractAddress",
-        "kind": "data"
+        "type": "core::starknet::contract_address::ContractAddress"
       },
       {
+        "kind": "data",
+        "name": "metadata",
+        "type": "core::array::Span::<core::felt252>"
+      },
+      {
+        "kind": "data",
         "name": "id",
-        "type": "core::integer::u32",
-        "kind": "data"
+        "type": "core::integer::u32"
       }
     ]
   },
   {
-    "type": "event",
+    "kind": "struct",
     "name": "coordination_stack_core::factory::Factory::CreationFeeUpdated",
-    "kind": "struct",
+    "type": "event",
     "members": [
       {
+        "kind": "data",
         "name": "new_fee",
-        "type": "core::integer::u256",
-        "kind": "data"
+        "type": "core::integer::u256"
       }
     ]
   },
   {
-    "type": "event",
-    "name": "openzeppelin::access::ownable::ownable::OwnableComponent::OwnershipTransferred",
     "kind": "struct",
+    "name": "openzeppelin::access::ownable::ownable::OwnableComponent::OwnershipTransferred",
+    "type": "event",
     "members": [
       {
+        "kind": "key",
         "name": "previous_owner",
-        "type": "core::starknet::contract_address::ContractAddress",
-        "kind": "data"
+        "type": "core::starknet::contract_address::ContractAddress"
       },
       {
+        "kind": "key",
         "name": "new_owner",
-        "type": "core::starknet::contract_address::ContractAddress",
-        "kind": "data"
+        "type": "core::starknet::contract_address::ContractAddress"
       }
     ]
   },
   {
+    "kind": "struct",
+    "name": "openzeppelin::access::ownable::ownable::OwnableComponent::OwnershipTransferStarted",
     "type": "event",
+    "members": [
+      {
+        "kind": "key",
+        "name": "previous_owner",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "kind": "key",
+        "name": "new_owner",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
+  },
+  {
+    "kind": "enum",
     "name": "openzeppelin::access::ownable::ownable::OwnableComponent::Event",
-    "kind": "enum",
+    "type": "event",
     "variants": [
       {
+        "kind": "nested",
         "name": "OwnershipTransferred",
-        "type": "openzeppelin::access::ownable::ownable::OwnableComponent::OwnershipTransferred",
-        "kind": "nested"
+        "type": "openzeppelin::access::ownable::ownable::OwnableComponent::OwnershipTransferred"
+      },
+      {
+        "kind": "nested",
+        "name": "OwnershipTransferStarted",
+        "type": "openzeppelin::access::ownable::ownable::OwnableComponent::OwnershipTransferStarted"
       }
     ]
   },
   {
+    "kind": "struct",
+    "name": "openzeppelin::upgrades::upgradeable::UpgradeableComponent::Upgraded",
     "type": "event",
-    "name": "coordination_stack_core::factory::Factory::Event",
+    "members": [
+      {
+        "kind": "data",
+        "name": "class_hash",
+        "type": "core::starknet::class_hash::ClassHash"
+      }
+    ]
+  },
+  {
     "kind": "enum",
+    "name": "openzeppelin::upgrades::upgradeable::UpgradeableComponent::Event",
+    "type": "event",
     "variants": [
       {
+        "kind": "nested",
+        "name": "Upgraded",
+        "type": "openzeppelin::upgrades::upgradeable::UpgradeableComponent::Upgraded"
+      }
+    ]
+  },
+  {
+    "kind": "enum",
+    "name": "coordination_stack_core::factory::Factory::Event",
+    "type": "event",
+    "variants": [
+      {
+        "kind": "nested",
         "name": "OrganisationCreated",
-        "type": "coordination_stack_core::factory::Factory::OrganisationCreated",
-        "kind": "nested"
+        "type": "coordination_stack_core::factory::Factory::OrganisationCreated"
       },
       {
+        "kind": "nested",
         "name": "CreationFeeUpdated",
-        "type": "coordination_stack_core::factory::Factory::CreationFeeUpdated",
-        "kind": "nested"
+        "type": "coordination_stack_core::factory::Factory::CreationFeeUpdated"
       },
       {
+        "kind": "flat",
         "name": "OwnableEvent",
-        "type": "openzeppelin::access::ownable::ownable::OwnableComponent::Event",
-        "kind": "flat"
+        "type": "openzeppelin::access::ownable::ownable::OwnableComponent::Event"
+      },
+      {
+        "kind": "flat",
+        "name": "UpgradeableEvent",
+        "type": "openzeppelin::upgrades::upgradeable::UpgradeableComponent::Event"
       }
     ]
   }
