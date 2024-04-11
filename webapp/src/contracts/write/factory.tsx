@@ -4,6 +4,7 @@ import { useState } from "react";
 import { CallData, cairo, shortString } from "starknet";
 import { useOrgCreationDeposit } from "../read/factory";
 import { FetchAPI } from "@/lib/api";
+import { toast } from "sonner";
 
 export const useCreateOrganisationContract = () => {
   const { provider } = useProvider();
@@ -67,15 +68,21 @@ export const useCreateOrganisationContract = () => {
       formData.append("discord", discord);
       formData.append("website", website);
 
-      const metadataRes = await FetchAPI("/metadata", {
-        method: "POST",
-        body: formData,
-        // mode: "no-cors", // TODO
-      });
-      const metadataJson = await metadataRes.json();
-      console.log("metadataJson", metadataJson);
+      let metadataCid = "";
+      try {
+        const metadataRes = await FetchAPI("/metadata", {
+          method: "POST",
+          body: formData,
+          // mode: "no-cors", // TODO
+        });
+        const metadataJson = await metadataRes.json();
+        console.log("metadataJson", metadataJson);
 
-      const metadataCid = metadataJson.cid;
+        metadataCid = metadataJson.cid;
+      } catch (err) {
+        toast.error("Failed to upload logo");
+        console.error(`failed to upload logo: `, { error: err });
+      }
 
       // transaction
       const multiCall = await account.execute([
