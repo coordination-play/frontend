@@ -1,16 +1,18 @@
 import pinataSDK from "@pinata/sdk";
 import { Readable } from "stream";
 
-const pinata = new pinataSDK({ pinataJWTKey: process.env.PINATA_API_JWT });
-
-const resOptions: RequestInit = {
-  headers: {
-    "Access-Control-Allow-Origin": process.env.FRONTEND_URL || "",
-  },
-};
+export const runtime = "edge";
 
 export async function POST(request: Request): Promise<Response> {
+  const resOptions: RequestInit = {
+    headers: {
+      "Access-Control-Allow-Origin": process.env.FRONTEND_URL || "",
+    },
+  };
+
   try {
+    const pinata = new pinataSDK({ pinataJWTKey: process.env.PINATA_API_JWT });
+
     const formData = await request.formData();
     const logo = formData.get("logo") as Blob;
     const name = formData.get("name");
