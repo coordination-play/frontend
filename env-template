@@ -1,11 +1,16 @@
+# where your api is running, most probably http://localhost:3000
+
 VITE_API_URL=
+
+# check production url/readme to see active addresses
+
 VITE_FACTORY_CONTRACT_ADDRESS=
 VITE_ETH_TOKEN_CONTRACT_ADDRESS=
 
-# for Starknet Goerli
+# for Starknet Sepolia
 
 VITE_ALCHEMY_API_KEY=
 
-# for org metadata & IPFS
+# for org metadata & IPFS, create at pinata.cloud
 
 VITE_PINATA_GATEWAY_URL=
