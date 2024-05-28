@@ -37,7 +37,7 @@ export const useDeployOrganisationContracts = ({
     error: null,
   });
 
-  const deploySalaryAndTreasuryContract = async () => {
+  const deploySalaryAndTreasuryContract = async (tokenAddress?: string) => {
     if (!contract) {
       throw new Error(`Contract not found`);
     }
@@ -61,7 +61,7 @@ export const useDeployOrganisationContracts = ({
           entrypoint: "update_salary_distributor_contract",
           calldata: CallData.compile({
             // owner: accountAddress,
-            token: CONTRACTS_ADDRESSES.ETH_TOKEN,
+            token: tokenAddress || CONTRACTS_ADDRESSES.ETH_TOKEN,
           }),
         },
         {
